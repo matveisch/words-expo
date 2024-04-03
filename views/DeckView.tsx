@@ -1,12 +1,19 @@
 import { View, Text } from '@tamagui/core';
 import { StyleSheet, SafeAreaView } from 'react-native';
+import Word from '../helpers/Word';
+import Deck from '../helpers/Deck';
 
 type DeckPropsType = {
   name: string;
 };
 
-export default function Deck(props: DeckPropsType) {
+export default function DeckView(props: DeckPropsType) {
   const { name } = props;
+
+  const dogWord = new Word('dog', 'собака', 'дог', 4);
+  const catWord = new Word('cat', 'кошка', 'кэт', 3);
+  const newDeck = new Deck([dogWord, catWord]);
+  const otherDeck = new Deck([dogWord, catWord], [newDeck]);
 
   return (
     <SafeAreaView>

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { createTamagui, TamaguiProvider, View } from '@tamagui/core';
 import { config } from '@tamagui/config/v3';
 import { loadFonts } from './helpers/loadFonts';
-import Deck from './views/Deck';
+import DeckView from './views/DeckView';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -20,7 +20,7 @@ export default function App() {
   return (
     <TamaguiProvider config={tamaguiConfig}>
       <View style={styles.container}>
-        <Deck name="Hebrew" />
+        <DeckView name="Hebrew" />
         <StatusBar style="auto" />
       </View>
     </TamaguiProvider>
