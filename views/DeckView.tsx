@@ -1,24 +1,37 @@
 import { View, Text } from '@tamagui/core';
 import { StyleSheet, SafeAreaView } from 'react-native';
-import Word from '../helpers/Word';
 import Deck from '../helpers/Deck';
+import { Button } from 'tamagui';
 
 type DeckPropsType = {
-  name: string;
+  deck: Deck;
 };
 
-export default function DeckView(props: DeckPropsType) {
-  const { name } = props;
-
-  const dogWord = new Word('dog', 'собака', 'дог', 4);
-  const catWord = new Word('cat', 'кошка', 'кэт', 3);
-  const newDeck = new Deck([dogWord, catWord]);
-  const otherDeck = new Deck([dogWord, catWord], [newDeck]);
-
+export default function DeckView({ deck }: DeckPropsType) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Text style={styles.deckHeader}>{name}</Text>
+        <Text style={styles.deckHeader} fontSize={20} paddingBottom={10}>
+          {deck.name}
+        </Text>
+        <View style={styles.buttonsContainer}>
+          <Button style={styles.button}>
+            <Text>{deck.numberOfCertainLevelWords(1)}</Text>
+            <Text>again</Text>
+          </Button>
+          <Button>
+            <Text
+              justifyContent="center"
+              alignItems="center"
+            >{`${deck.numberOfCertainLevelWords(1)}\n\nagain`}</Text>
+          </Button>
+          <Button>
+            <Text>{deck.numberOfCertainLevelWords(1)} again</Text>
+          </Button>
+          <Button>
+            <Text>{deck.numberOfCertainLevelWords(1)} again</Text>
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -30,9 +43,15 @@ const styles = StyleSheet.create({
     // borderColor: 'black',
     // borderWidth: 1,
   },
-  deckHeader: {
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderWidth: 1,
+  deckHeader: {},
+  buttonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  button: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
