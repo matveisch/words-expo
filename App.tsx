@@ -1,18 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { createTamagui, TamaguiProvider, View } from '@tamagui/core';
+import { config } from '@tamagui/config/v3';
+import { loadFonts } from './helpers/loadFonts';
+import Deck from './views/Deck';
+
+const tamaguiConfig = createTamagui(config);
+
+type Conf = typeof tamaguiConfig;
+declare module '@tamagui/core' {
+  interface TamaguiCustomConfig extends Conf {}
+}
 
 export default function App() {
+  if (!loadFonts()) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Hello</Text>
-      <StatusBar style="auto" />
-    </View>
+    <TamaguiProvider config={tamaguiConfig}>
+      <View style={styles.container} width={200} height={200} backgroundColor="red">
+        <Deck name="Hebrew" />
+        <StatusBar style="auto" />
+      </View>
+    </TamaguiProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
