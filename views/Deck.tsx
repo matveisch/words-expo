@@ -19,13 +19,9 @@ export default function Deck(props: DeckPropsType) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: '#fff',
-
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderWidth: 1,
+    // borderStyle: 'solid',
+    // borderColor: 'black',
+    // borderWidth: 1,
   },
   deckHeader: {
     borderStyle: 'solid',

@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <TamaguiProvider config={tamaguiConfig}>
-      <View style={styles.container} width={200} height={200} backgroundColor="red">
+      <View style={styles.container}>
         <Deck name="Hebrew" />
         <StatusBar style="auto" />
       </View>
@@ -30,9 +30,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+
+    // borderStyle: 'solid',
+    // borderColor: 'black',
+    // borderWidth: 1,
   },
 });
