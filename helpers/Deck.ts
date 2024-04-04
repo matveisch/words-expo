@@ -12,7 +12,7 @@ export default class Deck {
   }
 
   numberOfCertainLevelWords(level: number) {
-    return this.words.map((word) => word.knowledgeLevel === level).length;
+    return this.words.filter((word) => word.knowledgeLevel === level).length;
   }
 
   get totalNumberOfWords() {

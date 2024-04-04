@@ -20,7 +20,7 @@ export default function App() {
   }
 
   const dogWord = new Word('dog', 'собака', 'дог', 4);
-  const catWord = new Word('cat', 'кошка', 'кэт', 3);
+  const catWord = new Word('cat', 'кошка', 'кэт', 2);
   const newDeck = new Deck('animals', [dogWord, catWord]);
   const otherDeck = new Deck('animals too', [dogWord, catWord], [newDeck]);
 
