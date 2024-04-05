@@ -37,7 +37,7 @@ export default function DeckView({ deck }: DeckPropsType) {
           </Button>
         </View>
         <View paddingVertical={10}>
-          <Progress value={60}>
+          <Progress value={(deck.numberOfCertainLevelWords(4) * 100) / deck.words.length}>
             <Progress.Indicator backgroundColor="#00CD5E" />
           </Progress>
         </View>
