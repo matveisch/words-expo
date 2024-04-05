@@ -21,9 +21,10 @@ export default function App() {
 
   const dogWord = new Word('dog', 'собака', 'дог', 4);
   const catWord = new Word('cat', 'кошка', 'кэт', 2);
-  const mouseWord = new Word('mouse', 'мышь', 'моус', 1);
+  const mouseWord = new Word('mouse', 'мышь', 'маус', 1);
   const newDeck = new Deck('animals', [dogWord, catWord]);
-  const otherDeck = new Deck('animals too', [dogWord, catWord, mouseWord], [newDeck]);
+  const secondDeck = new Deck('another animals', [dogWord, catWord]);
+  const otherDeck = new Deck('animals too', [dogWord, catWord, mouseWord], [newDeck, secondDeck]);
 
   return (
     <TamaguiProvider config={tamaguiConfig}>

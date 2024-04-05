@@ -1,7 +1,8 @@
 import { View, Text } from '@tamagui/core';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import Deck from '../helpers/Deck';
-import { Button, Progress } from 'tamagui';
+import { Button, ListItem, Progress } from 'tamagui';
+import { ChevronRight } from '@tamagui/lucide-icons';
 
 type DeckPropsType = {
   deck: Deck;
@@ -41,6 +42,21 @@ export default function DeckView({ deck }: DeckPropsType) {
             <Progress.Indicator backgroundColor="#00CD5E" />
           </Progress>
         </View>
+        <View>
+          <Button>Study all the words</Button>
+        </View>
+      </View>
+      <View>
+        <Text fontSize={15}>Decks</Text>
+        <FlatList
+          data={deck.innerDecks}
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          renderItem={({ item }) => (
+            <ListItem iconAfter={ChevronRight} pressTheme borderRadius={9}>
+              {item.name}
+            </ListItem>
+          )}
+        />
       </View>
     </SafeAreaView>
   );
