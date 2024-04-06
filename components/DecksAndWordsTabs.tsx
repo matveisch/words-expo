@@ -6,7 +6,7 @@ import Deck from '../helpers/Deck';
 
 export default function DecksAndWordsTabs({ deck }: { deck: Deck }) {
   return (
-    <Tabs defaultValue="tab1" flexDirection="column" height="100%">
+    <Tabs defaultValue="tab1" flexDirection="column" height="100%" flex={1}>
       <Tabs.List marginVertical={10}>
         <Tabs.Tab value="tab1" flex={1}>
           <SizableText>Words</SizableText>
