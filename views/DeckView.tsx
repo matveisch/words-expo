@@ -47,14 +47,32 @@ export default function DeckView({ deck }: DeckPropsType) {
         </View>
       </View>
       <View>
-        <Text fontSize={15}>Decks</Text>
+        <Text fontSize={15} paddingVertical={10}>
+          Decks
+        </Text>
         <FlatList
           data={deck.innerDecks}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
-            <ListItem iconAfter={ChevronRight} pressTheme borderRadius={9}>
-              {item.name}
-            </ListItem>
+            <ListItem iconAfter={ChevronRight} pressTheme borderRadius={9} title={item.name} />
+          )}
+        />
+      </View>
+      <View>
+        <Text fontSize={15} paddingVertical={10}>
+          Words
+        </Text>
+        <FlatList
+          data={deck.words}
+          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          renderItem={({ item }) => (
+            <ListItem
+              iconAfter={ChevronRight}
+              pressTheme
+              borderRadius={9}
+              title={item.word}
+              subTitle={item.meaning}
+            />
           )}
         />
       </View>
