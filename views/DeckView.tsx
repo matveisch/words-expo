@@ -1,32 +1,49 @@
 import { View, Text } from '@tamagui/core';
-import { StyleSheet } from 'react-native';
-import Deck from '../helpers/Deck';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { Button, Progress } from 'tamagui';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
+import { useContext } from 'react';
+import { DataContext, DataContextType } from '../helpers/DataContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-type DeckPropsType = {
-  deck: Deck;
-};
+export default function DeckView() {
+  const insets = useSafeAreaInsets();
+  const { currentDeck } = useContext(DataContext) as DataContextType;
 
-export default function DeckView({ deck }: DeckPropsType) {
   return (
-    <View style={styles.container} height={'100%'}>
-      <Text style={styles.deckHeader} fontSize={20} paddingBottom={10}>
-        {deck.name}
+    <View
+      style={{
+        backgroundColor: '#fff',
+        height: '100%',
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left + 10,
+        paddingRight: insets.right + 10,
+      }}
+    >
+      <Text fontSize={20} paddingBottom={10}>
+        {currentDeck.name}
       </Text>
 
       <View style={styles.buttonsContainer}>
         <Button style={styles.button} backgroundColor="#F28F88">
-          <Text style={styles.buttonText}>{`${deck.numberOfCertainLevelWords(1)}\n\nagain`}</Text>
+          <Text
+            style={styles.buttonText}
+          >{`${currentDeck.numberOfCertainLevelWords(1)}\n\nagain`}</Text>
         </Button>
         <Button style={styles.button} backgroundColor="#F2DB88">
-          <Text style={styles.buttonText}>{`${deck.numberOfCertainLevelWords(2)}\n\nhard`}</Text>
+          <Text
+            style={styles.buttonText}
+          >{`${currentDeck.numberOfCertainLevelWords(2)}\n\nhard`}</Text>
         </Button>
         <Button style={styles.button} backgroundColor="#D7F288">
-          <Text style={styles.buttonText}>{`${deck.numberOfCertainLevelWords(3)}\n\ngood`}</Text>
+          <Text
+            style={styles.buttonText}
+          >{`${currentDeck.numberOfCertainLevelWords(3)}\n\ngood`}</Text>
         </Button>
         <Button style={styles.button} backgroundColor="#88F2F2">
-          <Text style={styles.buttonText}>{`${deck.numberOfCertainLevelWords(4)}\n\neasy`}</Text>
+          <Text
+            style={styles.buttonText}
+          >{`${currentDeck.numberOfCertainLevelWords(4)}\n\neasy`}</Text>
         </Button>
       </View>
 
@@ -40,7 +57,9 @@ export default function DeckView({ deck }: DeckPropsType) {
       </View>
 
       <View paddingVertical={10}>
-        <Progress value={(deck.numberOfCertainLevelWords(4) * 100) / deck.words.length}>
+        <Progress
+          value={(currentDeck.numberOfCertainLevelWords(4) * 100) / currentDeck.words.length}
+        >
           <Progress.Indicator backgroundColor="#00CD5E" />
         </Progress>
       </View>
@@ -49,14 +68,12 @@ export default function DeckView({ deck }: DeckPropsType) {
         <Button>Study all the words</Button>
       </View>
 
-      <DecksAndWordsTabs deck={deck} />
+      <DecksAndWordsTabs deck={currentDeck} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  deckHeader: {},
   buttonsContainer: {
     flexDirection: 'row',
     alignItems: 'center',

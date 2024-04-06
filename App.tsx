@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { createTamagui, TamaguiProvider, View } from '@tamagui/core';
+import { createTamagui, TamaguiProvider } from '@tamagui/core';
 import { config } from '@tamagui/config/v3';
 import { loadFonts } from './helpers/loadFonts';
-import DeckView from './views/DeckView';
-import Word from './helpers/Word';
 import Deck from './helpers/Deck';
+import ListOfDecks from './views/ListOfDecks';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import DeckView from './views/DeckView';
+import { useState } from 'react';
+import { DataContext, DataContextType } from './helpers/DataContext';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -14,57 +18,34 @@ declare module '@tamagui/core' {
   interface TamaguiCustomConfig extends Conf {}
 }
 
+type RootStackParamList = {
+  Decks: undefined;
+  DeckView: undefined;
+};
+
+export type Props = NativeStackScreenProps<RootStackParamList, 'Decks', 'DeckView'>;
+
 export default function App() {
   if (!loadFonts()) {
     return null;
   }
 
-  const dogWord = new Word('dog', 'собака', 'дог', 4);
-  const catWord = new Word('cat', 'кошка', 'кэт', 2);
-  const mouseWord = new Word('mouse', 'мышь', 'маус', 1);
-  const newWord = new Word('123', 'мышь', 'маус', 1);
-  const newDeck = new Deck('animals', [dogWord, catWord]);
-  const secondDeck = new Deck('another animals', [dogWord, catWord]);
-  const otherDeck = new Deck(
-    'animals too',
-    [
-      dogWord,
-      catWord,
-      mouseWord,
-      dogWord,
-      catWord,
-      mouseWord,
-      dogWord,
-      catWord,
-      mouseWord,
-      dogWord,
-      catWord,
-      mouseWord,
-      dogWord,
-      catWord,
-      mouseWord,
-      dogWord,
-      catWord,
-      mouseWord,
-      newWord,
-    ],
-    [newDeck, secondDeck, newDeck, secondDeck, newDeck, secondDeck, newDeck, secondDeck]
-  );
+  const [currentDeck, setCurrentDeck] = useState<Deck>();
+  const DataContextValue = { currentDeck, setCurrentDeck } as DataContextType;
+  const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
     <TamaguiProvider config={tamaguiConfig}>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <DeckView deck={otherDeck} />
-          <StatusBar style="auto" />
-        </View>
-      </SafeAreaView>
+      <DataContext.Provider value={DataContextValue}>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Decks">
+              <Stack.Screen name="Decks" component={ListOfDecks} />
+              <Stack.Screen name="DeckView" component={DeckView} options={{ headerTitle: '' }} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </DataContext.Provider>
     </TamaguiProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 10,
-  },
-});
