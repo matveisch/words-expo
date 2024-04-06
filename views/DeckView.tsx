@@ -1,8 +1,11 @@
 import { View, Text } from '@tamagui/core';
-import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import Deck from '../helpers/Deck';
-import { Button, ListItem, Progress } from 'tamagui';
+import { Button, ListItem, Progress, useWindowDimensions } from 'tamagui';
+import DecksAndWordsTabs from './DecksAndWordsTabs';
 import { ChevronRight } from '@tamagui/lucide-icons';
+import { FlashList } from '@shopify/flash-list';
+import Word from '../helpers/Word';
 
 type DeckPropsType = {
   deck: Deck;
@@ -10,11 +13,12 @@ type DeckPropsType = {
 
 export default function DeckView({ deck }: DeckPropsType) {
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <View style={styles.container} height={'100%'}>
+      <View>
         <Text style={styles.deckHeader} fontSize={20} paddingBottom={10}>
           {deck.name}
         </Text>
+
         <View style={styles.buttonsContainer}>
           <Button style={styles.button} backgroundColor="#F28F88">
             <Text style={styles.buttonText}>{`${deck.numberOfCertainLevelWords(1)}\n\nagain`}</Text>
@@ -29,6 +33,7 @@ export default function DeckView({ deck }: DeckPropsType) {
             <Text style={styles.buttonText}>{`${deck.numberOfCertainLevelWords(4)}\n\neasy`}</Text>
           </Button>
         </View>
+
         <View style={styles.studyButtonsContainer}>
           <Button style={styles.studyButton}>
             <Text>Study words</Text>
@@ -37,46 +42,37 @@ export default function DeckView({ deck }: DeckPropsType) {
             <Text>Revise words</Text>
           </Button>
         </View>
+
         <View paddingVertical={10}>
           <Progress value={(deck.numberOfCertainLevelWords(4) * 100) / deck.words.length}>
             <Progress.Indicator backgroundColor="#00CD5E" />
           </Progress>
         </View>
+
         <View>
           <Button>Study all the words</Button>
         </View>
       </View>
-      <View>
-        <Text fontSize={15} paddingVertical={10}>
-          Decks
-        </Text>
-        <FlatList
-          data={deck.innerDecks}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          renderItem={({ item }) => (
-            <ListItem iconAfter={ChevronRight} pressTheme borderRadius={9} title={item.name} />
-          )}
-        />
+
+      {/*<View style={{ borderWidth: 1, flex: 1 }}>*/}
+      {/*  <FlashList*/}
+      {/*    data={deck.words}*/}
+      {/*    renderItem={({ item }: { item: Word }) => (*/}
+      {/*      <ListItem*/}
+      {/*        iconAfter={ChevronRight}*/}
+      {/*        pressTheme*/}
+      {/*        borderRadius={9}*/}
+      {/*        title={item.word}*/}
+      {/*        subTitle={item.meaning}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*  />*/}
+      {/*</View>*/}
+
+      <View flex={1}>
+        <DecksAndWordsTabs deck={deck} />
       </View>
-      <View>
-        <Text fontSize={15} paddingVertical={10}>
-          Words
-        </Text>
-        <FlatList
-          data={deck.words}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          renderItem={({ item }) => (
-            <ListItem
-              iconAfter={ChevronRight}
-              pressTheme
-              borderRadius={9}
-              title={item.word}
-              subTitle={item.meaning}
-            />
-          )}
-        />
-      </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

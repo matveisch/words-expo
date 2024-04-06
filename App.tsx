@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { createTamagui, TamaguiProvider, View } from '@tamagui/core';
 import { config } from '@tamagui/config/v3';
 import { loadFonts } from './helpers/loadFonts';
@@ -22,27 +22,49 @@ export default function App() {
   const dogWord = new Word('dog', 'собака', 'дог', 4);
   const catWord = new Word('cat', 'кошка', 'кэт', 2);
   const mouseWord = new Word('mouse', 'мышь', 'маус', 1);
+  const newWord = new Word('123', 'мышь', 'маус', 1);
   const newDeck = new Deck('animals', [dogWord, catWord]);
   const secondDeck = new Deck('another animals', [dogWord, catWord]);
-  const otherDeck = new Deck('animals too', [dogWord, catWord, mouseWord], [newDeck, secondDeck]);
+  const otherDeck = new Deck(
+    'animals too',
+    [
+      dogWord,
+      catWord,
+      mouseWord,
+      dogWord,
+      catWord,
+      mouseWord,
+      dogWord,
+      catWord,
+      mouseWord,
+      dogWord,
+      catWord,
+      mouseWord,
+      dogWord,
+      catWord,
+      mouseWord,
+      dogWord,
+      catWord,
+      mouseWord,
+      newWord,
+    ],
+    [newDeck, secondDeck, newDeck, secondDeck, newDeck, secondDeck, newDeck, secondDeck]
+  );
 
   return (
     <TamaguiProvider config={tamaguiConfig}>
-      <View style={styles.container}>
-        <DeckView deck={otherDeck} />
-        <StatusBar style="auto" />
-      </View>
+      <SafeAreaView>
+        <View style={styles.container}>
+          <DeckView deck={otherDeck} />
+          <StatusBar style="auto" />
+        </View>
+      </SafeAreaView>
     </TamaguiProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 10,
-
-    // borderStyle: 'solid',
-    // borderColor: 'black',
-    // borderWidth: 1,
   },
 });
