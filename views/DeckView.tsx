@@ -1,5 +1,5 @@
 import { View, Text } from '@tamagui/core';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button, Progress } from 'tamagui';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { useContext } from 'react';

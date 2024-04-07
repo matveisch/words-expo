@@ -1,8 +1,8 @@
 import { ListItem, SizableText, Tabs } from 'tamagui';
 import { View } from '@tamagui/core';
-import { FlatList } from 'react-native';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import Deck from '../helpers/Deck';
+import { FlashList } from '@shopify/flash-list';
 
 export default function DecksAndWordsTabs({ deck }: { deck: Deck }) {
   return (
@@ -17,7 +17,8 @@ export default function DecksAndWordsTabs({ deck }: { deck: Deck }) {
       </Tabs.List>
 
       <Tabs.Content value="tab1" flex={1}>
-        <FlatList
+        <FlashList
+          estimatedItemSize={65}
           data={deck.words}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
@@ -31,8 +32,9 @@ export default function DecksAndWordsTabs({ deck }: { deck: Deck }) {
           )}
         />
       </Tabs.Content>
-      <Tabs.Content value="tab2">
-        <FlatList
+      <Tabs.Content value="tab2" flex={1}>
+        <FlashList
+          estimatedItemSize={44}
           data={deck.innerDecks}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (

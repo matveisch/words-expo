@@ -65,6 +65,7 @@ export default function ListOfDecks({ navigation }: Props) {
       </Text>
       <View flex={1}>
         <FlashList
+          estimatedItemSize={44}
           data={decks}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
