@@ -41,8 +41,19 @@ export default function App() {
         <SafeAreaProvider>
           <NavigationContainer>
             <Stack.Navigator initialRouteName="Decks">
-              <Stack.Screen name="Decks" component={ListOfDecks} />
-              <Stack.Screen name="DeckView" component={DeckView} options={{ headerTitle: '' }} />
+              <Stack.Screen
+                name="Decks"
+                component={ListOfDecks}
+                options={{ headerTitle: 'Your Decks' }}
+              />
+              <Stack.Screen
+                name="DeckView"
+                component={DeckView}
+                options={{
+                  headerTitle: currentDeck?.name,
+                  headerBackTitleVisible: false,
+                }}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>

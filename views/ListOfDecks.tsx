@@ -59,11 +59,9 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
         paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
+        paddingTop: 10,
       }}
     >
-      <Text fontSize={20} paddingBottom={10}>
-        Your Decks
-      </Text>
       <View flex={1}>
         <FlashList
           estimatedItemSize={44}

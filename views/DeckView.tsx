@@ -19,12 +19,9 @@ export default function DeckView() {
         paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
+        paddingTop: 10,
       }}
     >
-      <Text fontSize={20} paddingBottom={10}>
-        {currentDeck.name}
-      </Text>
-
       <View style={styles.buttonsContainer}>
         <Button style={styles.button} backgroundColor="#F28F88">
           <Text
