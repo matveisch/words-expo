@@ -2,15 +2,14 @@ import { Button, ListItem, Text } from 'tamagui';
 import { View } from '@tamagui/core';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { FlashList } from '@shopify/flash-list';
-import { useContext, useState } from 'react';
-import { DataContext, DataContextType } from '../helpers/DataContext';
+import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Deck from '../helpers/Deck';
 
-export default function DecksAndWordsTabs() {
+export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: Deck }) {
   const [activeTab, setActiveTab] = useState(0);
-  const { currentDeck } = useContext(DataContext) as DataContextType;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (

@@ -88,7 +88,7 @@ export default function DeckView({ route }: Props) {
           />
         </View>
       ) : (
-        <DecksAndWordsTabs />
+        <DecksAndWordsTabs currentDeck={currentDeck} />
       )}
     </View>
   );

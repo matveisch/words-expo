@@ -3,11 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { FlashList } from '@shopify/flash-list';
 import { ListItem } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
-import { useContext } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import { NavigationProps } from '../App';
-import { DataContext, DataContextType } from '../helpers/DataContext';
 import Word from '../helpers/Word';
 import Deck from '../helpers/Deck';
 
@@ -51,7 +48,6 @@ const decks = [
 
 export default function ListOfDecks({ navigation }: NavigationProps) {
   const insets = useSafeAreaInsets();
-  const { setCurrentDeck } = useContext(DataContext) as DataContextType;
 
   return (
     <View
@@ -78,7 +74,6 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
               borderRadius={9}
               title={item.name}
               onPress={() => {
-                setCurrentDeck(item);
                 navigation.navigate('DeckView', { currentDeck: item });
               }}
             />
