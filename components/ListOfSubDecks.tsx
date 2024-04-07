@@ -7,7 +7,6 @@ import { DataContext, DataContextType } from '../helpers/DataContext';
 
 export default function ListOfSubDecks() {
   const { currentDeck } = useContext(DataContext) as DataContextType;
-  // const [currentSubDeck, setCurrentSubDeck] = useState<Deck>();
 
   return (
     <View flex={1}>
