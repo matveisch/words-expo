@@ -66,7 +66,7 @@ export default function DeckView() {
         <Button>Study all the words</Button>
       </View>
 
-      <DecksAndWordsTabs deck={currentDeck} />
+      <DecksAndWordsTabs />
     </View>
   );
 }

@@ -44,7 +44,7 @@ export default function App() {
               <Stack.Screen
                 name="Decks"
                 component={ListOfDecks}
-                options={{ headerTitle: 'Your Decks' }}
+                options={{ headerTitle: 'My Decks' }}
               />
               <Stack.Screen
                 name="DeckView"
