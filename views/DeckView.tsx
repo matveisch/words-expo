@@ -8,10 +8,12 @@ import { DataContext, DataContextType } from '../helpers/DataContext';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { FlashList } from '@shopify/flash-list';
 import { ChevronRight } from '@tamagui/lucide-icons';
+import { NavigationProps } from '../App';
 
-export default function DeckView() {
+export default function DeckView({ route }: NavigationProps) {
+  const { currentDeck } = route.params;
   const insets = useSafeAreaInsets();
-  const { currentDeck } = useContext(DataContext) as DataContextType;
+  // const { currentDeck } = useContext(DataContext) as DataContextType;
 
   return (
     <View

@@ -1,12 +1,13 @@
 import { createTamagui, TamaguiProvider } from '@tamagui/core';
 import { config } from '@tamagui/config/v3';
 import { loadFonts } from './helpers/loadFonts';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-
 import { DataContext, DataContextType } from './helpers/DataContext';
 import Deck from './helpers/Deck';
 import DeckView from './views/DeckView';
@@ -21,10 +22,18 @@ declare module '@tamagui/core' {
 
 type RootStackParamList = {
   Decks: undefined;
-  DeckView: undefined;
+  DeckView: { currentDeck: Deck };
 };
 
-export type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Decks', 'DeckView'>;
+type DeckViewNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+type DeckViewRouteProp = RouteProp<RootStackParamList>;
+
+export type NavigationProps = {
+  navigation: DeckViewNavigationProp;
+  route: DeckViewRouteProp;
+};
+
+// export type NavigationProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function App() {
   const [currentDeck, setCurrentDeck] = useState<Deck>();
@@ -49,10 +58,10 @@ export default function App() {
               <Stack.Screen
                 name="DeckView"
                 component={DeckView}
-                options={{
-                  headerTitle: currentDeck?.name,
+                options={({ route }) => ({
+                  headerTitle: route.params.currentDeck?.name,
                   headerBackTitleVisible: false,
-                }}
+                })}
               />
             </Stack.Navigator>
           </NavigationContainer>

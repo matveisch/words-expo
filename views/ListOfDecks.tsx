@@ -79,7 +79,7 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
               title={item.name}
               onPress={() => {
                 setCurrentDeck(item);
-                navigation.navigate('DeckView');
+                navigation.navigate('DeckView', { currentDeck: item });
               }}
             />
           )}
