@@ -1,15 +1,16 @@
 import { createTamagui, TamaguiProvider } from '@tamagui/core';
 import { config } from '@tamagui/config/v3';
 import { loadFonts } from './helpers/loadFonts';
-import Deck from './helpers/Deck';
-import ListOfDecks from './views/ListOfDecks';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DeckView from './views/DeckView';
 import { useState } from 'react';
-import { DataContext, DataContextType } from './helpers/DataContext';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { DataContext, DataContextType } from './helpers/DataContext';
+import Deck from './helpers/Deck';
+import DeckView from './views/DeckView';
+import ListOfDecks from './views/ListOfDecks';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -23,7 +24,7 @@ type RootStackParamList = {
   DeckView: undefined;
 };
 
-export type Props = NativeStackScreenProps<RootStackParamList, 'Decks', 'DeckView'>;
+export type NavigationProps = NativeStackScreenProps<RootStackParamList, 'Decks', 'DeckView'>;
 
 export default function App() {
   const [currentDeck, setCurrentDeck] = useState<Deck>();

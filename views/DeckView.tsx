@@ -1,10 +1,11 @@
 import { View, Text } from '@tamagui/core';
 import { StyleSheet } from 'react-native';
 import { Button, Progress } from 'tamagui';
-import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { useContext } from 'react';
-import { DataContext, DataContextType } from '../helpers/DataContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { DataContext, DataContextType } from '../helpers/DataContext';
+import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 
 export default function DeckView() {
   const insets = useSafeAreaInsets();

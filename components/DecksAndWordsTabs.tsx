@@ -1,8 +1,9 @@
 import { ListItem, SizableText, Tabs } from 'tamagui';
 import { View } from '@tamagui/core';
 import { ChevronRight } from '@tamagui/lucide-icons';
-import Deck from '../helpers/Deck';
 import { FlashList } from '@shopify/flash-list';
+
+import Deck from '../helpers/Deck';
 
 export default function DecksAndWordsTabs({ deck }: { deck: Deck }) {
   return (

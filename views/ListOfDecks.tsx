@@ -1,14 +1,15 @@
 import { Text, View } from '@tamagui/core';
 import { StatusBar } from 'expo-status-bar';
-import Word from '../helpers/Word';
-import Deck from '../helpers/Deck';
 import { FlashList } from '@shopify/flash-list';
 import { ListItem } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
-import { Props } from '../App';
 import { useContext } from 'react';
-import { DataContext, DataContextType } from '../helpers/DataContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { NavigationProps } from '../App';
+import { DataContext, DataContextType } from '../helpers/DataContext';
+import Word from '../helpers/Word';
+import Deck from '../helpers/Deck';
 
 const dogWord = new Word('dog', 'собака', 'дог', 4);
 const catWord = new Word('cat', 'кошка', 'кэт', 2);
@@ -45,7 +46,7 @@ const decks = [
   otherDeck,
 ];
 
-export default function ListOfDecks({ navigation }: Props) {
+export default function ListOfDecks({ navigation }: NavigationProps) {
   const insets = useSafeAreaInsets();
   const { setCurrentDeck } = useContext(DataContext) as DataContextType;
 
