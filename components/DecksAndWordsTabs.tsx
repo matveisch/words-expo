@@ -4,10 +4,14 @@ import { ChevronRight } from '@tamagui/lucide-icons';
 import { FlashList } from '@shopify/flash-list';
 import { useContext, useState } from 'react';
 import { DataContext, DataContextType } from '../helpers/DataContext';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../App';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export default function DecksAndWordsTabs() {
   const [activeTab, setActiveTab] = useState(0);
   const { currentDeck } = useContext(DataContext) as DataContextType;
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View flexDirection="column" height="100%" flex={1} paddingTop={10}>
@@ -55,7 +59,15 @@ export default function DecksAndWordsTabs() {
             ListEmptyComponent={<Text textAlign="center">No decks</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
-              <ListItem iconAfter={ChevronRight} pressTheme borderRadius={9} title={item.name} />
+              <ListItem
+                iconAfter={ChevronRight}
+                pressTheme
+                borderRadius={9}
+                title={item.name}
+                onPress={() => {
+                  navigation.push('DeckView', { currentDeck: item });
+                }}
+              />
             )}
           />
         </View>

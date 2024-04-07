@@ -20,6 +20,7 @@ declare module '@tamagui/core' {
 export type RootStackParamList = {
   Decks: undefined;
   DeckView: { currentDeck: Deck };
+  DecksAndWordsTabs: undefined;
 };
 
 // type DeckViewNavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -55,6 +56,7 @@ export default function App() {
                   headerBackTitleVisible: false,
                 })}
               />
+              {/*<Stack.Screen name="DecksAndWordsTabs" component={DecksAndWordsTabs} />*/}
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
