@@ -1,19 +1,18 @@
 import { View, Text } from '@tamagui/core';
 import { StyleSheet } from 'react-native';
 import { Button, ListItem, Progress } from 'tamagui';
-import { useContext } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { DataContext, DataContextType } from '../helpers/DataContext';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { FlashList } from '@shopify/flash-list';
 import { ChevronRight } from '@tamagui/lucide-icons';
-import { NavigationProps } from '../App';
+import { RootStackParamList } from '../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function DeckView({ route }: NavigationProps) {
+interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
+
+export default function DeckView({ route }: Props) {
   const { currentDeck } = route.params;
   const insets = useSafeAreaInsets();
-  // const { currentDeck } = useContext(DataContext) as DataContextType;
 
   return (
     <View

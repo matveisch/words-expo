@@ -2,7 +2,6 @@ import { Button, ListItem, Text } from 'tamagui';
 import { View } from '@tamagui/core';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { FlashList } from '@shopify/flash-list';
-
 import { useContext, useState } from 'react';
 import { DataContext, DataContextType } from '../helpers/DataContext';
 

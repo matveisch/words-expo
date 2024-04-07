@@ -2,11 +2,11 @@ import { FlashList } from '@shopify/flash-list';
 import { ListItem, Text } from 'tamagui';
 import { View } from '@tamagui/core';
 import { ChevronRight } from '@tamagui/lucide-icons';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { DataContext, DataContextType } from '../helpers/DataContext';
 
 export default function ListOfSubDecks() {
-  const { currentDeck, setCurrentDeck } = useContext(DataContext) as DataContextType;
+  const { currentDeck } = useContext(DataContext) as DataContextType;
   // const [currentSubDeck, setCurrentSubDeck] = useState<Deck>();
 
   return (
