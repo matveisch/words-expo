@@ -34,6 +34,7 @@ export default function DecksAndWordsTabs() {
           <FlashList
             estimatedItemSize={65}
             data={currentDeck.words}
+            ListEmptyComponent={<Text textAlign="center">No words</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
               <ListItem
@@ -52,6 +53,7 @@ export default function DecksAndWordsTabs() {
           <FlashList
             estimatedItemSize={44}
             data={currentDeck.innerDecks}
+            ListEmptyComponent={<Text textAlign="center">No decks</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
               <ListItem iconAfter={ChevronRight} pressTheme borderRadius={9} title={item.name} />

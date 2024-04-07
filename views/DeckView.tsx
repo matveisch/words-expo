@@ -1,11 +1,13 @@
 import { View, Text } from '@tamagui/core';
 import { StyleSheet } from 'react-native';
-import { Button, Progress } from 'tamagui';
+import { Button, ListItem, Progress } from 'tamagui';
 import { useContext } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DataContext, DataContextType } from '../helpers/DataContext';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
+import { FlashList } from '@shopify/flash-list';
+import { ChevronRight } from '@tamagui/lucide-icons';
 
 export default function DeckView() {
   const insets = useSafeAreaInsets();
@@ -56,7 +58,7 @@ export default function DeckView() {
 
       <View paddingVertical={10}>
         <Progress
-          value={(currentDeck.numberOfCertainLevelWords(4) * 100) / currentDeck.words.length}
+          value={(currentDeck.numberOfCertainLevelWords(4) * 100) / currentDeck.totalNumberOfWords}
         >
           <Progress.Indicator backgroundColor="#00CD5E" />
         </Progress>
@@ -66,7 +68,27 @@ export default function DeckView() {
         <Button>Study all the words</Button>
       </View>
 
-      <DecksAndWordsTabs />
+      {currentDeck.isSubDeck ? (
+        <View flex={1}>
+          <FlashList
+            estimatedItemSize={65}
+            ListEmptyComponent={<Text textAlign="center">No words</Text>}
+            data={currentDeck.words}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            renderItem={({ item }) => (
+              <ListItem
+                iconAfter={ChevronRight}
+                pressTheme
+                borderRadius={9}
+                title={item.word}
+                subTitle={item.meaning}
+              />
+            )}
+          />
+        </View>
+      ) : (
+        <DecksAndWordsTabs />
+      )}
     </View>
   );
 }

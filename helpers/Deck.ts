@@ -3,11 +3,13 @@ import Word from './Word';
 export default class Deck {
   name: string;
   words: Word[];
+  isSubDeck: boolean;
   innerDecks?: Deck[];
 
-  constructor(name: string, words: Word[], innerDecks?: Deck[]) {
+  constructor(name: string, words: Word[], isSubDeck: boolean, innerDecks?: Deck[]) {
     this.name = name;
     this.words = words;
+    this.isSubDeck = isSubDeck;
     this.innerDecks = innerDecks;
   }
 
@@ -21,9 +23,5 @@ export default class Deck {
 
   get wordsToLearn() {
     return this.words.map((word) => word.knowledgeLevel <= 3);
-  }
-
-  get learnedWords() {
-    return this.words.map((word) => word.knowledgeLevel === 4);
   }
 }
