@@ -26,13 +26,13 @@ type RootStackParamList = {
 export type Props = NativeStackScreenProps<RootStackParamList, 'Decks', 'DeckView'>;
 
 export default function App() {
-  if (!loadFonts()) {
-    return null;
-  }
-
   const [currentDeck, setCurrentDeck] = useState<Deck>();
   const DataContextValue = { currentDeck, setCurrentDeck } as DataContextType;
   const Stack = createNativeStackNavigator<RootStackParamList>();
+
+  if (!loadFonts()) {
+    return null;
+  }
 
   return (
     <TamaguiProvider config={tamaguiConfig}>
