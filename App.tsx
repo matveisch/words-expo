@@ -9,6 +9,8 @@ import { DataContext, DataContextType } from './helpers/DataContext';
 import Deck from './helpers/Deck';
 import DeckView from './views/DeckView';
 import ListOfDecks from './views/ListOfDecks';
+import { Button } from 'tamagui';
+import { BookPlus } from '@tamagui/lucide-icons';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -23,14 +25,11 @@ export type RootStackParamList = {
   DecksAndWordsTabs: undefined;
 };
 
-// type DeckViewNavigationProp = NativeStackNavigationProp<RootStackParamList>;
-// type DeckViewRouteProp = RouteProp<RootStackParamList, 'DeckView'>;
-
 export type NavigationProps = NativeStackScreenProps<RootStackParamList>;
 
 export default function App() {
-  const [currentDeck, setCurrentDeck] = useState<Deck>();
-  const DataContextValue = { currentDeck, setCurrentDeck } as DataContextType;
+  const [openCreateDeckModal, setOpenCreateDeckModal] = useState(false);
+  const DataContextValue = { openCreateDeckModal, setOpenCreateDeckModal } as DataContextType;
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   if (!loadFonts()) {
@@ -46,7 +45,14 @@ export default function App() {
               <Stack.Screen
                 name="Decks"
                 component={ListOfDecks}
-                options={{ headerTitle: 'My Decks' }}
+                options={{
+                  headerTitle: 'My Decks',
+                  headerRight: () => (
+                    <Button size="$2" chromeless onPress={() => setOpenCreateDeckModal(true)}>
+                      <BookPlus />
+                    </Button>
+                  ),
+                }}
               />
               <Stack.Screen
                 name="DeckView"
@@ -56,7 +62,6 @@ export default function App() {
                   headerBackTitleVisible: false,
                 })}
               />
-              {/*<Stack.Screen name="DecksAndWordsTabs" component={DecksAndWordsTabs} />*/}
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>

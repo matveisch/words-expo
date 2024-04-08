@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationProps } from '../App';
 import Word from '../helpers/Word';
 import Deck from '../helpers/Deck';
+import SheetView from './SheetView';
 
 const dogWord = new Word('dog', 'собака', 'дог', 4);
 const catWord = new Word('cat', 'кошка', 'кэт', 2);
@@ -61,6 +62,7 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
       }}
     >
       <View flex={1}>
+        <SheetView />
         <FlashList
           estimatedItemSize={44}
           data={decks}
