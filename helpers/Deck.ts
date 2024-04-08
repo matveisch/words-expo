@@ -3,13 +3,11 @@ import Word from './Word';
 export default class Deck {
   name: string;
   words: Word[];
-  isSubDeck: boolean;
   innerDecks?: Deck[];
 
-  constructor(name: string, words: Word[], isSubDeck: boolean, innerDecks?: Deck[]) {
+  constructor(name: string, words: Word[], innerDecks?: Deck[]) {
     this.name = name;
     this.words = words;
-    this.isSubDeck = isSubDeck;
     this.innerDecks = innerDecks;
   }
 

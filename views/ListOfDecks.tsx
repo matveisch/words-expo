@@ -11,9 +11,9 @@ import Deck from '../helpers/Deck';
 const dogWord = new Word('dog', 'собака', 'дог', 4);
 const catWord = new Word('cat', 'кошка', 'кэт', 2);
 
-const newSubDeck = new Deck('sub deck', [dogWord, catWord], true);
-const parentDeck = new Deck('parent deck', [dogWord, catWord], false, [newSubDeck]);
-const secondDeck = new Deck('another animals', [dogWord, catWord], false);
+const newSubDeck = new Deck('sub deck', [dogWord, catWord]);
+const parentDeck = new Deck('parent deck', [dogWord, catWord], [newSubDeck]);
+const secondDeck = new Deck('another animals', [dogWord, catWord]);
 const otherDeck = new Deck(
   'animals too',
   [
@@ -30,7 +30,6 @@ const otherDeck = new Deck(
     dogWord,
     catWord,
   ],
-  false,
   [parentDeck, secondDeck, parentDeck, secondDeck, parentDeck, secondDeck, parentDeck, secondDeck]
 );
 

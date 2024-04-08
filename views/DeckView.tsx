@@ -1,10 +1,8 @@
 import { View, Text } from '@tamagui/core';
 import { StyleSheet } from 'react-native';
-import { Button, ListItem, Progress } from 'tamagui';
+import { Button, Progress } from 'tamagui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
-import { FlashList } from '@shopify/flash-list';
-import { ChevronRight } from '@tamagui/lucide-icons';
 import { RootStackParamList } from '../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -69,27 +67,7 @@ export default function DeckView({ route }: Props) {
         <Button>Study all the words</Button>
       </View>
 
-      {currentDeck.isSubDeck ? (
-        <View flex={1}>
-          <FlashList
-            estimatedItemSize={65}
-            ListEmptyComponent={<Text textAlign="center">No words</Text>}
-            data={currentDeck.words}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            renderItem={({ item }) => (
-              <ListItem
-                iconAfter={ChevronRight}
-                pressTheme
-                borderRadius={9}
-                title={item.word}
-                subTitle={item.meaning}
-              />
-            )}
-          />
-        </View>
-      ) : (
-        <DecksAndWordsTabs currentDeck={currentDeck} />
-      )}
+      <DecksAndWordsTabs currentDeck={currentDeck} />
     </View>
   );
 }
