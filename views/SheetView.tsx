@@ -2,6 +2,7 @@ import { Button, Form, Input, Label, Sheet, Text } from 'tamagui';
 import { useContext } from 'react';
 import { DataContext, DataContextType } from '../helpers/DataContext';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { View } from '@tamagui/core';
 
 type Inputs = {
   deckName: string;
@@ -13,7 +14,6 @@ export default function SheetView() {
   ) as DataContextType;
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
@@ -31,23 +31,45 @@ export default function SheetView() {
       onOpenChange={setOpenCreateDeckModal}
       dismissOnSnapToBottom
       zIndex={100_000}
-      moveOnKeyboardChange
     >
       <Sheet.Overlay enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
       <Sheet.Handle />
       <Sheet.Frame padding={10}>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <View>
           <Label>Deck Name</Label>
           <Controller
             name="deckName"
             control={control}
-            render={({ field }) => <Input size="$4" borderWidth={2} {...field} />}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                onChangeText={(text) => onChange(text)}
+                onBlur={onBlur}
+                value={value}
+                size="$4"
+                borderWidth={2}
+              />
+            )}
           />
-          {errors.deckName && <span>This field is required</span>}
-          <Form.Trigger asChild marginTop={10}>
-            <Button>Create</Button>
-          </Form.Trigger>
-        </Form>
+          {errors.deckName && <Text color="red">This field is required</Text>}
+          <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
+            Create
+          </Button>
+        </View>
+        {/*<Form onSubmit={handleSubmit(onSubmit)}>*/}
+        {/*  <Label>Deck Name</Label>*/}
+        {/*  <Controller*/}
+        {/*    name="deckName"*/}
+        {/*    control={control}*/}
+        {/*    render={({ field }) => <Input {...field} size="$4" borderWidth={2} />}*/}
+        {/*  />*/}
+        {/*  {errors.deckName && <span>This field is required</span>}*/}
+        {/*  <Form.Trigger asChild marginTop={10}>*/}
+        {/*    <Button>Create</Button>*/}
+        {/*  </Form.Trigger>*/}
+        {/*</Form>*/}
       </Sheet.Frame>
     </Sheet>
   );
