@@ -1,5 +1,5 @@
 import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { DataContext, DataContextType } from '../helpers/DataContext';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
@@ -14,7 +14,7 @@ export default function SheetView() {
   const { openCreateDeckModal, setOpenCreateDeckModal } = useContext(
     DataContext
   ) as DataContextType;
-
+  const [currentColor, setCurrentColor] = useState('');
   const colors = [
     orange.orange7,
     yellow.yellow7,
@@ -29,6 +29,7 @@ export default function SheetView() {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
@@ -39,8 +40,8 @@ export default function SheetView() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
     Keyboard.dismiss();
-    reset();
-    setOpenCreateDeckModal(false);
+    // reset();
+    // setOpenCreateDeckModal(false);
   };
 
   return (
@@ -79,11 +80,15 @@ export default function SheetView() {
           <View flexDirection="row" gap={10}>
             {colors.map((color, index) => (
               <Circle
+                onPress={() => {
+                  setValue('color', color);
+                  setCurrentColor(color);
+                }}
                 key={`${color}-${index}`}
                 backgroundColor={color}
                 size="$3"
                 borderWidth={3}
-                borderColor="$borderColor"
+                borderColor={currentColor === color ? 'black' : '$borderColor'}
               />
             ))}
           </View>
