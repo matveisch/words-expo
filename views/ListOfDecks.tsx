@@ -11,9 +11,9 @@ import SheetView from './SheetView';
 const dogWord = new Word('dog', 'собака', 'дог', 4);
 const catWord = new Word('cat', 'кошка', 'кэт', 2);
 
-const newSubDeck = new Deck('sub deck', [dogWord, catWord]);
-const parentDeck = new Deck('parent deck', [dogWord, catWord], [newSubDeck]);
 const secondDeck = new Deck('another animals', [dogWord, catWord]);
+const newSubDeck = new Deck('sub deck', [dogWord, catWord], [secondDeck]);
+const parentDeck = new Deck('parent deck', [dogWord, catWord], [newSubDeck]);
 const otherDeck = new Deck(
   'animals too',
   [
