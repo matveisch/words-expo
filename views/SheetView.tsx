@@ -1,27 +1,47 @@
-import { Button, Form, Input, Label, Sheet, Text } from 'tamagui';
+import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
 import { useContext } from 'react';
 import { DataContext, DataContextType } from '../helpers/DataContext';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { View } from '@tamagui/core';
+import { Keyboard } from 'react-native';
+import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
 
 type Inputs = {
   deckName: string;
+  color: string;
 };
 
 export default function SheetView() {
   const { openCreateDeckModal, setOpenCreateDeckModal } = useContext(
     DataContext
   ) as DataContextType;
+
+  const colors = [
+    orange.orange7,
+    yellow.yellow7,
+    green.green7,
+    blue.blue7,
+    purple.purple7,
+    pink.pink7,
+    red.red7,
+  ];
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
       deckName: '',
+      color: '',
     },
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    Keyboard.dismiss();
+    reset();
+    setOpenCreateDeckModal(false);
+  };
 
   return (
     <Sheet
@@ -36,7 +56,8 @@ export default function SheetView() {
       <Sheet.Handle />
       <Sheet.Frame padding={10}>
         <View>
-          <Label>Deck Name</Label>
+          <H3 textAlign="center">New Deck</H3>
+          <Label>Name</Label>
           <Controller
             name="deckName"
             control={control}
@@ -54,22 +75,22 @@ export default function SheetView() {
             )}
           />
           {errors.deckName && <Text color="red">This field is required</Text>}
+          <Label>Color</Label>
+          <View flexDirection="row" gap={10}>
+            {colors.map((color, index) => (
+              <Circle
+                key={`${color}-${index}`}
+                backgroundColor={color}
+                size="$3"
+                borderWidth={3}
+                borderColor="$borderColor"
+              />
+            ))}
+          </View>
           <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
             Create
           </Button>
         </View>
-        {/*<Form onSubmit={handleSubmit(onSubmit)}>*/}
-        {/*  <Label>Deck Name</Label>*/}
-        {/*  <Controller*/}
-        {/*    name="deckName"*/}
-        {/*    control={control}*/}
-        {/*    render={({ field }) => <Input {...field} size="$4" borderWidth={2} />}*/}
-        {/*  />*/}
-        {/*  {errors.deckName && <span>This field is required</span>}*/}
-        {/*  <Form.Trigger asChild marginTop={10}>*/}
-        {/*    <Button>Create</Button>*/}
-        {/*  </Form.Trigger>*/}
-        {/*</Form>*/}
       </Sheet.Frame>
     </Sheet>
   );

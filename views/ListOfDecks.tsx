@@ -1,7 +1,6 @@
-import { Text, View } from '@tamagui/core';
 import { StatusBar } from 'expo-status-bar';
 import { FlashList } from '@shopify/flash-list';
-import { ListItem } from 'tamagui';
+import { ListItem, Text, View } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationProps } from '../App';

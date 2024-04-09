@@ -12,6 +12,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@shopify/flash-list": "1.6.3",
+    "@tamagui/colors": "^1.94.4",
     "@tamagui/config": "^1.94.3",
     "@tamagui/core": "^1.94.3",
     "@tamagui/lucide-icons": "^1.94.3",
