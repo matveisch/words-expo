@@ -11,6 +11,7 @@ import DeckView from './views/DeckView';
 import ListOfDecks from './views/ListOfDecks';
 import { Button } from 'tamagui';
 import { BookPlus } from '@tamagui/lucide-icons';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -27,6 +28,8 @@ export type RootStackParamList = {
 
 export type NavigationProps = NativeStackScreenProps<RootStackParamList>;
 
+const queryClient = new QueryClient();
+
 export default function App() {
   const [openCreateDeckModal, setOpenCreateDeckModal] = useState(false);
   const DataContextValue = { openCreateDeckModal, setOpenCreateDeckModal } as DataContextType;
@@ -38,34 +41,36 @@ export default function App() {
 
   return (
     <TamaguiProvider config={tamaguiConfig}>
-      <DataContext.Provider value={DataContextValue}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName="Decks">
-              <Stack.Screen
-                name="Decks"
-                component={ListOfDecks}
-                options={{
-                  headerTitle: 'My Decks',
-                  headerRight: () => (
-                    <Button size="$2" chromeless onPress={() => setOpenCreateDeckModal(true)}>
-                      <BookPlus />
-                    </Button>
-                  ),
-                }}
-              />
-              <Stack.Screen
-                name="DeckView"
-                component={DeckView}
-                options={({ route }) => ({
-                  headerTitle: route.params.currentDeck?.name,
-                  headerBackTitleVisible: false,
-                })}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </DataContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <DataContext.Provider value={DataContextValue}>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <Stack.Navigator initialRouteName="Decks">
+                <Stack.Screen
+                  name="Decks"
+                  component={ListOfDecks}
+                  options={{
+                    headerTitle: 'My Decks',
+                    headerRight: () => (
+                      <Button size="$2" chromeless onPress={() => setOpenCreateDeckModal(true)}>
+                        <BookPlus />
+                      </Button>
+                    ),
+                  }}
+                />
+                <Stack.Screen
+                  name="DeckView"
+                  component={DeckView}
+                  options={({ route }) => ({
+                    headerTitle: route.params.currentDeck?.name,
+                    headerBackTitleVisible: false,
+                  })}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </DataContext.Provider>
+      </QueryClientProvider>
     </TamaguiProvider>
   );
 }
