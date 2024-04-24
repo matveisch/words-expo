@@ -7,6 +7,8 @@ import { NavigationProps } from '../App';
 import Word from '../helpers/Word';
 import Deck from '../helpers/Deck';
 import SheetView from './SheetView';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '../helpers/initSupabase';
 
 const dogWord = new Word('dog', 'собака', 'дог', 4);
 const catWord = new Word('cat', 'кошка', 'кэт', 2);
@@ -47,6 +49,12 @@ const decks = [
 
 export default function ListOfDecks({ navigation }: NavigationProps) {
   const insets = useSafeAreaInsets();
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ['decks'],
+    queryFn: () => supabase.from('decks').select().is('parent_deck', null),
+  });
+
+  console.log({ data });
 
   return (
     <View
