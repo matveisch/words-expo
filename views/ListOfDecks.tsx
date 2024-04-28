@@ -4,57 +4,12 @@ import { ListItem, Text, View } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationProps } from '../App';
-import Word from '../helpers/Word';
-import Deck from '../helpers/Deck';
 import SheetView from './SheetView';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../helpers/initSupabase';
-
-const dogWord = new Word('dog', 'собака', 'дог', 4);
-const catWord = new Word('cat', 'кошка', 'кэт', 2);
-
-const secondDeck = new Deck('another animals', [dogWord, catWord]);
-const newSubDeck = new Deck('sub deck', [dogWord, catWord], [secondDeck]);
-const parentDeck = new Deck('parent deck', [dogWord, catWord], [newSubDeck]);
-const otherDeck = new Deck(
-  'animals too',
-  [
-    dogWord,
-    catWord,
-    dogWord,
-    catWord,
-    dogWord,
-    catWord,
-    dogWord,
-    catWord,
-    dogWord,
-    catWord,
-    dogWord,
-    catWord,
-  ],
-  [parentDeck, secondDeck, parentDeck, secondDeck, parentDeck, secondDeck, parentDeck, secondDeck]
-);
-
-const decks = [
-  parentDeck,
-  secondDeck,
-  parentDeck,
-  secondDeck,
-  parentDeck,
-  secondDeck,
-  parentDeck,
-  secondDeck,
-  otherDeck,
-];
+import { useDecks } from '../hooks/useDecks';
 
 export default function ListOfDecks({ navigation }: NavigationProps) {
   const insets = useSafeAreaInsets();
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ['decks'],
-    queryFn: () => supabase.from('decks').select().is('parent_deck', null),
-  });
-
-  console.log({ data });
+  const { data: decks, isError, isLoading, error } = useDecks();
 
   return (
     <View
@@ -82,7 +37,7 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
               borderRadius={9}
               title={item.name}
               onPress={() => {
-                navigation.navigate('DeckView', { currentDeck: item });
+                navigation.navigate('DeckView', { currentDeck: item.id });
               }}
             />
           )}

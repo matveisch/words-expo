@@ -6,11 +6,12 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Deck from '../helpers/Deck';
+import { useWords } from '../hooks/useWords';
 
-export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: Deck }) {
+export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number }) {
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { data: words } = useWords(currentDeck);
 
   return (
     <View flexDirection="column" height="100%" flex={1} paddingTop={10}>
@@ -35,7 +36,7 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: Deck }
         <View flex={1}>
           <FlashList
             estimatedItemSize={65}
-            data={currentDeck.words}
+            data={words}
             ListEmptyComponent={<Text textAlign="center">No words</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
@@ -52,23 +53,23 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: Deck }
       )}
       {activeTab === 1 && (
         <View flex={1}>
-          <FlashList
-            estimatedItemSize={44}
-            data={currentDeck.innerDecks}
-            ListEmptyComponent={<Text textAlign="center">No decks</Text>}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            renderItem={({ item }) => (
-              <ListItem
-                iconAfter={ChevronRight}
-                pressTheme
-                borderRadius={9}
-                title={item.name}
-                onPress={() => {
-                  navigation.push('DeckView', { currentDeck: item });
-                }}
-              />
-            )}
-          />
+          {/*<FlashList*/}
+          {/*  estimatedItemSize={44}*/}
+          {/*  data={currentDeck.innerDecks}*/}
+          {/*  ListEmptyComponent={<Text textAlign="center">No decks</Text>}*/}
+          {/*  ItemSeparatorComponent={() => <View style={{ height: 10 }} />}*/}
+          {/*  renderItem={({ item }) => (*/}
+          {/*    <ListItem*/}
+          {/*      iconAfter={ChevronRight}*/}
+          {/*      pressTheme*/}
+          {/*      borderRadius={9}*/}
+          {/*      title={item.name}*/}
+          {/*      onPress={() => {*/}
+          {/*        navigation.push('DeckView', { currentDeck: item });*/}
+          {/*      }}*/}
+          {/*    />*/}
+          {/*  )}*/}
+          {/*/>*/}
         </View>
       )}
     </View>

@@ -1,14 +1,11 @@
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { supabase } from '../helpers/initSupabase';
+import { DeckType } from '../types/Deck';
 
-const fetchDecks = async (deckId: string) => {
-  const { data } = await axios.get('');
-  return data;
-};
-
-const usePost = (deckId: string) =>
+export const useDeck = (id: number) =>
   useQuery({
-    queryKey: ['decks', deckId],
-    queryFn: () => fetchDecks(deckId),
+    queryKey: ['decks'],
+    queryFn: () => supabase.from('decks').select().eq('id', id),
+    // @ts-ignore
+    select: (data): DeckType => data.data,
   });
-export default usePost;

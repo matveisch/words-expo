@@ -5,12 +5,29 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { RootStackParamList } from '../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useDeck } from '../hooks/useDeck';
+import { useWords } from '../hooks/useWords';
+import { Word } from '../types/Word';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
+
+function getCertainKnowledgeLevelWords(knowledgeLevel: number, words: Word[] | undefined): number {
+  return words?.filter((word) => word.knowledgelevel === knowledgeLevel).length || 0;
+}
 
 export default function DeckView({ route }: Props) {
   const { currentDeck } = route.params;
   const insets = useSafeAreaInsets();
+  const { data: deck, isError, isLoading, error } = useDeck(currentDeck);
+  const { data: words } = useWords(currentDeck);
+
+  if (!words) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -27,22 +44,22 @@ export default function DeckView({ route }: Props) {
         <Button style={styles.button} backgroundColor="#F28F88">
           <Text
             style={styles.buttonText}
-          >{`${currentDeck.numberOfCertainLevelWords(1)}\n\nagain`}</Text>
+          >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>
         </Button>
         <Button style={styles.button} backgroundColor="#F2DB88">
           <Text
             style={styles.buttonText}
-          >{`${currentDeck.numberOfCertainLevelWords(2)}\n\nhard`}</Text>
+          >{`${getCertainKnowledgeLevelWords(2, words)}\n\nhard`}</Text>
         </Button>
         <Button style={styles.button} backgroundColor="#D7F288">
           <Text
             style={styles.buttonText}
-          >{`${currentDeck.numberOfCertainLevelWords(3)}\n\ngood`}</Text>
+          >{`${getCertainKnowledgeLevelWords(3, words)}\n\ngood`}</Text>
         </Button>
         <Button style={styles.button} backgroundColor="#88F2F2">
           <Text
             style={styles.buttonText}
-          >{`${currentDeck.numberOfCertainLevelWords(4)}\n\neasy`}</Text>
+          >{`${getCertainKnowledgeLevelWords(4, words)}\n\neasy`}</Text>
         </Button>
       </View>
 
@@ -56,9 +73,7 @@ export default function DeckView({ route }: Props) {
       </View>
 
       <View paddingVertical={10}>
-        <Progress
-          value={(currentDeck.numberOfCertainLevelWords(4) * 100) / currentDeck.totalNumberOfWords}
-        >
+        <Progress value={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length}>
           <Progress.Indicator backgroundColor="#00CD5E" />
         </Progress>
       </View>

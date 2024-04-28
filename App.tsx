@@ -6,7 +6,6 @@ import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navig
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DataContext, DataContextType } from './helpers/DataContext';
-import Deck from './helpers/Deck';
 import DeckView from './views/DeckView';
 import ListOfDecks from './views/ListOfDecks';
 import { Button } from 'tamagui';
@@ -17,7 +16,6 @@ import NetInfo from '@react-native-community/netinfo';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { supabase } from './helpers/initSupabase';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -28,7 +26,7 @@ const tamaguiConfig = createTamagui(config);
 
 export type RootStackParamList = {
   Decks: undefined;
-  DeckView: { currentDeck: Deck };
+  DeckView: { currentDeck: number };
   DecksAndWordsTabs: undefined;
 };
 
@@ -43,9 +41,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-//cacheTime: Infinity,
-//retry: 0,
 
 const asyncPersist = createAsyncStoragePersister({
   storage: AsyncStorage,
@@ -109,7 +104,7 @@ export default function App() {
                   name="DeckView"
                   component={DeckView}
                   options={({ route }) => ({
-                    headerTitle: route.params.currentDeck?.name,
+                    headerTitle: 'route.params.currentDeck?.name',
                     headerBackTitleVisible: false,
                   })}
                 />
