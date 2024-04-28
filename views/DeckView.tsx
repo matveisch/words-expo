@@ -16,12 +16,12 @@ function getCertainKnowledgeLevelWords(knowledgeLevel: number, words: Word[] | u
 }
 
 export default function DeckView({ route }: Props) {
-  const { currentDeck } = route.params;
+  const { currentDeckId } = route.params;
   const insets = useSafeAreaInsets();
-  const { data: deck, isError, isLoading, error } = useDeck(currentDeck);
-  const { data: words } = useWords(currentDeck);
+  const { data: deck, isError, isLoading: isDeckLoading, error } = useDeck(currentDeckId);
+  const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
 
-  if (!words) {
+  if (isDeckLoading || areWordsLoading) {
     return (
       <View>
         <Text>Loading...</Text>
@@ -73,16 +73,18 @@ export default function DeckView({ route }: Props) {
       </View>
 
       <View paddingVertical={10}>
-        <Progress value={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length}>
-          <Progress.Indicator backgroundColor="#00CD5E" />
-        </Progress>
+        {words && (
+          <Progress value={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length}>
+            <Progress.Indicator backgroundColor="#00CD5E" />
+          </Progress>
+        )}
       </View>
 
       <View>
         <Button>Study all the words</Button>
       </View>
 
-      <DecksAndWordsTabs currentDeck={currentDeck} />
+      <DecksAndWordsTabs currentDeck={currentDeckId} />
     </View>
   );
 }

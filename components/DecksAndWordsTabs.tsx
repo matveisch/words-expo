@@ -7,11 +7,13 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useWords } from '../hooks/useWords';
+import { useSubDecks } from '../hooks/useSubDecks';
 
 export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number }) {
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
+  const { data: subDecks } = useSubDecks(currentDeck);
 
   return (
     <View flexDirection="column" height="100%" flex={1} paddingTop={10}>
@@ -53,23 +55,26 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number
       )}
       {activeTab === 1 && (
         <View flex={1}>
-          {/*<FlashList*/}
-          {/*  estimatedItemSize={44}*/}
-          {/*  data={currentDeck.innerDecks}*/}
-          {/*  ListEmptyComponent={<Text textAlign="center">No decks</Text>}*/}
-          {/*  ItemSeparatorComponent={() => <View style={{ height: 10 }} />}*/}
-          {/*  renderItem={({ item }) => (*/}
-          {/*    <ListItem*/}
-          {/*      iconAfter={ChevronRight}*/}
-          {/*      pressTheme*/}
-          {/*      borderRadius={9}*/}
-          {/*      title={item.name}*/}
-          {/*      onPress={() => {*/}
-          {/*        navigation.push('DeckView', { currentDeck: item });*/}
-          {/*      }}*/}
-          {/*    />*/}
-          {/*  )}*/}
-          {/*/>*/}
+          <FlashList
+            estimatedItemSize={44}
+            data={subDecks}
+            ListEmptyComponent={<Text textAlign="center">No decks</Text>}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            renderItem={({ item }) => (
+              <ListItem
+                iconAfter={ChevronRight}
+                pressTheme
+                borderRadius={9}
+                title={item.name}
+                onPress={() => {
+                  navigation.push('DeckView', {
+                    currentDeckId: item.id,
+                    currentDeckName: item.name,
+                  });
+                }}
+              />
+            )}
+          />
         </View>
       )}
     </View>

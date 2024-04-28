@@ -11,6 +11,14 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
   const insets = useSafeAreaInsets();
   const { data: decks, isError, isLoading, error } = useDecks();
 
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View
       style={{
@@ -37,7 +45,10 @@ export default function ListOfDecks({ navigation }: NavigationProps) {
               borderRadius={9}
               title={item.name}
               onPress={() => {
-                navigation.navigate('DeckView', { currentDeck: item.id });
+                navigation.navigate('DeckView', {
+                  currentDeckId: item.id,
+                  currentDeckName: item.name,
+                });
               }}
             />
           )}

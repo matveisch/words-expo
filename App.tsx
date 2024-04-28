@@ -26,7 +26,7 @@ const tamaguiConfig = createTamagui(config);
 
 export type RootStackParamList = {
   Decks: undefined;
-  DeckView: { currentDeck: number };
+  DeckView: { currentDeckId: number; currentDeckName: string };
   DecksAndWordsTabs: undefined;
 };
 
@@ -34,11 +34,11 @@ export type NavigationProps = NativeStackScreenProps<RootStackParamList>;
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-      staleTime: Infinity,
-      gcTime: Infinity,
-      retry: 0,
-    },
+    // queries: {
+    //   staleTime: Infinity,
+    //   gcTime: Infinity,
+    //   retry: 0,
+    // },
   },
 });
 
@@ -104,7 +104,7 @@ export default function App() {
                   name="DeckView"
                   component={DeckView}
                   options={({ route }) => ({
-                    headerTitle: 'route.params.currentDeck?.name',
+                    headerTitle: route.params.currentDeckName,
                     headerBackTitleVisible: false,
                   })}
                 />
