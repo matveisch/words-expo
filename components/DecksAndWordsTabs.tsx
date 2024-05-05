@@ -4,14 +4,14 @@ import { ChevronRight } from '@tamagui/lucide-icons';
 import { FlashList } from '@shopify/flash-list';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../App';
+import { RootTabsParamList } from '../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
 
 export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number }) {
   const [activeTab, setActiveTab] = useState(0);
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootTabsParamList>>();
   const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);
 

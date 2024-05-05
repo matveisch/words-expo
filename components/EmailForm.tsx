@@ -11,7 +11,7 @@ type Inputs = {
   password: string;
 };
 
-export default function EmailForm({ navigation }: NavigationProps) {
+export default function EmailForm() {
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
 
@@ -35,7 +35,7 @@ export default function EmailForm({ navigation }: NavigationProps) {
 
     if (error) Alert.alert(error.message);
     setLoading(false);
-    if (!error) navigation.navigate('Decks', { userId: session.user?.id });
+    // if (!error) navigation.navigate('Decks', { userId: session.user?.id });
   }
 
   async function signUpWithEmail(data: Inputs) {
