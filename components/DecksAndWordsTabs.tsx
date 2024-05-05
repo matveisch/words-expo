@@ -4,19 +4,21 @@ import { ChevronRight } from '@tamagui/lucide-icons';
 import { FlashList } from '@shopify/flash-list';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { RootTabsParamList } from '../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
+import { RootStackParamList } from '../views/Home';
+import { StyleSheet } from 'react-native';
+import { blackA, blueDarkA, orangeDark } from '@tamagui/colors';
 
 export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number }) {
   const [activeTab, setActiveTab] = useState(0);
-  const navigation = useNavigation<NativeStackNavigationProp<RootTabsParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);
 
   return (
-    <View flexDirection="column" height="100%" flex={1} paddingTop={10}>
+    <View flexDirection="column" height="100%" flex={1} paddingTop={10} style={styles.container}>
       <View flexDirection="row" gap={10} paddingBottom={10}>
         <Button
           flex={1}
@@ -77,6 +79,25 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number
           />
         </View>
       )}
+      <View style={styles.newItemButton}>
+        <Button backgroundColor={orangeDark.orange10}>
+          {`Add new ${activeTab === 0 ? 'word' : 'deck'}`}
+        </Button>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+  },
+  newItemButton: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
