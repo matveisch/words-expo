@@ -10,15 +10,24 @@ import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/Home';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
+import SheetView from '../views/SheetView';
 
 export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number }) {
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [openModal, setOpenModal] = useState(false);
   const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);
 
+  function handleButtonPress() {
+    if (activeTab === 1) setOpenModal(!openModal);
+  }
+
+  console.log(subDecks);
+
   return (
-    <View flexDirection="column" height="100%" flex={1} style={styles.container}>
+    <View flex={1} style={styles.container}>
+      <SheetView openModal={openModal} setOpenModal={setOpenModal} parentDeck={currentDeck} />
       <View flexDirection="row" gap={10} paddingBottom={10}>
         <Button
           flex={1}
@@ -80,7 +89,7 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number
         </View>
       )}
       <View style={styles.newItemButton}>
-        <Button backgroundColor={orange.orange7}>
+        <Button backgroundColor={orange.orange7} onPress={handleButtonPress}>
           {`Add new ${activeTab === 0 ? 'word' : 'deck'}`}
         </Button>
       </View>
@@ -91,6 +100,7 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number
 const styles = StyleSheet.create({
   container: {
     height: '100%',
+    flexDirection: 'column',
   },
   newItemButton: {
     position: 'absolute',

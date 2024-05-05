@@ -7,12 +7,17 @@ import SheetView from './SheetView';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './Home';
+import { useContext } from 'react';
+import { DataContext, DataContextType } from '../helpers/DataContext';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
 export default function ListOfDecks({ navigation, route }: Props) {
   const insets = useSafeAreaInsets();
   const { userId } = route.params;
+  const { openCreateDeckModal, setOpenCreateDeckModal } = useContext(
+    DataContext
+  ) as DataContextType;
   // todo error handling
   const { data: decks, isError, isLoading, error } = useDecks(userId);
 
@@ -37,7 +42,7 @@ export default function ListOfDecks({ navigation, route }: Props) {
       }}
     >
       <View flex={1}>
-        <SheetView />
+        <SheetView openModal={openCreateDeckModal} setOpenModal={setOpenCreateDeckModal} />
         <FlashList
           estimatedItemSize={44}
           data={decks}

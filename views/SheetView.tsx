@@ -1,20 +1,24 @@
 import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
-import { useContext, useState } from 'react';
-import { DataContext, DataContextType } from '../helpers/DataContext';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
 import useAddDeck from '../hooks/useAddDeck';
+import useAddSubDeck from '../hooks/useAddSubDeck';
 
 type Inputs = {
   deckName: string;
   color: string;
 };
 
-export default function SheetView() {
-  const { openCreateDeckModal, setOpenCreateDeckModal } = useContext(
-    DataContext
-  ) as DataContextType;
+type SheetViewProps = {
+  openModal: boolean;
+  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  parentDeck?: number;
+};
+
+export default function SheetView(props: SheetViewProps) {
+  const { openModal, setOpenModal, parentDeck } = props;
   const [currentColor, setCurrentColor] = useState('');
   const colors = [
     orange.orange7,
@@ -38,26 +42,31 @@ export default function SheetView() {
     },
   });
   const addDeck = useAddDeck();
+  const addSubDeck = useAddSubDeck();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    addDeck
-      .mutateAsync({
-        name: data.deckName,
-        parent_deck: null,
-        color: data.color,
-      })
-      .then(() => reset());
+    const newDeck = {
+      name: data.deckName,
+      parent_deck: parentDeck || null,
+      color: data.color,
+    };
+
+    if (parentDeck) {
+      addSubDeck.mutateAsync(newDeck).then(() => reset());
+    } else {
+      addDeck.mutateAsync(newDeck).then(() => reset());
+    }
 
     Keyboard.dismiss();
-    setOpenCreateDeckModal(false);
+    setOpenModal(false);
   };
 
   return (
     <Sheet
       modal
-      forceRemoveScrollEnabled={openCreateDeckModal}
-      open={openCreateDeckModal}
-      onOpenChange={setOpenCreateDeckModal}
+      forceRemoveScrollEnabled={openModal}
+      open={openModal}
+      onOpenChange={setOpenModal}
       dismissOnSnapToBottom
       zIndex={100_000}
     >
