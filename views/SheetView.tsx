@@ -40,15 +40,16 @@ export default function SheetView() {
   const addDeck = useAddDeck();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    addDeck.mutate({
-      name: data.deckName,
-      parent_deck: null,
-      color: data.color,
-    });
+    addDeck
+      .mutateAsync({
+        name: data.deckName,
+        parent_deck: null,
+        color: data.color,
+      })
+      .then(() => reset());
+
     Keyboard.dismiss();
     setOpenCreateDeckModal(false);
-
-    // todo handle form reset
   };
 
   return (

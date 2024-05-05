@@ -80,9 +80,9 @@ export default function DeckView({ route }: Props) {
         )}
       </View>
 
-      <View>
-        <Button>Study all the words</Button>
-      </View>
+      {/*<View>*/}
+      {/*  <Button>Study all the words</Button>*/}
+      {/*</View>*/}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
     </View>

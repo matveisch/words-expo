@@ -9,7 +9,7 @@ import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/Home';
 import { StyleSheet } from 'react-native';
-import { blackA, blueDarkA, orangeDark } from '@tamagui/colors';
+import { orange } from '@tamagui/colors';
 
 export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -18,7 +18,7 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number
   const { data: subDecks } = useSubDecks(currentDeck);
 
   return (
-    <View flexDirection="column" height="100%" flex={1} paddingTop={10} style={styles.container}>
+    <View flexDirection="column" height="100%" flex={1} style={styles.container}>
       <View flexDirection="row" gap={10} paddingBottom={10}>
         <Button
           flex={1}
@@ -80,7 +80,7 @@ export default function DecksAndWordsTabs({ currentDeck }: { currentDeck: number
         </View>
       )}
       <View style={styles.newItemButton}>
-        <Button backgroundColor={orangeDark.orange10}>
+        <Button backgroundColor={orange.orange7}>
           {`Add new ${activeTab === 0 ? 'word' : 'deck'}`}
         </Button>
       </View>
