@@ -4,6 +4,7 @@ import { DataContext, DataContextType } from '../helpers/DataContext';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
+import useAddDeck from '../hooks/useAddDeck';
 
 type Inputs = {
   deckName: string;
@@ -24,7 +25,6 @@ export default function SheetView() {
     pink.pink7,
     red.red7,
   ];
-
   const {
     control,
     handleSubmit,
@@ -37,11 +37,18 @@ export default function SheetView() {
       color: '',
     },
   });
+  const addDeck = useAddDeck();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    addDeck.mutate({
+      name: data.deckName,
+      parent_deck: null,
+      color: data.color,
+    });
     Keyboard.dismiss();
-    // reset();
-    // setOpenCreateDeckModal(false);
+    setOpenCreateDeckModal(false);
+
+    // todo handle form reset
   };
 
   return (

@@ -3,13 +3,13 @@ import { StyleSheet } from 'react-native';
 import { Button, Progress } from 'tamagui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
-import { RootTabsParamList } from '../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useDeck } from '../hooks/useDeck';
 import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
+import { RootStackParamList } from './Home';
 
-interface Props extends NativeStackScreenProps<RootTabsParamList, 'DeckView'> {}
+interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
 function getCertainKnowledgeLevelWords(knowledgeLevel: number, words: Word[] | undefined): number {
   return words?.filter((word) => word.knowledgelevel === knowledgeLevel).length || 0;

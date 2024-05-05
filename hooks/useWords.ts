@@ -4,7 +4,7 @@ import { Word } from '../types/Word';
 
 export const useWords = (deckId: number) =>
   useQuery({
-    queryKey: ['words'],
+    queryKey: ['words', deckId],
     queryFn: () => supabase.from('words').select().eq('deck', deckId),
     // @ts-ignore
     select: (data): Word[] => data.data,

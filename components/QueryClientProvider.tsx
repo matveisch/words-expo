@@ -10,6 +10,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 0,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     },
   },
 });
@@ -18,12 +20,6 @@ const asyncPersist = createAsyncStoragePersister({
   storage: AsyncStorage,
   throttleTime: 3000,
 });
-
-// queryClient.setMutationDefaults(['decks'], {
-//   mutationFn: async ({ deck }) => {
-//     return supabase.from('decks').insert({ deck });
-//   },
-// });
 
 export default function QueryClientProvider({ children }: { children: ReactNode }) {
   useEffect(() => {

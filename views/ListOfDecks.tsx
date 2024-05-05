@@ -45,6 +45,7 @@ export default function ListOfDecks({ navigation, route }: Props) {
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
             <ListItem
+              backgroundColor={item.color ? item.color : undefined}
               iconAfter={ChevronRight}
               pressTheme
               borderRadius={9}
