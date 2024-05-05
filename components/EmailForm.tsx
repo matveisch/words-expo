@@ -1,35 +1,29 @@
 import React, { useState } from 'react';
-import { Alert, Keyboard, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { supabase } from '../helpers/initSupabase';
 import { Button, Input, Label, Text } from 'tamagui';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import useCreateUser from '../hooks/useCreateUser';
+import { Controller, useForm } from 'react-hook-form';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { NavigationProps } from '../App';
 
 type Inputs = {
   email: string;
   password: string;
 };
 
-export default function EmailForm() {
+export default function EmailForm({ navigation }: NavigationProps) {
   const [loading, setLoading] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const {
     control,
     handleSubmit,
-    reset,
-    setValue,
     formState: { errors },
-    getValues,
   } = useForm<Inputs>({
     defaultValues: {
       email: '',
       password: '',
     },
-  });
-
-  const createUserMutation = useCreateUser({
-    email: getValues('email'),
-    password: getValues('password'),
   });
 
   async function signInWithEmail(data: Inputs) {
@@ -41,6 +35,7 @@ export default function EmailForm() {
 
     if (error) Alert.alert(error.message);
     setLoading(false);
+    if (!error) navigation.navigate('Decks');
   }
 
   async function signUpWithEmail(data: Inputs) {
@@ -54,20 +49,29 @@ export default function EmailForm() {
     });
 
     if (error) Alert.alert(error.message);
-    if (!session) Alert.alert('Please check your inbox for email verification!');
+    if (!error && !session) Alert.alert('Please check your inbox for email verification!');
     setLoading(false);
   }
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    createUserMutation.mutate();
-    Keyboard.dismiss();
-    // reset();
-    // setOpenCreateDeckModal(false);
-  };
+  // const onSubmit: SubmitHandler<Inputs> = (data) => {
+  //   console.log(data);
+  //   Keyboard.dismiss();
+  //   // reset();
+  //   // setOpenCreateDeckModal(false);
+  // };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        padding: 12,
+        backgroundColor: '#fff',
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left + 10,
+        paddingRight: insets.right + 10,
+        paddingTop: insets.top,
+        height: '100%',
+      }}
+    >
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Label>Email</Label>
         <Controller
@@ -128,16 +132,12 @@ export default function EmailForm() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
   },
   mt20: {
-    marginTop: 20,
+    // marginTop: 20,
   },
 });
