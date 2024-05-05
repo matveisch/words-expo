@@ -24,7 +24,7 @@ const tamaguiConfig = createTamagui(config);
 
 export type RootStackParamList = {
   Auth: undefined;
-  Decks: undefined;
+  Decks: { userId: string };
   DeckView: { currentDeckId: number; currentDeckName: string };
   DecksAndWordsTabs: undefined;
 };
@@ -67,6 +67,7 @@ export default function App() {
                 />
                 <Stack.Screen
                   name="Decks"
+                  initialParams={{ userId: session?.user.id }}
                   component={ListOfDecks}
                   options={{
                     gestureEnabled: false,

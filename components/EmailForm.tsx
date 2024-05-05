@@ -28,14 +28,14 @@ export default function EmailForm({ navigation }: NavigationProps) {
 
   async function signInWithEmail(data: Inputs) {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data: session } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
 
     if (error) Alert.alert(error.message);
     setLoading(false);
-    if (!error) navigation.navigate('Decks');
+    if (!error) navigation.navigate('Decks', { userId: session.user?.id });
   }
 
   async function signUpWithEmail(data: Inputs) {

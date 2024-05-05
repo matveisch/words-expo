@@ -3,13 +3,18 @@ import { FlashList } from '@shopify/flash-list';
 import { ListItem, Text, View } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NavigationProps } from '../App';
+import { RootStackParamList } from '../App';
 import SheetView from './SheetView';
 import { useDecks } from '../hooks/useDecks';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function ListOfDecks({ navigation }: NavigationProps) {
+interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
+
+export default function ListOfDecks({ navigation, route }: Props) {
   const insets = useSafeAreaInsets();
-  const { data: decks, isError, isLoading, error } = useDecks();
+  const { userId } = route.params;
+  // todo error handling
+  const { data: decks, isError, isLoading, error } = useDecks(userId);
 
   if (isLoading) {
     return (
