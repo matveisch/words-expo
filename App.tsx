@@ -41,8 +41,6 @@ export default function App() {
     });
   }, []);
 
-  console.log(session?.user.id);
-
   if (!loadFonts()) {
     return null;
   }

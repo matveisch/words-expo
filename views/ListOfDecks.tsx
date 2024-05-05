@@ -3,12 +3,12 @@ import { FlashList } from '@shopify/flash-list';
 import { ListItem, Text, View } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RootTabsParamList } from '../App';
 import SheetView from './SheetView';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from './Home';
 
-interface Props extends NativeStackScreenProps<RootTabsParamList, 'Decks'> {}
+interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
 export default function ListOfDecks({ navigation, route }: Props) {
   const insets = useSafeAreaInsets();
