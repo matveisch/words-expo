@@ -20,6 +20,9 @@ export default function useUpdateDeck() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (deck: DeckToUpdate) => updateDeck(deck),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['decks'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['deck'] });
+      queryClient.invalidateQueries({ queryKey: ['decks'] });
+    },
   });
 }

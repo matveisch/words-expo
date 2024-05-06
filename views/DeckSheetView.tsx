@@ -1,5 +1,5 @@
 import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
@@ -42,10 +42,18 @@ function DeckSheetView(props: DeckSheetViewProps) {
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
-      deckName: deck?.name,
-      color: deck?.color,
+      deckName: '',
+      color: '',
     },
   });
+
+  useEffect(() => {
+    if (deck) {
+      setValue('deckName', deck.name);
+      setValue('color', deck.color);
+      setCurrentColor(deck.color);
+    }
+  }, [deck]);
 
   const addSubDeck = useAddSubDeck();
   const updateDeck = useUpdateDeck();
@@ -78,8 +86,6 @@ function DeckSheetView(props: DeckSheetViewProps) {
       open={deckModalStore.isDeckModalOpen}
       onOpenChange={(state: boolean) => {
         deckModalStore.setIsDeckModalOpen(state);
-        reset();
-        setCurrentColor('');
       }}
       dismissOnSnapToBottom
       zIndex={100_000}
