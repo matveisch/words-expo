@@ -7,11 +7,11 @@ import ListOfDecks from './ListOfDecks';
 import { Button } from 'tamagui';
 import { BookPlus, Trash2 } from '@tamagui/lucide-icons';
 import DeckView from './DeckView';
-import { useState } from 'react';
 import { loadFonts } from '../helpers/loadFonts';
-import { DataContextType, DataContext } from '../helpers/DataContext';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
+import { observer } from 'mobx-react';
+import { modalStore } from '../ModalStore';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -21,12 +21,11 @@ export type RootStackParamList = {
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
-export default function Home({ route }: Props) {
-  const [openCreateDeckModal, setOpenCreateDeckModal] = useState(false);
-  const Stack = createNativeStackNavigator<RootStackParamList>();
-  const DataContextValue = { openCreateDeckModal, setOpenCreateDeckModal } as DataContextType;
+const Home = observer(({ route }: Props) => {
   const { session } = route.params;
+
   const deleteDeck = useDeleteDeck();
+  const Stack = createNativeStackNavigator<RootStackParamList>();
 
   function handleDeleteDeck(
     deckId: number,
@@ -43,41 +42,48 @@ export default function Home({ route }: Props) {
   }
 
   return (
-    <DataContext.Provider value={DataContextValue}>
-      <Stack.Navigator initialRouteName="Decks">
-        <Stack.Screen
-          name="Decks"
-          initialParams={{ userId: session?.user?.id }}
-          component={ListOfDecks}
-          options={{
-            gestureEnabled: false,
-            headerBackVisible: false,
-            headerTitle: 'My Decks',
-            headerRight: () => (
-              <Button size="$2" chromeless onPress={() => setOpenCreateDeckModal(true)}>
-                <BookPlus />
-              </Button>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="DeckView"
-          component={DeckView}
-          options={({ route, navigation }) => ({
-            headerTitle: route.params.currentDeckName,
-            headerBackTitleVisible: false,
-            headerRight: () => (
-              <Button
-                size="$2"
-                chromeless
-                onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
-              >
-                <Trash2 />
-              </Button>
-            ),
-          })}
-        />
-      </Stack.Navigator>
-    </DataContext.Provider>
+    <Stack.Navigator initialRouteName="Decks">
+      <Stack.Screen
+        name="Decks"
+        initialParams={{ userId: session?.user?.id }}
+        component={ListOfDecks}
+        options={{
+          gestureEnabled: false,
+          headerBackVisible: false,
+          headerTitle: 'My Decks',
+          headerRight: () => (
+            <Button
+              size="$2"
+              chromeless
+              onPress={() => {
+                modalStore.openModal();
+                console.log(modalStore.isModalOpen);
+              }}
+            >
+              <BookPlus />
+            </Button>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="DeckView"
+        component={DeckView}
+        options={({ route, navigation }) => ({
+          headerTitle: route.params.currentDeckName,
+          headerBackTitleVisible: false,
+          headerRight: () => (
+            <Button
+              size="$2"
+              chromeless
+              onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
+            >
+              <Trash2 />
+            </Button>
+          ),
+        })}
+      />
+    </Stack.Navigator>
   );
-}
+});
+
+export default Home;

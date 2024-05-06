@@ -1,10 +1,12 @@
 import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
-import { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
 import useAddDeck from '../hooks/useAddDeck';
 import useAddSubDeck from '../hooks/useAddSubDeck';
+import { observer } from 'mobx-react';
+import { modalStore } from '../ModalStore';
 
 type Inputs = {
   deckName: string;
@@ -12,14 +14,13 @@ type Inputs = {
 };
 
 type SheetViewProps = {
-  openModal: boolean;
-  setOpenModal: Dispatch<SetStateAction<boolean>>;
   parentDeck?: number;
 };
 
-export default function SheetView(props: SheetViewProps) {
-  const { openModal, setOpenModal, parentDeck } = props;
+const SheetView = observer((props: SheetViewProps) => {
+  const { parentDeck } = props;
   const [currentColor, setCurrentColor] = useState('');
+
   const colors = [
     orange.orange7,
     yellow.yellow7,
@@ -58,15 +59,15 @@ export default function SheetView(props: SheetViewProps) {
     }
 
     Keyboard.dismiss();
-    setOpenModal(false);
+    modalStore.closeModal();
   };
 
   return (
     <Sheet
       modal
-      forceRemoveScrollEnabled={openModal}
-      open={openModal}
-      onOpenChange={setOpenModal}
+      forceRemoveScrollEnabled={modalStore.isModalOpen}
+      open={modalStore.isModalOpen}
+      onOpenChange={(state: boolean) => modalStore.handleModal(state)}
       dismissOnSnapToBottom
       zIndex={100_000}
     >
@@ -116,4 +117,6 @@ export default function SheetView(props: SheetViewProps) {
       </Sheet.Frame>
     </Sheet>
   );
-}
+});
+
+export default SheetView;
