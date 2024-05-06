@@ -3,15 +3,20 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
-import useAddDeck from '../hooks/useAddDeck';
 import useAddSubDeck from '../hooks/useAddSubDeck';
-import { observer } from 'mobx-react';
-import { modalStore } from '../ModalStore';
 import useUpdateDeck from '../hooks/useUpdateDeck';
+import { observer } from 'mobx-react';
+import { deckModalStore } from '../helpers/DeckModalStore';
+import { useDeck } from '../hooks/useDeck';
 
 type Inputs = {
   deckName: string;
   color: string;
+};
+
+type DeckSheetViewProps = {
+  currentDeckId: number;
+  edit: boolean;
 };
 
 const colors = [
@@ -24,10 +29,10 @@ const colors = [
   red.red7,
 ];
 
-const SheetView = observer(() => {
-  const [currentColor, setCurrentColor] = useState('');
-
-  // const { data: deck } = useDeck(modalStore.currentDeckId);
+function DeckSheetView(props: DeckSheetViewProps) {
+  const { currentDeckId, edit } = props;
+  const { data: deck } = useDeck(currentDeckId);
+  const [currentColor, setCurrentColor] = useState(deck?.color);
 
   const {
     control,
@@ -37,58 +42,44 @@ const SheetView = observer(() => {
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
-      deckName: '',
-      color: '',
+      deckName: deck?.name,
+      color: deck?.color,
     },
   });
 
-  // filling up inputs on editing
-  // console.log({ deck });
-  // if (deck?.name) setValue('deckName', deck.name);
-  // if (deck?.color) setCurrentColor(deck.color);
-
-  const addDeck = useAddDeck();
   const addSubDeck = useAddSubDeck();
   const updateDeck = useUpdateDeck();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: modalStore.parentDeckId || null,
+      parent_deck: currentDeckId || null,
       color: data.color,
     };
 
-    // edit
-    if (modalStore.currentDeckId) {
-      updateDeck.mutateAsync({ ...newDeck, id: modalStore.currentDeckId }).then(() => {
+    if (edit) {
+      updateDeck.mutateAsync({ ...newDeck, id: currentDeckId }).then(() => {
         reset();
-        modalStore.setCurrentDeckId(undefined);
       });
-      // add sub deck
-    } else if (modalStore.parentDeckId) {
+    } else {
       addSubDeck.mutateAsync(newDeck).then(() => {
         reset();
-        modalStore.setParentDeckId(undefined);
       });
-      // add deck
-    } else {
-      addDeck.mutateAsync(newDeck).then(() => reset());
     }
 
     Keyboard.dismiss();
-    modalStore.closeModal();
+    deckModalStore.setIsDeckModalOpen(false);
   };
 
   return (
     <Sheet
       modal
-      forceRemoveScrollEnabled={modalStore.isModalOpen}
-      open={modalStore.isModalOpen}
+      forceRemoveScrollEnabled={deckModalStore.isDeckModalOpen}
+      open={deckModalStore.isDeckModalOpen}
       onOpenChange={(state: boolean) => {
-        modalStore.handleModal(state);
+        deckModalStore.setIsDeckModalOpen(state);
         reset();
         setCurrentColor('');
-        modalStore.setCurrentDeckId(undefined);
       }}
       dismissOnSnapToBottom
       zIndex={100_000}
@@ -97,7 +88,7 @@ const SheetView = observer(() => {
       <Sheet.Handle />
       <Sheet.Frame padding={10}>
         <View>
-          <H3 textAlign="center">{modalStore.currentDeckId ? 'Edit Deck' : 'New Deck'}</H3>
+          <H3 textAlign="center">{edit ? 'Edit Deck' : 'New Deck'}</H3>
           <Label>Name</Label>
           <Controller
             name="deckName"
@@ -133,12 +124,12 @@ const SheetView = observer(() => {
             ))}
           </View>
           <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
-            {modalStore.currentDeckId ? 'Edit' : 'Create'}
+            {edit ? 'Edit' : 'Create'}
           </Button>
         </View>
       </Sheet.Frame>
     </Sheet>
   );
-});
+}
 
-export default SheetView;
+export default observer(DeckSheetView);

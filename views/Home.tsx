@@ -13,6 +13,7 @@ import useDeleteDeck from '../hooks/useDeleteDeck';
 import { observer } from 'mobx-react';
 import { modalStore } from '../ModalStore';
 import { Alert } from 'react-native';
+import { deckModalStore } from '../helpers/DeckModalStore';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -44,6 +45,11 @@ const Home = observer(({ route }: Props) => {
     ]);
   }
 
+  function handleEdit() {
+    deckModalStore.setEdit(true);
+    deckModalStore.setIsDeckModalOpen(true);
+  }
+
   if (!loadFonts()) {
     return null;
   }
@@ -73,7 +79,7 @@ const Home = observer(({ route }: Props) => {
           headerBackTitleVisible: false,
           headerRight: () => (
             <XStack>
-              <Button size="$2" chromeless>
+              <Button size="$2" chromeless onPress={handleEdit}>
                 <Pencil />
               </Button>
               <Button

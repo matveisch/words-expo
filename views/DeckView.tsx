@@ -4,11 +4,13 @@ import { Button, Progress } from 'tamagui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useDeck } from '../hooks/useDeck';
 import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './Home';
 import Loader from '../components/Loader';
+import DeckSheetView from './DeckSheetView';
+import { observer } from 'mobx-react';
+import { deckModalStore } from '../helpers/DeckModalStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -16,13 +18,12 @@ function getCertainKnowledgeLevelWords(knowledgeLevel: number, words: Word[] | u
   return words?.filter((word) => word.knowledgelevel === knowledgeLevel).length || 0;
 }
 
-export default function DeckView({ route }: Props) {
+function DeckView({ route }: Props) {
   const { currentDeckId } = route.params;
   const insets = useSafeAreaInsets();
-  const { data: deck, isError, isLoading: isDeckLoading, error } = useDeck(currentDeckId);
   const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
 
-  if (isDeckLoading || areWordsLoading) {
+  if (areWordsLoading) {
     return <Loader />;
   }
 
@@ -82,6 +83,7 @@ export default function DeckView({ route }: Props) {
       {/*</View>*/}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
+      <DeckSheetView currentDeckId={currentDeckId} edit={deckModalStore.edit} />
     </View>
   );
 }
@@ -108,3 +110,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default observer(DeckView);
