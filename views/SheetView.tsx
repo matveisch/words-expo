@@ -13,12 +13,7 @@ type Inputs = {
   color: string;
 };
 
-type SheetViewProps = {
-  parentDeck?: number;
-};
-
-const SheetView = observer((props: SheetViewProps) => {
-  const { parentDeck } = props;
+const SheetView = observer(() => {
   const [currentColor, setCurrentColor] = useState('');
 
   const colors = [
@@ -48,12 +43,15 @@ const SheetView = observer((props: SheetViewProps) => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: parentDeck || null,
+      parent_deck: modalStore.parentDeckId || null,
       color: data.color,
     };
 
-    if (parentDeck) {
-      addSubDeck.mutateAsync(newDeck).then(() => reset());
+    if (modalStore.parentDeckId) {
+      addSubDeck.mutateAsync(newDeck).then(() => {
+        reset();
+        modalStore.setParentDeckId(undefined);
+      });
     } else {
       addDeck.mutateAsync(newDeck).then(() => reset());
     }

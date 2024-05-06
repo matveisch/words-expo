@@ -52,14 +52,7 @@ const Home = observer(({ route }: Props) => {
           headerBackVisible: false,
           headerTitle: 'My Decks',
           headerRight: () => (
-            <Button
-              size="$2"
-              chromeless
-              onPress={() => {
-                modalStore.openModal();
-                console.log(modalStore.isModalOpen);
-              }}
-            >
+            <Button size="$2" chromeless onPress={() => modalStore.openModal()}>
               <BookPlus />
             </Button>
           ),

@@ -10,7 +10,6 @@ import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/Home';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
-import SheetView from '../views/SheetView';
 import { observer } from 'mobx-react';
 import { modalStore } from '../ModalStore';
 
@@ -21,12 +20,14 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
   const { data: subDecks } = useSubDecks(currentDeck);
 
   function handleButtonPress() {
-    if (activeTab === 1) modalStore.handleModal(!modalStore.isModalOpen);
+    if (activeTab === 1) {
+      modalStore.setParentDeckId(currentDeck);
+      modalStore.handleModal(!modalStore.isModalOpen);
+    }
   }
 
   return (
     <View flex={1} style={styles.container}>
-      <SheetView parentDeck={currentDeck} />
       <View flexDirection="row" gap={10} paddingBottom={10}>
         <Button
           flex={1}
