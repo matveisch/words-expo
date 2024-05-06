@@ -7,6 +7,7 @@ import SheetView from './SheetView';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './Home';
+import Loader from '../components/Loader';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -17,11 +18,7 @@ const ListOfDecks = ({ navigation, route }: Props) => {
   const { data: decks, isError, isLoading, error } = useDecks(userId);
 
   if (isLoading) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <Loader />;
   }
 
   return (

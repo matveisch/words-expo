@@ -4,14 +4,15 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import ListOfDecks from './ListOfDecks';
-import { Button } from 'tamagui';
-import { BookPlus, Trash2 } from '@tamagui/lucide-icons';
+import { Button, XStack } from 'tamagui';
+import { BookPlus, Pencil, Trash2 } from '@tamagui/lucide-icons';
 import DeckView from './DeckView';
 import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
 import { observer } from 'mobx-react';
 import { modalStore } from '../ModalStore';
+import { Alert } from 'react-native';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -31,10 +32,16 @@ const Home = observer(({ route }: Props) => {
     deckId: number,
     navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView', undefined>
   ) {
-    deleteDeck.mutate(deckId);
-    navigation.goBack();
-
-    // todo handle delete confirmation
+    Alert.alert('Are you sure?', 'All of your sub decks are about to be deleted as well', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        onPress: () => {
+          deleteDeck.mutate(deckId);
+          navigation.goBack();
+        },
+      },
+    ]);
   }
 
   if (!loadFonts()) {
@@ -65,13 +72,18 @@ const Home = observer(({ route }: Props) => {
           headerTitle: route.params.currentDeckName,
           headerBackTitleVisible: false,
           headerRight: () => (
-            <Button
-              size="$2"
-              chromeless
-              onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
-            >
-              <Trash2 />
-            </Button>
+            <XStack>
+              <Button size="$2" chromeless>
+                <Pencil />
+              </Button>
+              <Button
+                size="$2"
+                chromeless
+                onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
+              >
+                <Trash2 />
+              </Button>
+            </XStack>
           ),
         })}
       />

@@ -15,6 +15,7 @@ import { modalStore } from '../ModalStore';
 
 const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
+
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);

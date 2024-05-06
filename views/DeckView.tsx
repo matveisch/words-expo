@@ -8,6 +8,7 @@ import { useDeck } from '../hooks/useDeck';
 import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './Home';
+import Loader from '../components/Loader';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -22,11 +23,7 @@ export default function DeckView({ route }: Props) {
   const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
 
   if (isDeckLoading || areWordsLoading) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <Loader />;
   }
 
   return (
