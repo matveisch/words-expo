@@ -2,26 +2,16 @@ import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
-import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
 import useAddDeck from '../hooks/useAddDeck';
 import useAddSubDeck from '../hooks/useAddSubDeck';
 import { observer } from 'mobx-react';
 import { modalStore } from '../helpers/ModalStore';
+import { colors } from '../helpers/colors';
 
 type Inputs = {
   deckName: string;
   color: string;
 };
-
-const colors = [
-  orange.orange7,
-  yellow.yellow7,
-  green.green7,
-  blue.blue7,
-  purple.purple7,
-  pink.pink7,
-  red.red7,
-];
 
 const DeckCreateModal = observer(() => {
   const [currentColor, setCurrentColor] = useState('');

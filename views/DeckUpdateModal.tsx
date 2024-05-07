@@ -2,36 +2,26 @@ import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
-import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
 import useUpdateDeck from '../hooks/useUpdateDeck';
 import { observer } from 'mobx-react';
 import { deckModalStore } from '../helpers/DeckModalStore';
 import { useDeck } from '../hooks/useDeck';
 import Toast from 'react-native-root-toast';
+import { colors } from '../helpers/colors';
+import { toastOptions } from '../helpers/toastOptions';
 
 type Inputs = {
   deckName: string;
   color: string;
 };
 
-const colors = [
-  orange.orange7,
-  yellow.yellow7,
-  green.green7,
-  blue.blue7,
-  purple.purple7,
-  pink.pink7,
-  red.red7,
-];
-
 function DeckUpdateModal() {
-  const { data: deck } = useDeck(deckModalStore.deckId!);
-  const [currentColor, setCurrentColor] = useState(deck?.color);
-
+  const { data: deck, isError, error } = useDeck(deckModalStore.deckId!);
+  const [currentColor, setCurrentColor] = useState('');
+  const updateDeck = useUpdateDeck();
   const {
     control,
     handleSubmit,
-    reset,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -41,15 +31,6 @@ function DeckUpdateModal() {
     },
   });
 
-  useEffect(() => {
-    if (deck) {
-      setValue('deckName', deck.name);
-      setValue('color', deck.color);
-      setCurrentColor(deck.color);
-    }
-  }, [deck]);
-  const updateDeck = useUpdateDeck();
-
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
@@ -58,20 +39,24 @@ function DeckUpdateModal() {
     };
 
     updateDeck.mutateAsync({ ...newDeck, id: deckModalStore.deckId! }).then(() => {
-      let toast = Toast.show('Deck Updated', {
-        duration: Toast.durations.LONG,
-        position: Toast.positions.TOP,
-        backgroundColor: colors[0],
-        opacity: 1,
-        shadow: false,
-        textColor: 'black',
-      });
-      reset();
+      Toast.show('Deck Updated', toastOptions);
     });
 
     Keyboard.dismiss();
     deckModalStore.setIsDeckModalOpen(false);
   };
+
+  useEffect(() => {
+    if (deck) {
+      setValue('deckName', deck.name);
+      setValue('color', deck.color);
+      setCurrentColor(deck.color);
+    }
+  }, [deck]);
+
+  if (isError) {
+    Toast.show(error.message, toastOptions);
+  }
 
   return (
     <Sheet
