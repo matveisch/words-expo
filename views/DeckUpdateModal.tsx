@@ -74,6 +74,7 @@ function DeckUpdateModal() {
       <Sheet.Frame padding={10}>
         <View>
           <H3 textAlign="center">Edit Deck</H3>
+
           <Label>Name</Label>
           <Controller
             name="deckName"
@@ -92,6 +93,7 @@ function DeckUpdateModal() {
             )}
           />
           {errors.deckName && <Text color="red">This field is required</Text>}
+
           <Label>Color</Label>
           <View flexDirection="row" gap={10}>
             {colors.map((color, index) => (
@@ -108,6 +110,7 @@ function DeckUpdateModal() {
               />
             ))}
           </View>
+
           <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
             Edit
           </Button>
