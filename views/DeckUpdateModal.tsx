@@ -13,10 +13,6 @@ type Inputs = {
   color: string;
 };
 
-type DeckSheetViewProps = {
-  currentDeckId: number;
-};
-
 const colors = [
   orange.orange7,
   yellow.yellow7,
@@ -27,9 +23,8 @@ const colors = [
   red.red7,
 ];
 
-function DeckSheetView(props: DeckSheetViewProps) {
-  const { currentDeckId } = props;
-  const { data: deck } = useDeck(currentDeckId);
+function DeckUpdateModal() {
+  const { data: deck } = useDeck(deckModalStore.deckId!);
   const [currentColor, setCurrentColor] = useState(deck?.color);
 
   const {
@@ -57,11 +52,11 @@ function DeckSheetView(props: DeckSheetViewProps) {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: currentDeckId || null,
+      parent_deck: deckModalStore.deckId || null,
       color: data.color,
     };
 
-    updateDeck.mutateAsync({ ...newDeck, id: currentDeckId }).then(() => {
+    updateDeck.mutateAsync({ ...newDeck, id: deckModalStore.deckId! }).then(() => {
       reset();
     });
 
@@ -128,4 +123,4 @@ function DeckSheetView(props: DeckSheetViewProps) {
   );
 }
 
-export default observer(DeckSheetView);
+export default observer(DeckUpdateModal);

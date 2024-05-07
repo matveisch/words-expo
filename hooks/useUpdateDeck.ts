@@ -23,6 +23,7 @@ export default function useUpdateDeck() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['deck'] });
       queryClient.invalidateQueries({ queryKey: ['decks'] });
+      queryClient.invalidateQueries({ queryKey: ['subDecks'] });
     },
   });
 }

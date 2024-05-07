@@ -8,9 +8,10 @@ import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './Home';
 import Loader from '../components/Loader';
-import DeckSheetView from './DeckSheetView';
+import DeckUpdateModal from './DeckUpdateModal';
 import { observer } from 'mobx-react';
 import { deckModalStore } from '../helpers/DeckModalStore';
+import { useEffect } from 'react';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -22,6 +23,10 @@ function DeckView({ route }: Props) {
   const { currentDeckId } = route.params;
   const insets = useSafeAreaInsets();
   const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
+
+  useEffect(() => {
+    deckModalStore.setDeckId(currentDeckId);
+  }, []);
 
   if (areWordsLoading) {
     return <Loader />;
@@ -83,7 +88,8 @@ function DeckView({ route }: Props) {
       {/*</View>*/}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
-      <DeckSheetView currentDeckId={currentDeckId} edit={deckModalStore.edit} />
+
+      <DeckUpdateModal />
     </View>
   );
 }

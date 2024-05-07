@@ -11,7 +11,7 @@ import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
 import { observer } from 'mobx-react';
-import { modalStore } from '../ModalStore';
+import { modalStore } from '../helpers/ModalStore';
 import { Alert } from 'react-native';
 import { deckModalStore } from '../helpers/DeckModalStore';
 
@@ -45,11 +45,6 @@ const Home = observer(({ route }: Props) => {
     ]);
   }
 
-  function handleEdit() {
-    deckModalStore.setEdit(true);
-    deckModalStore.setIsDeckModalOpen(true);
-  }
-
   if (!loadFonts()) {
     return null;
   }
@@ -65,7 +60,7 @@ const Home = observer(({ route }: Props) => {
           headerBackVisible: false,
           headerTitle: 'My Decks',
           headerRight: () => (
-            <Button size="$2" chromeless onPress={() => modalStore.openModal()}>
+            <Button size="$2" chromeless onPress={() => modalStore.handleModal(true)}>
               <BookPlus />
             </Button>
           ),
@@ -79,7 +74,7 @@ const Home = observer(({ route }: Props) => {
           headerBackTitleVisible: false,
           headerRight: () => (
             <XStack>
-              <Button size="$2" chromeless onPress={handleEdit}>
+              <Button size="$2" chromeless onPress={() => deckModalStore.setIsDeckModalOpen(true)}>
                 <Pencil />
               </Button>
               <Button

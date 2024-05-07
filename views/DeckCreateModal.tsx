@@ -23,7 +23,7 @@ const colors = [
   red.red7,
 ];
 
-const SheetView = observer(() => {
+const DeckCreateModal = observer(() => {
   const [currentColor, setCurrentColor] = useState('');
 
   const {
@@ -125,4 +125,4 @@ const SheetView = observer(() => {
   );
 });
 
-export default SheetView;
+export default DeckCreateModal;

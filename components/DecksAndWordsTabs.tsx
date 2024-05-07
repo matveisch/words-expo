@@ -11,7 +11,7 @@ import { RootStackParamList } from '../views/Home';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
 import { observer } from 'mobx-react';
-import { modalStore } from '../ModalStore';
+import { modalStore } from '../helpers/ModalStore';
 
 const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -76,6 +76,7 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
               <ListItem
                 iconAfter={ChevronRight}
                 pressTheme
+                backgroundColor={item.color ? item.color : undefined}
                 borderRadius={9}
                 title={item.name}
                 onPress={() => {

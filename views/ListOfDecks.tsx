@@ -3,7 +3,7 @@ import { FlashList } from '@shopify/flash-list';
 import { ListItem, Text, View } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import SheetView from './SheetView';
+import DeckCreateModal from './DeckCreateModal';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './Home';
@@ -34,7 +34,7 @@ const ListOfDecks = ({ navigation, route }: Props) => {
       }}
     >
       <View flex={1}>
-        <SheetView />
+        <DeckCreateModal />
         <FlashList
           estimatedItemSize={44}
           data={decks}
