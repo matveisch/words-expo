@@ -15,7 +15,8 @@ type Inputs = {
 
 const DeckCreateModal = observer(() => {
   const [currentColor, setCurrentColor] = useState('');
-
+  const addDeck = useAddDeck();
+  const addSubDeck = useAddSubDeck();
   const {
     control,
     handleSubmit,
@@ -28,9 +29,6 @@ const DeckCreateModal = observer(() => {
       color: '',
     },
   });
-
-  const addDeck = useAddDeck();
-  const addSubDeck = useAddSubDeck();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
@@ -51,6 +49,7 @@ const DeckCreateModal = observer(() => {
     }
 
     Keyboard.dismiss();
+    setCurrentColor('');
     modalStore.handleModal(false);
   };
 
