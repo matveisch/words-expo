@@ -89,6 +89,7 @@ const DeckCreateModal = observer(() => {
             )}
           />
           {errors.deckName && <Text color="red">This field is required</Text>}
+
           <Label>Color</Label>
           <View flexDirection="row" gap={10}>
             {colors.map((color, index) => (
@@ -105,6 +106,7 @@ const DeckCreateModal = observer(() => {
               />
             ))}
           </View>
+
           <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
             Create
           </Button>

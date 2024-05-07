@@ -14,11 +14,13 @@ import { observer } from 'mobx-react';
 import { modalStore } from '../helpers/ModalStore';
 import { Alert } from 'react-native';
 import { deckModalStore } from '../helpers/DeckModalStore';
+import Word from './Word';
 
 export type RootStackParamList = {
   Decks: { userId: string };
   DeckView: { currentDeckId: number; currentDeckName: string };
   DecksAndWordsTabs: undefined;
+  Word: { wordId: number };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
@@ -86,6 +88,14 @@ const Home = observer(({ route }: Props) => {
               </Button>
             </XStack>
           ),
+        })}
+      />
+      <Stack.Screen
+        name="Word"
+        component={Word}
+        options={() => ({
+          headerTitle: 'Edit Word',
+          headerBackTitleVisible: false,
         })}
       />
     </Stack.Navigator>

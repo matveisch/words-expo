@@ -60,6 +60,11 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
                 borderRadius={9}
                 title={item.word}
                 subTitle={item.meaning}
+                onPress={() => {
+                  navigation.push('Word', {
+                    wordId: item.id,
+                  });
+                }}
               />
             )}
           />
