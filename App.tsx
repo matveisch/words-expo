@@ -12,6 +12,7 @@ import EmailForm from './components/EmailForm';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './views/Home';
 import Settings from './views/Settings';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -46,26 +47,28 @@ export default function App() {
   }
 
   return (
-    <TamaguiProvider config={tamaguiConfig}>
-      <QueryClientProvider>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            {session ? (
-              <Tab.Navigator>
-                <Tab.Screen
-                  name="Home"
-                  component={Home}
-                  initialParams={{ session: session }}
-                  options={{ headerShown: false }}
-                />
-                <Tab.Screen name="Settings" component={Settings} />
-              </Tab.Navigator>
-            ) : (
-              <EmailForm />
-            )}
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </QueryClientProvider>
-    </TamaguiProvider>
+    <RootSiblingParent>
+      <TamaguiProvider config={tamaguiConfig}>
+        <QueryClientProvider>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              {session ? (
+                <Tab.Navigator>
+                  <Tab.Screen
+                    name="Home"
+                    component={Home}
+                    initialParams={{ session: session }}
+                    options={{ headerShown: false }}
+                  />
+                  <Tab.Screen name="Settings" component={Settings} />
+                </Tab.Navigator>
+              ) : (
+                <EmailForm />
+              )}
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </TamaguiProvider>
+    </RootSiblingParent>
   );
 }

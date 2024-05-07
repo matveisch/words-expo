@@ -7,6 +7,7 @@ import useUpdateDeck from '../hooks/useUpdateDeck';
 import { observer } from 'mobx-react';
 import { deckModalStore } from '../helpers/DeckModalStore';
 import { useDeck } from '../hooks/useDeck';
+import Toast from 'react-native-root-toast';
 
 type Inputs = {
   deckName: string;
@@ -57,6 +58,14 @@ function DeckUpdateModal() {
     };
 
     updateDeck.mutateAsync({ ...newDeck, id: deckModalStore.deckId! }).then(() => {
+      let toast = Toast.show('Deck Updated', {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.TOP,
+        backgroundColor: colors[0],
+        opacity: 1,
+        shadow: false,
+        textColor: 'black',
+      });
       reset();
     });
 
