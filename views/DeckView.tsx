@@ -12,6 +12,7 @@ import DeckUpdateModal from './DeckUpdateModal';
 import { observer } from 'mobx-react';
 import { deckModalStore } from '../helpers/DeckModalStore';
 import { useEffect } from 'react';
+import { useDeck } from '../hooks/useDeck';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -19,10 +20,17 @@ function getCertainKnowledgeLevelWords(knowledgeLevel: number, words: Word[] | u
   return words?.filter((word) => word.knowledgelevel === knowledgeLevel).length || 0;
 }
 
-function DeckView({ route }: Props) {
+function DeckView({ route, navigation }: Props) {
   const { currentDeckId } = route.params;
   const insets = useSafeAreaInsets();
   const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
+  const { data: deck } = useDeck(currentDeckId);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: deck?.name,
+    });
+  }, [deck?.name, navigation]);
 
   useEffect(() => {
     deckModalStore.setDeckId(currentDeckId);
