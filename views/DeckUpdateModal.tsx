@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors';
-import useAddSubDeck from '../hooks/useAddSubDeck';
 import useUpdateDeck from '../hooks/useUpdateDeck';
 import { observer } from 'mobx-react';
 import { deckModalStore } from '../helpers/DeckModalStore';
@@ -16,7 +15,6 @@ type Inputs = {
 
 type DeckSheetViewProps = {
   currentDeckId: number;
-  edit: boolean;
 };
 
 const colors = [
@@ -30,7 +28,7 @@ const colors = [
 ];
 
 function DeckSheetView(props: DeckSheetViewProps) {
-  const { currentDeckId, edit } = props;
+  const { currentDeckId } = props;
   const { data: deck } = useDeck(currentDeckId);
   const [currentColor, setCurrentColor] = useState(deck?.color);
 
@@ -54,8 +52,6 @@ function DeckSheetView(props: DeckSheetViewProps) {
       setCurrentColor(deck.color);
     }
   }, [deck]);
-
-  const addSubDeck = useAddSubDeck();
   const updateDeck = useUpdateDeck();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -65,15 +61,9 @@ function DeckSheetView(props: DeckSheetViewProps) {
       color: data.color,
     };
 
-    if (edit) {
-      updateDeck.mutateAsync({ ...newDeck, id: currentDeckId }).then(() => {
-        reset();
-      });
-    } else {
-      addSubDeck.mutateAsync(newDeck).then(() => {
-        reset();
-      });
-    }
+    updateDeck.mutateAsync({ ...newDeck, id: currentDeckId }).then(() => {
+      reset();
+    });
 
     Keyboard.dismiss();
     deckModalStore.setIsDeckModalOpen(false);
@@ -94,7 +84,7 @@ function DeckSheetView(props: DeckSheetViewProps) {
       <Sheet.Handle />
       <Sheet.Frame padding={10}>
         <View>
-          <H3 textAlign="center">{edit ? 'Edit Deck' : 'New Deck'}</H3>
+          <H3 textAlign="center">Edit Deck</H3>
           <Label>Name</Label>
           <Controller
             name="deckName"
@@ -130,7 +120,7 @@ function DeckSheetView(props: DeckSheetViewProps) {
             ))}
           </View>
           <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
-            {edit ? 'Edit' : 'Create'}
+            Edit
           </Button>
         </View>
       </Sheet.Frame>

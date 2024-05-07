@@ -6,8 +6,7 @@ import { blue, green, orange, pink, purple, red, yellow } from '@tamagui/colors'
 import useAddDeck from '../hooks/useAddDeck';
 import useAddSubDeck from '../hooks/useAddSubDeck';
 import { observer } from 'mobx-react';
-import { modalStore } from '../ModalStore';
-import useUpdateDeck from '../hooks/useUpdateDeck';
+import { modalStore } from '../helpers/ModalStore';
 
 type Inputs = {
   deckName: string;
@@ -27,8 +26,6 @@ const colors = [
 const SheetView = observer(() => {
   const [currentColor, setCurrentColor] = useState('');
 
-  // const { data: deck } = useDeck(modalStore.currentDeckId);
-
   const {
     control,
     handleSubmit,
@@ -42,14 +39,8 @@ const SheetView = observer(() => {
     },
   });
 
-  // filling up inputs on editing
-  // console.log({ deck });
-  // if (deck?.name) setValue('deckName', deck.name);
-  // if (deck?.color) setCurrentColor(deck.color);
-
   const addDeck = useAddDeck();
   const addSubDeck = useAddSubDeck();
-  const updateDeck = useUpdateDeck();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
@@ -58,14 +49,8 @@ const SheetView = observer(() => {
       color: data.color,
     };
 
-    // edit
-    if (modalStore.currentDeckId) {
-      updateDeck.mutateAsync({ ...newDeck, id: modalStore.currentDeckId }).then(() => {
-        reset();
-        modalStore.setCurrentDeckId(undefined);
-      });
-      // add sub deck
-    } else if (modalStore.parentDeckId) {
+    // add sub deck
+    if (modalStore.parentDeckId) {
       addSubDeck.mutateAsync(newDeck).then(() => {
         reset();
         modalStore.setParentDeckId(undefined);
@@ -76,7 +61,7 @@ const SheetView = observer(() => {
     }
 
     Keyboard.dismiss();
-    modalStore.closeModal();
+    modalStore.handleModal(false);
   };
 
   return (
@@ -88,7 +73,6 @@ const SheetView = observer(() => {
         modalStore.handleModal(state);
         reset();
         setCurrentColor('');
-        modalStore.setCurrentDeckId(undefined);
       }}
       dismissOnSnapToBottom
       zIndex={100_000}
@@ -97,7 +81,7 @@ const SheetView = observer(() => {
       <Sheet.Handle />
       <Sheet.Frame padding={10}>
         <View>
-          <H3 textAlign="center">{modalStore.currentDeckId ? 'Edit Deck' : 'New Deck'}</H3>
+          <H3 textAlign="center">New Deck</H3>
           <Label>Name</Label>
           <Controller
             name="deckName"
@@ -133,7 +117,7 @@ const SheetView = observer(() => {
             ))}
           </View>
           <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
-            {modalStore.currentDeckId ? 'Edit' : 'Create'}
+            Create
           </Button>
         </View>
       </Sheet.Frame>
