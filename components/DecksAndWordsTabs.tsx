@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
-import { RootStackParamList } from '../views/Home';
+import { RootStackParamList } from '../views/HomeView';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
 import { observer } from 'mobx-react';

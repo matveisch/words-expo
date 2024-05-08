@@ -1,7 +1,7 @@
 import { Button, Circle, Input, Label, SizableText, Text, View } from 'tamagui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from './Home';
+import { RootStackParamList } from './HomeView';
 import useWord from '../hooks/useWord';
 import { useEffect, useState } from 'react';
 import { Keyboard, StyleSheet } from 'react-native';

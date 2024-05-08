@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DeckCreateModal from './DeckCreateModal';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from './Home';
+import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}

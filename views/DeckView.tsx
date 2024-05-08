@@ -6,7 +6,7 @@ import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
-import { RootStackParamList } from './Home';
+import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
 import DeckUpdateModal from './DeckUpdateModal';
 import { observer } from 'mobx-react';

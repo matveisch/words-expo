@@ -7,7 +7,7 @@ export default function User() {
   }
 
   return (
-    <View>
+    <View marginTop={20}>
       <Button onPress={handleSignOut}>Sign out</Button>
     </View>
   );

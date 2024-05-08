@@ -10,9 +10,10 @@ import { Session } from '@supabase/supabase-js';
 import { supabase } from './helpers/initSupabase';
 import EmailForm from './components/EmailForm';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from './views/Home';
-import Settings from './views/Settings';
+import HomeView from './views/HomeView';
+import SettingsView from './views/SettingsView';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import { Home, Settings } from '@tamagui/lucide-icons';
 
 const tamaguiConfig = createTamagui(config);
 
@@ -64,11 +65,15 @@ export default function App() {
                 <Tab.Navigator>
                   <Tab.Screen
                     name="Home"
-                    component={Home}
+                    component={HomeView}
                     initialParams={{ session: session }}
-                    options={{ headerShown: false }}
+                    options={{ headerShown: false, tabBarIcon: () => <Home /> }}
                   />
-                  <Tab.Screen name="Settings" component={Settings} />
+                  <Tab.Screen
+                    name="Settings"
+                    component={SettingsView}
+                    options={{ tabBarIcon: () => <Settings /> }}
+                  />
                 </Tab.Navigator>
               ) : (
                 <EmailForm />

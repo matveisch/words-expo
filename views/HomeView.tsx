@@ -26,7 +26,7 @@ export type RootStackParamList = {
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
-const Home = observer(({ route }: Props) => {
+const HomeView = observer(({ route }: Props) => {
   const { session } = route.params;
 
   const deleteDeck = useDeleteDeck();
@@ -106,4 +106,4 @@ const Home = observer(({ route }: Props) => {
   );
 });
 
-export default Home;
+export default HomeView;

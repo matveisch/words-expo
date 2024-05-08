@@ -9,6 +9,7 @@ import useAddWord from '../hooks/useAddWord';
 import Toast from 'react-native-root-toast';
 import { toastOptions } from '../helpers/toastOptions';
 import { currentDeckStore } from '../features/CurrentDeckStore';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Inputs = {
   word: string;
@@ -66,6 +67,7 @@ const WordCreateModal = observer(() => {
         wordModalStore.setIsWordModalOpen(state);
         setCurrentLevel(1);
         reset();
+        Keyboard.dismiss();
       }}
       dismissOnSnapToBottom
       zIndex={100_000}
@@ -73,83 +75,85 @@ const WordCreateModal = observer(() => {
       <Sheet.Overlay enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
       <Sheet.Handle />
       <Sheet.Frame padding={10}>
-        <View>
-          <H3 textAlign="center">New Word</H3>
+        <KeyboardAwareScrollView>
+          <View>
+            <H3 textAlign="center">New Word</H3>
 
-          <Label>Word</Label>
-          <Controller
-            name="word"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
-          />
-          {errors.word && <Text color="red">This field is required</Text>}
+            <Label>Word</Label>
+            <Controller
+              name="word"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onChangeText={(text) => onChange(text)}
+                  onBlur={onBlur}
+                  value={value}
+                  size="$4"
+                  borderWidth={2}
+                />
+              )}
+            />
+            {errors.word && <Text color="red">This field is required</Text>}
 
-          <Label>Meaning</Label>
-          <Controller
-            name="meaning"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
-          />
-          {errors.meaning && <Text color="red">This field is required</Text>}
+            <Label>Meaning</Label>
+            <Controller
+              name="meaning"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onChangeText={(text) => onChange(text)}
+                  onBlur={onBlur}
+                  value={value}
+                  size="$4"
+                  borderWidth={2}
+                />
+              )}
+            />
+            {errors.meaning && <Text color="red">This field is required</Text>}
 
-          <Label>Pronunciation</Label>
-          <Controller
-            name="pronunciation"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
-          />
+            <Label>Pronunciation</Label>
+            <Controller
+              name="pronunciation"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onChangeText={(text) => onChange(text)}
+                  onBlur={onBlur}
+                  value={value}
+                  size="$4"
+                  borderWidth={2}
+                />
+              )}
+            />
 
-          <Label>Knowledge Level</Label>
-          <SizableText size="$3" style={styles.knowledgeDescription}>
-            Although being calculated by the app, you can always define word knowledge level by
-            yourself.
-          </SizableText>
-          <View flexDirection="row" gap={10}>
-            {knowledgeLevels.map((level, index) => (
-              <Circle
-                onPress={() => {
-                  setCurrentLevel(level);
-                  setValue('knowledgeLevel', level);
-                }}
-                key={`${level}-${index}`}
-                backgroundColor={knowledgeColors[index]}
-                size="$3"
-                borderWidth={3}
-                borderColor={currentLevel === level ? 'black' : '$borderColor'}
-              >
-                <Text>{level}</Text>
-              </Circle>
-            ))}
+            <Label>Knowledge Level</Label>
+            <SizableText size="$3" style={styles.knowledgeDescription}>
+              Although being calculated by the app, you can always define word knowledge level by
+              yourself.
+            </SizableText>
+            <View flexDirection="row" gap={10}>
+              {knowledgeLevels.map((level, index) => (
+                <Circle
+                  onPress={() => {
+                    setCurrentLevel(level);
+                    setValue('knowledgeLevel', level);
+                  }}
+                  key={`${level}-${index}`}
+                  backgroundColor={knowledgeColors[index]}
+                  size="$3"
+                  borderWidth={3}
+                  borderColor={currentLevel === level ? 'black' : '$borderColor'}
+                >
+                  <Text>{level}</Text>
+                </Circle>
+              ))}
+            </View>
+
+            <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
+              Create
+            </Button>
           </View>
-
-          <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
-            Create
-          </Button>
-        </View>
+        </KeyboardAwareScrollView>
       </Sheet.Frame>
     </Sheet>
   );
