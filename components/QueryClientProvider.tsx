@@ -10,8 +10,12 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 0,
+      // no refetching whatsoever
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      // keeping data saved forever
+      staleTime: Infinity,
+      gcTime: Infinity,
     },
   },
 });
