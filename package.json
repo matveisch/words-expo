@@ -14,7 +14,7 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
-    "@shopify/flash-list": "1.6.4",
+    "@shopify/flash-list": "1.6.3",
     "@supabase/supabase-js": "^2.43.1",
     "@tamagui/colors": "^1.94.4",
     "@tamagui/config": "^1.94.3",
