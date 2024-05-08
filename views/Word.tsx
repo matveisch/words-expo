@@ -10,6 +10,7 @@ import Toast from 'react-native-root-toast';
 import { toastOptions } from '../helpers/toastOptions';
 import useUpdateWord from '../hooks/useUpdateWord';
 import Loader from '../components/Loader';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Inputs = {
   word: string;
@@ -84,87 +85,88 @@ export default function Word({ route, navigation }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Label>Word</Label>
-      <Controller
-        name="word"
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            onChangeText={(text) => onChange(text)}
-            onBlur={onBlur}
-            value={value}
-            size="$4"
-            borderWidth={2}
-          />
-        )}
-      />
-      {errors.word && <Text color="red">This field is required</Text>}
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <Label>Word</Label>
+        <Controller
+          name="word"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              onChangeText={(text) => onChange(text)}
+              onBlur={onBlur}
+              value={value}
+              size="$4"
+              borderWidth={2}
+            />
+          )}
+        />
+        {errors.word && <Text color="red">This field is required</Text>}
 
-      <Label>Meaning</Label>
-      <Controller
-        name="meaning"
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            onChangeText={(text) => onChange(text)}
-            onBlur={onBlur}
-            value={value}
-            size="$4"
-            borderWidth={2}
-          />
-        )}
-      />
-      {errors.meaning && <Text color="red">This field is required</Text>}
+        <Label>Meaning</Label>
+        <Controller
+          name="meaning"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              onChangeText={(text) => onChange(text)}
+              onBlur={onBlur}
+              value={value}
+              size="$4"
+              borderWidth={2}
+            />
+          )}
+        />
+        {errors.meaning && <Text color="red">This field is required</Text>}
 
-      <Label>Pronunciation</Label>
-      <Controller
-        name="pronunciation"
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            onChangeText={(text) => onChange(text)}
-            onBlur={onBlur}
-            value={value}
-            size="$4"
-            borderWidth={2}
-          />
-        )}
-      />
+        <Label>Pronunciation</Label>
+        <Controller
+          name="pronunciation"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              onChangeText={(text) => onChange(text)}
+              onBlur={onBlur}
+              value={value}
+              size="$4"
+              borderWidth={2}
+            />
+          )}
+        />
 
-      <Label>Knowledge Level</Label>
-      <SizableText size="$3" style={styles.knowledgeDescription}>
-        Although being calculated by the app, you can always define word knowledge level by
-        yourself.
-      </SizableText>
-      <View flexDirection="row" gap={10}>
-        {knowledgeLevels.map((level, index) => (
-          <Circle
-            onPress={() => {
-              setCurrentLevel(level);
-              setValue('knowledgeLevel', level);
-            }}
-            key={`${level}-${index}`}
-            backgroundColor={knowledgeColors[index]}
-            size="$3"
-            borderWidth={3}
-            borderColor={currentLevel === level ? 'black' : '$borderColor'}
-          >
-            <Text>{level}</Text>
-          </Circle>
-        ))}
+        <Label>Knowledge Level</Label>
+        <SizableText size="$3" style={styles.knowledgeDescription}>
+          Although being calculated by the app, you can always define word knowledge level by
+          yourself.
+        </SizableText>
+        <View flexDirection="row" gap={10}>
+          {knowledgeLevels.map((level, index) => (
+            <Circle
+              onPress={() => {
+                setCurrentLevel(level);
+                setValue('knowledgeLevel', level);
+              }}
+              key={`${level}-${index}`}
+              backgroundColor={knowledgeColors[index]}
+              size="$3"
+              borderWidth={3}
+              borderColor={currentLevel === level ? 'black' : '$borderColor'}
+            >
+              <Text>{level}</Text>
+            </Circle>
+          ))}
+        </View>
+
+        <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
+          Edit
+        </Button>
       </View>
-
-      <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
-        Edit
-      </Button>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
     height: '100%',
     padding: 10,
   },

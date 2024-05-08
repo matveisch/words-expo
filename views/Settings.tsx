@@ -5,7 +5,6 @@ export default function Settings() {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
         height: '100%',
         padding: 10,
         display: 'flex',

@@ -44,7 +44,6 @@ function DeckView({ route, navigation }: Props) {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
         height: '100%',
         paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,

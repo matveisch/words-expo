@@ -1,7 +1,7 @@
 import { createTamagui, TamaguiProvider } from '@tamagui/core';
 import { config } from '@tamagui/config/v3';
 import { loadFonts } from './helpers/loadFonts';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -32,6 +32,14 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const Tab = createBottomTabNavigator<RootTabsParamList>();
 
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#fff',
+    },
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -51,7 +59,7 @@ export default function App() {
       <TamaguiProvider config={tamaguiConfig}>
         <QueryClientProvider>
           <SafeAreaProvider>
-            <NavigationContainer>
+            <NavigationContainer theme={MyTheme}>
               {session ? (
                 <Tab.Navigator>
                   <Tab.Screen

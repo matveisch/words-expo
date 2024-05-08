@@ -24,7 +24,6 @@ const ListOfDecks = ({ navigation, route }: Props) => {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
         height: '100%',
         paddingHorizontal: 10,
         paddingBottom: insets.bottom,
