@@ -11,7 +11,8 @@ import { RootStackParamList } from '../views/Home';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
 import { observer } from 'mobx-react';
-import { modalStore } from '../helpers/ModalStore';
+import { modalStore } from '../features/ModalStore';
+import { wordModalStore } from '../features/WordModalStore';
 
 const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -24,6 +25,8 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
     if (activeTab === 1) {
       modalStore.setParentDeckId(currentDeck);
       modalStore.handleModal(!modalStore.isModalOpen);
+    } else {
+      wordModalStore.setIsWordModalOpen(!wordModalStore.isWordModalOpen);
     }
   }
 
@@ -37,6 +40,7 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
         >
           <Text>Words</Text>
         </Button>
+
         <Button
           flex={1}
           variant={activeTab === 1 ? 'outlined' : undefined}
@@ -71,6 +75,7 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
           />
         </View>
       )}
+
       {activeTab === 1 && (
         <View flex={1}>
           <FlashList
@@ -96,6 +101,7 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
           />
         </View>
       )}
+
       <View style={styles.newItemButton}>
         <Button backgroundColor={orange.orange7} onPress={handleButtonPress}>
           {`Add new ${activeTab === 0 ? 'word' : 'deck'}`}

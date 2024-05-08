@@ -10,10 +10,11 @@ import { RootStackParamList } from './Home';
 import Loader from '../components/Loader';
 import DeckUpdateModal from './DeckUpdateModal';
 import { observer } from 'mobx-react';
-import { deckModalStore } from '../helpers/DeckModalStore';
 import { useEffect } from 'react';
 import { useDeck } from '../hooks/useDeck';
 import { knowledgeColors } from '../helpers/colors';
+import WordCreateModal from './WordCreateModal';
+import { currentDeckStore } from '../features/CurrentDeckStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -33,8 +34,9 @@ function DeckView({ route, navigation }: Props) {
     });
   }, [deck?.name, navigation]);
 
+  // setting current deck id as i cant get the right one out of navigation hook
   useEffect(() => {
-    deckModalStore.setDeckId(currentDeckId);
+    currentDeckStore.setCurrentDeck(currentDeckId);
   }, []);
 
   if (areWordsLoading) {
@@ -57,16 +59,19 @@ function DeckView({ route, navigation }: Props) {
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>
         </Button>
+
         <Button style={styles.button} backgroundColor={knowledgeColors[1]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(2, words)}\n\nhard`}</Text>
         </Button>
+
         <Button style={styles.button} backgroundColor={knowledgeColors[2]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(3, words)}\n\ngood`}</Text>
         </Button>
+
         <Button style={styles.button} backgroundColor={knowledgeColors[3]}>
           <Text
             style={styles.buttonText}
@@ -78,6 +83,7 @@ function DeckView({ route, navigation }: Props) {
         <Button style={styles.studyButton}>
           <Text>Study words</Text>
         </Button>
+
         <Button style={styles.studyButton}>
           <Text>Revise words</Text>
         </Button>
@@ -98,6 +104,7 @@ function DeckView({ route, navigation }: Props) {
       <DecksAndWordsTabs currentDeck={currentDeckId} />
 
       <DeckUpdateModal />
+      <WordCreateModal />
     </View>
   );
 }

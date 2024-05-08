@@ -11,9 +11,9 @@ import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
 import { observer } from 'mobx-react';
-import { modalStore } from '../helpers/ModalStore';
+import { modalStore } from '../features/ModalStore';
 import { Alert } from 'react-native';
-import { deckModalStore } from '../helpers/DeckModalStore';
+import { deckModalStore } from '../features/DeckModalStore';
 import Word from './Word';
 import { knowledgeColors } from '../helpers/colors';
 

@@ -5,7 +5,7 @@ import { Keyboard } from 'react-native';
 import useAddDeck from '../hooks/useAddDeck';
 import useAddSubDeck from '../hooks/useAddSubDeck';
 import { observer } from 'mobx-react';
-import { modalStore } from '../helpers/ModalStore';
+import { modalStore } from '../features/ModalStore';
 import { colors } from '../helpers/colors';
 
 type Inputs = {

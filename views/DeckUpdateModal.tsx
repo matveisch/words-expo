@@ -4,12 +4,13 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 import useUpdateDeck from '../hooks/useUpdateDeck';
 import { observer } from 'mobx-react';
-import { deckModalStore } from '../helpers/DeckModalStore';
+import { deckModalStore } from '../features/DeckModalStore';
 import { useDeck } from '../hooks/useDeck';
 import Toast from 'react-native-root-toast';
 import { colors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
 import Loader from '../components/Loader';
+import { currentDeckStore } from '../features/CurrentDeckStore';
 
 type Inputs = {
   deckName: string;
@@ -17,7 +18,7 @@ type Inputs = {
 };
 
 function DeckUpdateModal() {
-  const { data: deck, isLoading } = useDeck(deckModalStore.deckId!);
+  const { data: deck, isLoading } = useDeck(currentDeckStore.currentDeck!);
   const [currentColor, setCurrentColor] = useState('');
   const updateDeck = useUpdateDeck();
   const {
@@ -35,11 +36,11 @@ function DeckUpdateModal() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: deckModalStore.deckId || null,
+      parent_deck: currentDeckStore.currentDeck || null,
       color: data.color,
     };
 
-    updateDeck.mutateAsync({ ...newDeck, id: deckModalStore.deckId! }).then(() => {
+    updateDeck.mutateAsync({ ...newDeck, id: currentDeckStore.currentDeck! }).then(() => {
       Toast.show('Deck Updated', toastOptions);
     });
 

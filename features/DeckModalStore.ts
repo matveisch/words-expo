@@ -2,7 +2,6 @@ import { makeAutoObservable } from 'mobx';
 
 class DeckModalStore {
   isDeckModalOpen = false;
-  deckId: undefined | number = undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -10,10 +9,6 @@ class DeckModalStore {
 
   setIsDeckModalOpen(isOpen: boolean) {
     this.isDeckModalOpen = isOpen;
-  }
-
-  setDeckId(deckId: number) {
-    this.deckId = deckId;
   }
 }
 
