@@ -13,6 +13,7 @@ import { observer } from 'mobx-react';
 import { deckModalStore } from '../helpers/DeckModalStore';
 import { useEffect } from 'react';
 import { useDeck } from '../hooks/useDeck';
+import { knowledgeColors } from '../helpers/colors';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -52,22 +53,22 @@ function DeckView({ route, navigation }: Props) {
       }}
     >
       <View style={styles.buttonsContainer}>
-        <Button style={styles.button} backgroundColor="#F28F88">
+        <Button style={styles.button} backgroundColor={knowledgeColors[0]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>
         </Button>
-        <Button style={styles.button} backgroundColor="#F2DB88">
+        <Button style={styles.button} backgroundColor={knowledgeColors[1]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(2, words)}\n\nhard`}</Text>
         </Button>
-        <Button style={styles.button} backgroundColor="#D7F288">
+        <Button style={styles.button} backgroundColor={knowledgeColors[2]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(3, words)}\n\ngood`}</Text>
         </Button>
-        <Button style={styles.button} backgroundColor="#88F2F2">
+        <Button style={styles.button} backgroundColor={knowledgeColors[3]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(4, words)}\n\neasy`}</Text>

@@ -15,12 +15,13 @@ import { modalStore } from '../helpers/ModalStore';
 import { Alert } from 'react-native';
 import { deckModalStore } from '../helpers/DeckModalStore';
 import Word from './Word';
+import { knowledgeColors } from '../helpers/colors';
 
 export type RootStackParamList = {
   Decks: { userId: string };
   DeckView: { currentDeckId: number; currentDeckName: string };
   DecksAndWordsTabs: undefined;
-  Word: { wordId: number };
+  Word: { wordId: number; knowledgeLevel: number };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
@@ -93,9 +94,12 @@ const Home = observer(({ route }: Props) => {
       <Stack.Screen
         name="Word"
         component={Word}
-        options={() => ({
+        options={({ route }) => ({
           headerTitle: 'Edit Word',
           headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: knowledgeColors[route.params.knowledgeLevel - 1],
+          },
         })}
       />
     </Stack.Navigator>

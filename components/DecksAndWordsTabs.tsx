@@ -63,6 +63,7 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
                 onPress={() => {
                   navigation.push('Word', {
                     wordId: item.id,
+                    knowledgeLevel: item.knowledgelevel,
                   });
                 }}
               />
