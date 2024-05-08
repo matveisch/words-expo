@@ -1,29 +1,33 @@
 import { Button, Circle, Input, Label, SizableText, Text, View } from 'tamagui';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './Home';
 import useWord from '../hooks/useWord';
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Keyboard, StyleSheet } from 'react-native';
 import { knowledgeColors } from '../helpers/colors';
+import Toast from 'react-native-root-toast';
+import { toastOptions } from '../helpers/toastOptions';
+import useUpdateWord from '../hooks/useUpdateWord';
+import Loader from '../components/Loader';
 
 type Inputs = {
   word: string;
   meaning: string;
   pronunciation: string;
+  knowledgeLevel: number;
 };
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
-export default function Word({ route }: Props) {
+export default function Word({ route, navigation }: Props) {
   const { wordId } = route.params;
-  const { data: word } = useWord(wordId);
+  const { data: word, isLoading, isError, error } = useWord(wordId);
   const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const {
     control,
     handleSubmit,
-    reset,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -31,8 +35,26 @@ export default function Word({ route }: Props) {
       word: '',
       meaning: '',
       pronunciation: '',
+      knowledgeLevel: 1,
     },
   });
+  const updateWord = useUpdateWord();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const updatedWord = {
+      word: data.word,
+      meaning: data.meaning,
+      pronunciation: data.pronunciation,
+      knowledgelevel: data.knowledgeLevel,
+      id: wordId,
+    };
+
+    updateWord.mutateAsync(updatedWord).then(() => {
+      Toast.show('Word Updated', toastOptions);
+    });
+
+    Keyboard.dismiss();
+  };
 
   useEffect(() => {
     if (word) {
@@ -42,6 +64,24 @@ export default function Word({ route }: Props) {
       setCurrentLevel(word.knowledgelevel);
     }
   }, [word]);
+
+  useEffect(() => {
+    if (word) {
+      navigation.setOptions({
+        headerStyle: {
+          backgroundColor: knowledgeColors[word.knowledgelevel - 1],
+        },
+      });
+    }
+  }, [word?.knowledgelevel, navigation]);
+
+  if (isError) {
+    Toast.show(error.message, toastOptions);
+  }
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <View style={styles.container}>
@@ -91,17 +131,18 @@ export default function Word({ route }: Props) {
           />
         )}
       />
-      {errors.pronunciation && <Text color="red">This field is required</Text>}
 
       <Label>Knowledge Level</Label>
       <SizableText size="$3" style={styles.knowledgeDescription}>
-        You can always define word knowledge level by yourself
+        Although being calculated by the app, you can always define word knowledge level by
+        yourself.
       </SizableText>
       <View flexDirection="row" gap={10}>
         {knowledgeLevels.map((level, index) => (
           <Circle
             onPress={() => {
               setCurrentLevel(level);
+              setValue('knowledgeLevel', level);
             }}
             key={`${level}-${index}`}
             backgroundColor={knowledgeColors[index]}
@@ -114,7 +155,9 @@ export default function Word({ route }: Props) {
         ))}
       </View>
 
-      <Button marginTop={20}>Edit</Button>
+      <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
+        Edit
+      </Button>
     </View>
   );
 }

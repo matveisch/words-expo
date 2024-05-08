@@ -9,6 +9,7 @@ import { useDeck } from '../hooks/useDeck';
 import Toast from 'react-native-root-toast';
 import { colors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
+import Loader from '../components/Loader';
 
 type Inputs = {
   deckName: string;
@@ -16,7 +17,7 @@ type Inputs = {
 };
 
 function DeckUpdateModal() {
-  const { data: deck, isError, error } = useDeck(deckModalStore.deckId!);
+  const { data: deck, isError, error, isLoading } = useDeck(deckModalStore.deckId!);
   const [currentColor, setCurrentColor] = useState('');
   const updateDeck = useUpdateDeck();
   const {
@@ -56,6 +57,10 @@ function DeckUpdateModal() {
 
   if (isError) {
     Toast.show(error.message, toastOptions);
+  }
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
