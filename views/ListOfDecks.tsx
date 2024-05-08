@@ -14,8 +14,7 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 const ListOfDecks = ({ navigation, route }: Props) => {
   const insets = useSafeAreaInsets();
   const { userId } = route.params;
-  // todo error handling
-  const { data: decks, isError, isLoading, error } = useDecks(userId);
+  const { data: decks, isLoading } = useDecks(userId);
 
   if (isLoading) {
     return <Loader />;

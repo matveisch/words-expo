@@ -23,7 +23,7 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
 export default function Word({ route, navigation }: Props) {
   const { wordId } = route.params;
-  const { data: word, isLoading, isError, error } = useWord(wordId);
+  const { data: word, isLoading } = useWord(wordId);
   const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const {
@@ -75,10 +75,6 @@ export default function Word({ route, navigation }: Props) {
       });
     }
   }, [word?.knowledgelevel, navigation]);
-
-  if (isError) {
-    Toast.show(error.message, toastOptions);
-  }
 
   if (isLoading) {
     return <Loader />;

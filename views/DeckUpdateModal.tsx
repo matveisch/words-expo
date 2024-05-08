@@ -17,7 +17,7 @@ type Inputs = {
 };
 
 function DeckUpdateModal() {
-  const { data: deck, isError, error, isLoading } = useDeck(deckModalStore.deckId!);
+  const { data: deck, isLoading } = useDeck(deckModalStore.deckId!);
   const [currentColor, setCurrentColor] = useState('');
   const updateDeck = useUpdateDeck();
   const {
@@ -54,10 +54,6 @@ function DeckUpdateModal() {
       setCurrentColor(deck.color);
     }
   }, [deck]);
-
-  if (isError) {
-    Toast.show(error.message, toastOptions);
-  }
 
   if (isLoading) {
     return <Loader />;
