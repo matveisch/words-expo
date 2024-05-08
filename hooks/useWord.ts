@@ -4,7 +4,7 @@ import { Word } from '../types/Word';
 
 export default function useWord(wordId: number) {
   return useQuery({
-    queryKey: ['word'],
+    queryKey: ['word', wordId],
     queryFn: () => supabase.from('words').select().eq('id', wordId).order('id').single(),
     select: (data): Word => {
       // @ts-ignore

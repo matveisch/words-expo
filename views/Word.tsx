@@ -1,10 +1,11 @@
-import { Input, Label, Text, View } from 'tamagui';
+import { Button, Circle, Input, Label, SizableText, Text, View } from 'tamagui';
 import { Controller, useForm } from 'react-hook-form';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './Home';
 import useWord from '../hooks/useWord';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { knowledgeColors } from '../helpers/colors';
 
 type Inputs = {
   word: string;
@@ -16,6 +17,9 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
 export default function Word({ route }: Props) {
   const { wordId } = route.params;
+  const { data: word } = useWord(wordId);
+  const knowledgeLevels = [1, 2, 3, 4];
+  const [currentLevel, setCurrentLevel] = useState<number>(1);
   const {
     control,
     handleSubmit,
@@ -29,13 +33,13 @@ export default function Word({ route }: Props) {
       pronunciation: '',
     },
   });
-  const { data: word } = useWord(wordId);
 
   useEffect(() => {
     if (word) {
       setValue('word', word.word);
       setValue('meaning', word.meaning);
       setValue('pronunciation', word.pronunciation);
+      setCurrentLevel(word.knowledgelevel);
     }
   }, [word]);
 
@@ -88,6 +92,29 @@ export default function Word({ route }: Props) {
         )}
       />
       {errors.pronunciation && <Text color="red">This field is required</Text>}
+
+      <Label>Knowledge Level</Label>
+      <SizableText size="$3" style={styles.knowledgeDescription}>
+        You can always define word knowledge level by yourself
+      </SizableText>
+      <View flexDirection="row" gap={10}>
+        {knowledgeLevels.map((level, index) => (
+          <Circle
+            onPress={() => {
+              setCurrentLevel(level);
+            }}
+            key={`${level}-${index}`}
+            backgroundColor={knowledgeColors[index]}
+            size="$3"
+            borderWidth={3}
+            borderColor={currentLevel === level ? 'black' : '$borderColor'}
+          >
+            <Text>{level}</Text>
+          </Circle>
+        ))}
+      </View>
+
+      <Button marginTop={20}>Edit</Button>
     </View>
   );
 }
@@ -97,5 +124,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: '100%',
     padding: 10,
+  },
+  knowledgeDescription: {
+    marginTop: -10,
+    marginBottom: 10,
+    color: 'grey',
   },
 });
