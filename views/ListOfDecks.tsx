@@ -3,7 +3,6 @@ import { FlashList } from '@shopify/flash-list';
 import { ListItem, Text, View } from 'tamagui';
 import { ChevronRight } from '@tamagui/lucide-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DeckCreateModal from './DeckCreateModal';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';

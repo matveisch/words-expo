@@ -5,11 +5,9 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet, View } from 'react-native';
 
 import useAddDeck from '../hooks/useAddDeck';
-import { modalStore } from '../features/ModalStore';
 import { colors } from '../helpers/colors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
-import Loader from '../components/Loader';
 
 type Inputs = {
   deckName: string;
@@ -18,7 +16,7 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateModal'> {}
 
-const DeckCreateModal = observer(({ navigation }: Props) => {
+const DeckCreateModal = observer(({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useAddDeck();
   const {
@@ -37,7 +35,7 @@ const DeckCreateModal = observer(({ navigation }: Props) => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: modalStore.parentDeckId || null,
+      parent_deck: route.params ? route.params.parentDeckId : null,
       color: data.color,
     };
 
@@ -88,7 +86,7 @@ const DeckCreateModal = observer(({ navigation }: Props) => {
       </View>
 
       <Button onPress={handleSubmit(onSubmit)} marginTop={10} disabled={isPending}>
-        {isPending ? <Loader /> : 'Create'}
+        Create
       </Button>
     </View>
   );

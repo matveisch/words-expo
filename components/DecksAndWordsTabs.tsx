@@ -11,20 +11,19 @@ import { RootStackParamList } from '../views/HomeView';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
 import { observer } from 'mobx-react';
-import { modalStore } from '../features/ModalStore';
 import { wordModalStore } from '../features/WordModalStore';
 
 const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
-
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);
 
   function handleButtonPress() {
     if (activeTab === 1) {
-      navigation.navigate('DeckCreateModal');
-      modalStore.setParentDeckId(currentDeck);
+      navigation.navigate('DeckCreateModal', {
+        parentDeckId: currentDeck,
+      });
     } else {
       wordModalStore.setIsWordModalOpen(!wordModalStore.isWordModalOpen);
     }

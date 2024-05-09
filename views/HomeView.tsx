@@ -22,7 +22,7 @@ export type RootStackParamList = {
   DeckView: { currentDeckId: number; currentDeckName: string };
   DecksAndWordsTabs: undefined;
   Word: { wordId: number; knowledgeLevel: number };
-  DeckCreateModal: undefined;
+  DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: undefined;
 };
 
