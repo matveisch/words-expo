@@ -1,6 +1,6 @@
 import { Text } from '@tamagui/core';
 import { StyleSheet, View } from 'react-native';
-import { Button, Progress } from 'tamagui';
+import { Progress } from 'tamagui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -53,33 +53,33 @@ function DeckView({ route, navigation }: Props) {
           >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>
         </PressableArea>
 
-        <Button style={styles.button} backgroundColor={knowledgeColors[1]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[1]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(2, words)}\n\nhard`}</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.button} backgroundColor={knowledgeColors[2]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[2]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(3, words)}\n\ngood`}</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.button} backgroundColor={knowledgeColors[3]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[3]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(4, words)}\n\neasy`}</Text>
-        </Button>
+        </PressableArea>
       </View>
 
       <View style={styles.studyButtonsContainer}>
-        <Button style={styles.studyButton}>
+        <PressableArea style={styles.studyButton}>
           <Text>Study words</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.studyButton}>
+        <PressableArea style={styles.studyButton}>
           <Text>Revise words</Text>
-        </Button>
+        </PressableArea>
       </View>
 
       <View style={{ paddingVertical: 10 }}>
