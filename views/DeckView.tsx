@@ -8,11 +8,9 @@ import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
-import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 import { useDeck } from '../hooks/useDeck';
 import { knowledgeColors } from '../helpers/colors';
-import { currentDeckStore } from '../features/CurrentDeckStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -31,11 +29,6 @@ function DeckView({ route, navigation }: Props) {
       headerTitle: deck?.name,
     });
   }, [deck?.name, navigation]);
-
-  // setting current deck id as i cant get the right one out of navigation hook
-  useEffect(() => {
-    currentDeckStore.setCurrentDeck(currentDeckId);
-  }, []);
 
   if (areWordsLoading) {
     return <Loader />;
@@ -127,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default observer(DeckView);
+export default DeckView;

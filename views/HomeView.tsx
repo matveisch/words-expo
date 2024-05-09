@@ -10,7 +10,6 @@ import DeckView from './DeckView';
 import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
-import { observer } from 'mobx-react';
 import { Alert } from 'react-native';
 import Word from './Word';
 import { knowledgeColors } from '../helpers/colors';
@@ -30,7 +29,7 @@ export type RootStackParamList = {
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
-const HomeView = observer(({ route }: Props) => {
+const HomeView = ({ route }: Props) => {
   const { session } = route.params;
   const { mutateAsync } = useDeleteDeck();
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -140,6 +139,6 @@ const HomeView = observer(({ route }: Props) => {
       </Stack.Group>
     </Stack.Navigator>
   );
-});
+};
 
 export default HomeView;

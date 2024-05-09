@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react';
 import { Button, Circle, Input, Label, SizableText, Text, View } from 'tamagui';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -20,7 +19,7 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateModal'> {}
 
-const WordCreateModal = observer(({ route, navigation }: Props) => {
+const WordCreateModal = ({ route, navigation }: Props) => {
   const { parentDeckId } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const { mutateAsync, isPending } = useAddWord();
@@ -138,7 +137,7 @@ const WordCreateModal = observer(({ route, navigation }: Props) => {
       </View>
     </KeyboardAwareScrollView>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {

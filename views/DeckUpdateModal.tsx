@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet } from 'react-native';
 import useUpdateDeck from '../hooks/useUpdateDeck';
-import { observer } from 'mobx-react';
 import { useDeck } from '../hooks/useDeck';
 import Toast from 'react-native-root-toast';
 import { colors } from '../helpers/colors';
@@ -114,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default observer(DeckUpdateModal);
+export default DeckUpdateModal;

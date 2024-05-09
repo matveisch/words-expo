@@ -10,9 +10,8 @@ import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
-import { observer } from 'mobx-react';
 
-const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) => {
+const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
@@ -110,7 +109,7 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
       </Button>
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {

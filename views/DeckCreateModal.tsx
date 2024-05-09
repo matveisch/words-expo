@@ -1,6 +1,5 @@
 import { Button, Circle, Input, Label, Text } from 'tamagui';
 import { useState } from 'react';
-import { observer } from 'mobx-react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet, View } from 'react-native';
 
@@ -16,7 +15,7 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateModal'> {}
 
-const DeckCreateModal = observer(({ navigation, route }: Props) => {
+const DeckCreateModal = ({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useAddDeck();
 
@@ -91,7 +90,7 @@ const DeckCreateModal = observer(({ navigation, route }: Props) => {
       </Button>
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {
