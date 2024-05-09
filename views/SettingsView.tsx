@@ -2,7 +2,7 @@ import { View, Text, Label, Input, SizableText, Button, XStack } from 'tamagui';
 import User from '../components/User';
 import { Controller, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet } from 'react-native';
-import { Check } from '@tamagui/lucide-icons';
+import { TabBarIcon } from '../ui/TabBarIcon';
 
 type Inputs = {
   wordsPerSet: string;
@@ -55,7 +55,7 @@ export default function SettingsView() {
               Keyboard.dismiss();
             }}
           >
-            <Check />
+            <TabBarIcon name="check" size={20} />
           </Button>
         </XStack>
         {errors.wordsPerSet && <Text color="red">This field is required</Text>}

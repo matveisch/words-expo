@@ -1,6 +1,5 @@
 import { Button, ListItem, Text } from 'tamagui';
 import { View } from '@tamagui/core';
-import { ChevronRight } from '@tamagui/lucide-icons';
 import { FlashList } from '@shopify/flash-list';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +9,7 @@ import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
+import { ChevronIcon } from '../ui/ChevronIcon';
 
 const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -58,7 +58,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
               <ListItem
-                iconAfter={ChevronRight}
+                iconAfter={ChevronIcon}
                 pressTheme
                 borderRadius={9}
                 title={item.word}
@@ -84,7 +84,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
               <ListItem
-                iconAfter={ChevronRight}
+                iconAfter={ChevronIcon}
                 pressTheme
                 backgroundColor={item.color ? item.color : undefined}
                 borderRadius={9}

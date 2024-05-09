@@ -13,14 +13,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
 import { RootSiblingParent } from 'react-native-root-siblings';
-import { Home, Settings } from '@tamagui/lucide-icons';
+import { TabBarIcon } from './ui/TabBarIcon';
 
 const tamaguiConfig = createTamagui(config);
-
-//type Conf = typeof tamaguiConfig;
-//declare module '@tamagui/core' {
-//  interface TamaguiCustomConfig extends Conf {}
-//}
 
 export type RootTabsParamList = {
   Home: { session: Session };
@@ -67,12 +62,15 @@ export default function App() {
                     name="Home"
                     component={HomeView}
                     initialParams={{ session: session }}
-                    options={{ headerShown: false, tabBarIcon: () => <Home /> }}
+                    options={{
+                      headerShown: false,
+                      tabBarIcon: () => <TabBarIcon name="home" />,
+                    }}
                   />
                   <Tab.Screen
                     name="Settings"
                     component={SettingsView}
-                    options={{ tabBarIcon: () => <Settings /> }}
+                    options={{ tabBarIcon: () => <TabBarIcon name="gear" /> }}
                   />
                 </Tab.Navigator>
               ) : (

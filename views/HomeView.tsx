@@ -5,7 +5,6 @@ import {
 } from '@react-navigation/native-stack';
 import ListOfDecks from './ListOfDecks';
 import { Button, XStack } from 'tamagui';
-import { BookPlus, Pencil, Trash2 } from '@tamagui/lucide-icons';
 import DeckView from './DeckView';
 import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
@@ -16,6 +15,7 @@ import { knowledgeColors } from '../helpers/colors';
 import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
 import WordCreateModal from './WordCreateModal';
+import { TabBarIcon } from '../ui/TabBarIcon';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -66,7 +66,7 @@ const HomeView = ({ route }: Props) => {
             headerTitle: 'My Decks',
             headerRight: () => (
               <Button size="$2" chromeless onPress={() => navigation.navigate('DeckCreateModal')}>
-                <BookPlus />
+                <TabBarIcon name="plus-square" />
               </Button>
             ),
           })}
@@ -88,14 +88,14 @@ const HomeView = ({ route }: Props) => {
                     })
                   }
                 >
-                  <Pencil />
+                  <TabBarIcon name="edit" />
                 </Button>
                 <Button
                   size="$2"
                   chromeless
                   onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
                 >
-                  <Trash2 />
+                  <TabBarIcon name="trash-o" />
                 </Button>
               </XStack>
             ),
