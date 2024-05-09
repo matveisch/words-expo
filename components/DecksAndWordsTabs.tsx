@@ -8,7 +8,6 @@ import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
 import { StyleSheet } from 'react-native';
-import { orange } from '@tamagui/colors';
 import { ChevronIcon } from '../ui/ChevronIcon';
 
 const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
@@ -101,7 +100,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
         </View>
       )}
       <Button
-        backgroundColor={orange.orange7}
+        backgroundColor="hsl(24, 100%, 75.3%)"
         onPress={handleButtonPress}
         style={styles.newItemButton}
       >

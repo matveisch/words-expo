@@ -19,6 +19,8 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useAddDeck();
 
+  console.log(colors);
+
   const {
     control,
     handleSubmit,
