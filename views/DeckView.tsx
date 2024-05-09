@@ -26,8 +26,6 @@ function DeckView({ route, navigation }: Props) {
   const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
   const { data: deck } = useDeck(currentDeckId);
 
-  console.log(currentDeckId);
-
   useEffect(() => {
     navigation.setOptions({
       headerTitle: deck?.name,

@@ -24,7 +24,7 @@ export type RootStackParamList = {
   DecksAndWordsTabs: undefined;
   Word: { wordId: number; knowledgeLevel: number };
   DeckCreateModal: { parentDeckId: number };
-  DeckUpdateModal: undefined;
+  DeckUpdateModal: { parentDeckId: number };
   WordCreateModal: { parentDeckId: number };
 };
 
@@ -80,7 +80,15 @@ const HomeView = observer(({ route }: Props) => {
             headerBackTitleVisible: false,
             headerRight: () => (
               <XStack>
-                <Button size="$2" chromeless onPress={() => navigation.navigate('DeckCreateModal')}>
+                <Button
+                  size="$2"
+                  chromeless
+                  onPress={() =>
+                    navigation.navigate('DeckUpdateModal', {
+                      parentDeckId: route.params.currentDeckId,
+                    })
+                  }
+                >
                   <Pencil />
                 </Button>
                 <Button

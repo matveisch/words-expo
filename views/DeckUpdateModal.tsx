@@ -1,7 +1,7 @@
 import { Button, Circle, Input, Label, Text, View } from 'tamagui';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Keyboard } from 'react-native';
+import { Keyboard, StyleSheet } from 'react-native';
 import useUpdateDeck from '../hooks/useUpdateDeck';
 import { observer } from 'mobx-react';
 import { useDeck } from '../hooks/useDeck';
@@ -9,17 +9,22 @@ import Toast from 'react-native-root-toast';
 import { colors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
 import Loader from '../components/Loader';
-import { currentDeckStore } from '../features/CurrentDeckStore';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from './HomeView';
 
 type Inputs = {
   deckName: string;
   color: string;
 };
 
-function DeckUpdateModal() {
-  const { data: deck, isLoading } = useDeck(currentDeckStore.currentDeck!);
+interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckUpdateModal'> {}
+
+function DeckUpdateModal({ route, navigation }: Props) {
+  const { parentDeckId } = route.params;
+  const { data: deck, isLoading } = useDeck(parentDeckId);
   const [currentColor, setCurrentColor] = useState('');
-  const updateDeck = useUpdateDeck();
+  const { mutateAsync, isPending } = useUpdateDeck();
+
   const {
     control,
     handleSubmit,
@@ -35,15 +40,15 @@ function DeckUpdateModal() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: currentDeckStore.currentDeck || null,
+      parent_deck: parentDeckId || null,
       color: data.color,
     };
 
-    updateDeck.mutateAsync({ ...newDeck, id: currentDeckStore.currentDeck! }).then(() => {
+    mutateAsync({ ...newDeck, id: parentDeckId }).then(() => {
       Toast.show('Deck Updated', toastOptions);
+      Keyboard.dismiss();
+      navigation.goBack();
     });
-
-    Keyboard.dismiss();
   };
 
   useEffect(() => {
@@ -59,7 +64,7 @@ function DeckUpdateModal() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <Label>Name</Label>
       <Controller
         name="deckName"
@@ -96,11 +101,17 @@ function DeckUpdateModal() {
         ))}
       </View>
 
-      <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
+      <Button onPress={handleSubmit(onSubmit)} marginTop={10} disabled={isPending}>
         Edit
       </Button>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+});
 
 export default observer(DeckUpdateModal);
