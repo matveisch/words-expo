@@ -1,6 +1,5 @@
 import { Text } from '@tamagui/core';
 import { StyleSheet, View } from 'react-native';
-import { Progress } from 'tamagui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,6 +12,7 @@ import Loader from '../components/Loader';
 import { useDeck } from '../hooks/useDeck';
 import { knowledgeColors } from '../helpers/colors';
 import PressableArea from '../ui/PressableArea';
+import { ProgressBar } from '../ui/ProgressBar';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -32,7 +32,7 @@ function DeckView({ route, navigation }: Props) {
     });
   }, [deck?.name, navigation]);
 
-  if (areWordsLoading) {
+  if (areWordsLoading || !words) {
     return <Loader />;
   }
 
@@ -83,11 +83,7 @@ function DeckView({ route, navigation }: Props) {
       </View>
 
       <View style={{ paddingVertical: 10 }}>
-        {words && (
-          <Progress value={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length}>
-            <Progress.Indicator backgroundColor="#00CD5E" />
-          </Progress>
-        )}
+        <ProgressBar progress={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length} />
       </View>
 
       {/*<View>*/}
