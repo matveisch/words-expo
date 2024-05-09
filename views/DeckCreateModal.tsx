@@ -19,6 +19,7 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateMo
 const DeckCreateModal = observer(({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useAddDeck();
+
   const {
     control,
     handleSubmit,

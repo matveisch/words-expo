@@ -11,7 +11,6 @@ import { RootStackParamList } from '../views/HomeView';
 import { StyleSheet } from 'react-native';
 import { orange } from '@tamagui/colors';
 import { observer } from 'mobx-react';
-import { wordModalStore } from '../features/WordModalStore';
 
 const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -25,7 +24,9 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
         parentDeckId: currentDeck,
       });
     } else {
-      wordModalStore.setIsWordModalOpen(!wordModalStore.isWordModalOpen);
+      navigation.navigate('WordCreateModal', {
+        parentDeckId: currentDeck,
+      });
     }
   }
 

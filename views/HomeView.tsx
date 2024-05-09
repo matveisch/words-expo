@@ -16,6 +16,7 @@ import Word from './Word';
 import { knowledgeColors } from '../helpers/colors';
 import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
+import WordCreateModal from './WordCreateModal';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -24,14 +25,14 @@ export type RootStackParamList = {
   Word: { wordId: number; knowledgeLevel: number };
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: undefined;
+  WordCreateModal: { parentDeckId: number };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
 const HomeView = observer(({ route }: Props) => {
   const { session } = route.params;
-
-  const deleteDeck = useDeleteDeck();
+  const { mutateAsync } = useDeleteDeck();
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   function handleDeleteDeck(
@@ -43,8 +44,7 @@ const HomeView = observer(({ route }: Props) => {
       {
         text: 'Delete',
         onPress: () => {
-          deleteDeck.mutate(deckId);
-          navigation.goBack();
+          mutateAsync(deckId).then(() => navigation.goBack());
         },
       },
     ]);
@@ -120,6 +120,13 @@ const HomeView = observer(({ route }: Props) => {
           component={DeckUpdateModal}
           options={{
             headerTitle: 'Edit Deck',
+          }}
+        />
+        <Stack.Screen
+          name="WordCreateModal"
+          component={WordCreateModal}
+          options={{
+            headerTitle: 'New Word',
           }}
         />
       </Stack.Group>
