@@ -1,16 +1,18 @@
-import { View, Text } from '@tamagui/core';
-import { StyleSheet } from 'react-native';
+import { Text } from '@tamagui/core';
+import { StyleSheet, View } from 'react-native';
 import { Button, Progress } from 'tamagui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
+import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
-import { useEffect } from 'react';
 import { useDeck } from '../hooks/useDeck';
 import { knowledgeColors } from '../helpers/colors';
+import PressableArea from '../ui/PressableArea';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -45,11 +47,11 @@ function DeckView({ route, navigation }: Props) {
       }}
     >
       <View style={styles.buttonsContainer}>
-        <Button style={styles.button} backgroundColor={knowledgeColors[0]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[0]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>
-        </Button>
+        </PressableArea>
 
         <Button style={styles.button} backgroundColor={knowledgeColors[1]}>
           <Text
@@ -80,7 +82,7 @@ function DeckView({ route, navigation }: Props) {
         </Button>
       </View>
 
-      <View paddingVertical={10}>
+      <View style={{ paddingVertical: 10 }}>
         {words && (
           <Progress value={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length}>
             <Progress.Indicator backgroundColor="#00CD5E" />
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
+    paddingHorizontal: 18,
   },
   buttonText: {
     textAlign: 'center',

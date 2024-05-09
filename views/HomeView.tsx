@@ -66,7 +66,11 @@ const HomeView = ({ route }: Props) => {
             headerBackVisible: false,
             headerTitle: 'My Decks',
             headerRight: () => (
-              <PressableArea chromeless onPress={() => navigation.navigate('DeckCreateModal')}>
+              <PressableArea
+                chromeless
+                size="small"
+                onPress={() => navigation.navigate('DeckCreateModal')}
+              >
                 <TabBarIcon name="plus-square" />
               </PressableArea>
             ),
@@ -82,6 +86,7 @@ const HomeView = ({ route }: Props) => {
               <View style={{ flexDirection: 'row', gap: 5 }}>
                 <PressableArea
                   chromeless
+                  size="small"
                   onPress={() =>
                     navigation.navigate('DeckUpdateModal', {
                       parentDeckId: route.params.currentDeckId,
@@ -92,6 +97,7 @@ const HomeView = ({ route }: Props) => {
                 </PressableArea>
                 <PressableArea
                   chromeless
+                  size="small"
                   onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
                 >
                   <TabBarIcon name="trash-o" />
