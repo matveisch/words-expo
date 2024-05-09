@@ -32,7 +32,6 @@ const ListOfDecks = ({ navigation, route }: Props) => {
       }}
     >
       <View flex={1}>
-        <DeckCreateModal />
         <FlashList
           estimatedItemSize={44}
           data={decks}

@@ -8,12 +8,10 @@ import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
-import DeckUpdateModal from './DeckUpdateModal';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 import { useDeck } from '../hooks/useDeck';
 import { knowledgeColors } from '../helpers/colors';
-import WordCreateModal from './WordCreateModal';
 import { currentDeckStore } from '../features/CurrentDeckStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
@@ -47,10 +45,10 @@ function DeckView({ route, navigation }: Props) {
     <View
       style={{
         height: '100%',
-        paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
         paddingTop: 10,
+        paddingBottom: 10,
       }}
     >
       <View style={styles.buttonsContainer}>
@@ -102,9 +100,6 @@ function DeckView({ route, navigation }: Props) {
       {/*</View>*/}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
-
-      <DeckUpdateModal />
-      <WordCreateModal />
     </View>
   );
 }

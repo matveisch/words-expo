@@ -23,8 +23,8 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
 
   function handleButtonPress() {
     if (activeTab === 1) {
+      navigation.navigate('DeckCreateModal');
       modalStore.setParentDeckId(currentDeck);
-      modalStore.handleModal(!modalStore.isModalOpen);
     } else {
       wordModalStore.setIsWordModalOpen(!wordModalStore.isWordModalOpen);
     }
@@ -101,12 +101,13 @@ const DecksAndWordsTabs = observer(({ currentDeck }: { currentDeck: number }) =>
           />
         </View>
       )}
-
-      <View style={styles.newItemButton}>
-        <Button backgroundColor={orange.orange7} onPress={handleButtonPress}>
-          {`Add new ${activeTab === 0 ? 'word' : 'deck'}`}
-        </Button>
-      </View>
+      <Button
+        backgroundColor={orange.orange7}
+        onPress={handleButtonPress}
+        style={styles.newItemButton}
+      >
+        {`Add new ${activeTab === 0 ? 'word' : 'deck'}`}
+      </Button>
     </View>
   );
 });
@@ -117,12 +118,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   newItemButton: {
+    alignSelf: 'center',
     position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    bottom: 20,
   },
 });
 
