@@ -1,3 +1,8 @@
+export const defaultColors = {
+  buttonColor: '#EEEDEB',
+  inputColor: '#EEEDEB',
+};
+
 export const colors = [
   'hsl(24, 100%, 75.3%)',
   'hsl(47, 80.4%, 68.0%)',

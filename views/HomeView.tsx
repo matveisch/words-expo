@@ -3,19 +3,20 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { Alert, View } from 'react-native';
+
 import ListOfDecks from './ListOfDecks';
-import { Button, XStack } from 'tamagui';
 import DeckView from './DeckView';
 import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
-import { Alert } from 'react-native';
 import Word from './Word';
 import { knowledgeColors } from '../helpers/colors';
 import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
 import WordCreateModal from './WordCreateModal';
 import { TabBarIcon } from '../ui/TabBarIcon';
+import PressableArea from '../ui/PressableArea';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -65,9 +66,9 @@ const HomeView = ({ route }: Props) => {
             headerBackVisible: false,
             headerTitle: 'My Decks',
             headerRight: () => (
-              <Button size="$2" chromeless onPress={() => navigation.navigate('DeckCreateModal')}>
+              <PressableArea chromeless onPress={() => navigation.navigate('DeckCreateModal')}>
                 <TabBarIcon name="plus-square" />
-              </Button>
+              </PressableArea>
             ),
           })}
         />
@@ -78,9 +79,8 @@ const HomeView = ({ route }: Props) => {
             headerTitle: route.params.currentDeckName,
             headerBackTitleVisible: false,
             headerRight: () => (
-              <XStack>
-                <Button
-                  size="$2"
+              <View style={{ flexDirection: 'row', gap: 5 }}>
+                <PressableArea
                   chromeless
                   onPress={() =>
                     navigation.navigate('DeckUpdateModal', {
@@ -89,15 +89,14 @@ const HomeView = ({ route }: Props) => {
                   }
                 >
                   <TabBarIcon name="edit" />
-                </Button>
-                <Button
-                  size="$2"
+                </PressableArea>
+                <PressableArea
                   chromeless
                   onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
                 >
                   <TabBarIcon name="trash-o" />
-                </Button>
-              </XStack>
+                </PressableArea>
+              </View>
             ),
           })}
         />
