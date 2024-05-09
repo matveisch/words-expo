@@ -1,4 +1,3 @@
-import { ListItem } from 'tamagui';
 import { FlashList } from '@shopify/flash-list';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -8,8 +7,8 @@ import { StyleSheet, View, Text } from 'react-native';
 import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
-import { ChevronIcon } from '../ui/ChevronIcon';
 import PressableArea from '../ui/PressableArea';
+import ListItem from '../ui/ListItem';
 
 const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -58,9 +57,6 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
               <ListItem
-                iconAfter={ChevronIcon}
-                pressTheme
-                borderRadius={9}
                 title={item.word}
                 subTitle={item.meaning}
                 onPress={() => {
@@ -84,10 +80,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             renderItem={({ item }) => (
               <ListItem
-                iconAfter={ChevronIcon}
-                pressTheme
                 backgroundColor={item.color ? item.color : undefined}
-                borderRadius={9}
                 title={item.name}
                 onPress={() => {
                   navigation.push('DeckView', {
