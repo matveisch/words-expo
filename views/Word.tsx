@@ -1,16 +1,21 @@
-import { Button, Circle, Input, Label, SizableText, Text, View } from 'tamagui';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEffect, useState } from 'react';
+import Toast from 'react-native-root-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { RootStackParamList } from './HomeView';
 import useWord from '../hooks/useWord';
-import { useEffect, useState } from 'react';
-import { Keyboard, StyleSheet } from 'react-native';
 import { knowledgeColors } from '../helpers/colors';
-import Toast from 'react-native-root-toast';
 import { toastOptions } from '../helpers/toastOptions';
 import useUpdateWord from '../hooks/useUpdateWord';
 import Loader from '../components/Loader';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Description from '../ui/Description';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import Circle from '../ui/Circle';
+import PressableArea from '../ui/PressableArea';
 
 type Inputs = {
   word: string;
@@ -83,79 +88,58 @@ export default function Word({ route, navigation }: Props) {
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
-        <Label>Word</Label>
+        <Label text="Word" />
         <Controller
           name="word"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              size="$4"
-              borderWidth={2}
-            />
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.word && <Text color="red">This field is required</Text>}
+        {errors.word && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-        <Label>Meaning</Label>
+        <Label text="Meaning" />
         <Controller
           name="meaning"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              size="$4"
-              borderWidth={2}
-            />
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.meaning && <Text color="red">This field is required</Text>}
+        {errors.meaning && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-        <Label>Pronunciation</Label>
+        <Label text="Pronunciation" />
         <Controller
           name="pronunciation"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              size="$4"
-              borderWidth={2}
-            />
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
 
-        <Label>Knowledge Level</Label>
-        <SizableText size="$3" style={styles.knowledgeDescription}>
-          Although being calculated by the app, you can always define word knowledge level by
-          yourself.
-        </SizableText>
-        <View flexDirection="row" gap={10}>
+        <Label text="Knowledge Level" />
+        <Description
+          text="Although being calculated by the app, you can always define word knowledge level by
+          yourself."
+        />
+        <View style={{ flexDirection: 'row', gap: 10 }}>
           {knowledgeLevels.map((level, index) => (
             <Circle
               onPress={() => {
                 setCurrentLevel(level);
                 setValue('knowledgeLevel', level);
               }}
+              text={`${level}`}
               key={`${level}-${index}`}
               backgroundColor={knowledgeColors[index]}
-              size="$3"
-              borderWidth={3}
-              borderColor={currentLevel === level ? 'black' : '$borderColor'}
-            >
-              <Text>{level}</Text>
-            </Circle>
+              borderColor={currentLevel === level ? 'black' : undefined}
+            />
           ))}
         </View>
 
-        <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
-          Edit
-        </Button>
+        <PressableArea onPress={handleSubmit(onSubmit)} style={{ marginTop: 20 }}>
+          <Text>Edit</Text>
+        </PressableArea>
       </View>
     </KeyboardAwareScrollView>
   );

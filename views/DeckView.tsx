@@ -1,20 +1,17 @@
-import { View, Text } from '@tamagui/core';
-import { StyleSheet } from 'react-native';
-import { Button, Progress } from 'tamagui';
+import { StyleSheet, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
+import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { useWords } from '../hooks/useWords';
 import { Word } from '../types/Word';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
-import DeckUpdateModal from './DeckUpdateModal';
-import { observer } from 'mobx-react';
-import { useEffect } from 'react';
 import { useDeck } from '../hooks/useDeck';
 import { knowledgeColors } from '../helpers/colors';
-import WordCreateModal from './WordCreateModal';
-import { currentDeckStore } from '../features/CurrentDeckStore';
+import PressableArea from '../ui/PressableArea';
+import { ProgressBar } from '../ui/ProgressBar';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -34,12 +31,7 @@ function DeckView({ route, navigation }: Props) {
     });
   }, [deck?.name, navigation]);
 
-  // setting current deck id as i cant get the right one out of navigation hook
-  useEffect(() => {
-    currentDeckStore.setCurrentDeck(currentDeckId);
-  }, []);
-
-  if (areWordsLoading) {
+  if (areWordsLoading || !words) {
     return <Loader />;
   }
 
@@ -47,54 +39,50 @@ function DeckView({ route, navigation }: Props) {
     <View
       style={{
         height: '100%',
-        paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
         paddingTop: 10,
+        paddingBottom: 10,
       }}
     >
       <View style={styles.buttonsContainer}>
-        <Button style={styles.button} backgroundColor={knowledgeColors[0]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[0]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.button} backgroundColor={knowledgeColors[1]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[1]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(2, words)}\n\nhard`}</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.button} backgroundColor={knowledgeColors[2]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[2]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(3, words)}\n\ngood`}</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.button} backgroundColor={knowledgeColors[3]}>
+        <PressableArea style={styles.button} backgroundColor={knowledgeColors[3]}>
           <Text
             style={styles.buttonText}
           >{`${getCertainKnowledgeLevelWords(4, words)}\n\neasy`}</Text>
-        </Button>
+        </PressableArea>
       </View>
 
       <View style={styles.studyButtonsContainer}>
-        <Button style={styles.studyButton}>
+        <PressableArea style={styles.studyButton}>
           <Text>Study words</Text>
-        </Button>
+        </PressableArea>
 
-        <Button style={styles.studyButton}>
+        <PressableArea style={styles.studyButton}>
           <Text>Revise words</Text>
-        </Button>
+        </PressableArea>
       </View>
 
-      <View paddingVertical={10}>
-        {words && (
-          <Progress value={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length}>
-            <Progress.Indicator backgroundColor="#00CD5E" />
-          </Progress>
-        )}
+      <View style={{ paddingVertical: 10 }}>
+        <ProgressBar progress={(getCertainKnowledgeLevelWords(4, words) * 100) / words.length} />
       </View>
 
       {/*<View>*/}
@@ -102,9 +90,6 @@ function DeckView({ route, navigation }: Props) {
       {/*</View>*/}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
-
-      <DeckUpdateModal />
-      <WordCreateModal />
     </View>
   );
 }
@@ -118,6 +103,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
+    paddingHorizontal: 18,
   },
   buttonText: {
     textAlign: 'center',
@@ -132,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default observer(DeckView);
+export default DeckView;

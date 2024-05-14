@@ -23,6 +23,9 @@ export default function useAddDeck() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (deck: noUserIdDeck) => addDeck(deck),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['decks'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['decks'] });
+      queryClient.invalidateQueries({ queryKey: ['subDecks'] });
+    },
   });
 }

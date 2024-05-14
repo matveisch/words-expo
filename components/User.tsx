@@ -1,5 +1,7 @@
-import { Button, View } from 'tamagui';
+import { View, Text } from 'react-native';
+
 import { supabase } from '../helpers/initSupabase';
+import PressableArea from '../ui/PressableArea';
 
 export default function User() {
   async function handleSignOut() {
@@ -7,8 +9,10 @@ export default function User() {
   }
 
   return (
-    <View marginTop={20}>
-      <Button onPress={handleSignOut}>Sign out</Button>
+    <View style={{ marginTop: 20 }}>
+      <PressableArea onPress={handleSignOut}>
+        <Text>Sign out</Text>
+      </PressableArea>
     </View>
   );
 }

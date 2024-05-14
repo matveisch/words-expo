@@ -1,8 +1,11 @@
-import { View, Text, Label, Input, SizableText, Button, XStack } from 'tamagui';
-import User from '../components/User';
 import { Controller, useForm } from 'react-hook-form';
-import { Keyboard, StyleSheet } from 'react-native';
-import { Check } from '@tamagui/lucide-icons';
+import { Keyboard, View, Text } from 'react-native';
+import User from '../components/User';
+import { TabBarIcon } from '../ui/TabBarIcon';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import Description from '../ui/Description';
+import PressableArea from '../ui/PressableArea';
 
 type Inputs = {
   wordsPerSet: string;
@@ -30,11 +33,9 @@ export default function SettingsView() {
       }}
     >
       <View>
-        <Label>New words per session</Label>
-        <SizableText size="$3" style={styles.description}>
-          Set desired amount of words you want to learn per studying session.
-        </SizableText>
-        <XStack style={{ gap: 10 }}>
+        <Label text="New words per session" />
+        <Description text="Set desired amount of words you want to learn per studying session." />
+        <View style={{ gap: 10, flexDirection: 'row' }}>
           <Controller
             name="wordsPerSet"
             control={control}
@@ -45,30 +46,21 @@ export default function SettingsView() {
                 onBlur={onBlur}
                 keyboardType="number-pad"
                 value={value}
-                size="$4"
-                borderWidth={2}
               />
             )}
           />
-          <Button
+          <PressableArea
             onPress={() => {
               Keyboard.dismiss();
             }}
           >
-            <Check />
-          </Button>
-        </XStack>
-        {errors.wordsPerSet && <Text color="red">This field is required</Text>}
+            <TabBarIcon name="check" size={20} />
+          </PressableArea>
+        </View>
+        {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
       </View>
+
       <User />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  description: {
-    marginTop: -10,
-    marginBottom: 10,
-    color: 'grey',
-  },
-});

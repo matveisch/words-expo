@@ -3,33 +3,35 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { Alert, View } from 'react-native';
+
 import ListOfDecks from './ListOfDecks';
-import { Button, XStack } from 'tamagui';
-import { BookPlus, Pencil, Trash2 } from '@tamagui/lucide-icons';
 import DeckView from './DeckView';
-import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
-import { observer } from 'mobx-react';
-import { modalStore } from '../features/ModalStore';
-import { Alert } from 'react-native';
-import { deckModalStore } from '../features/DeckModalStore';
 import Word from './Word';
 import { knowledgeColors } from '../helpers/colors';
+import DeckCreateModal from './DeckCreateModal';
+import DeckUpdateModal from './DeckUpdateModal';
+import WordCreateModal from './WordCreateModal';
+import { TabBarIcon } from '../ui/TabBarIcon';
+import PressableArea from '../ui/PressableArea';
 
 export type RootStackParamList = {
   Decks: { userId: string };
   DeckView: { currentDeckId: number; currentDeckName: string };
   DecksAndWordsTabs: undefined;
   Word: { wordId: number; knowledgeLevel: number };
+  DeckCreateModal: { parentDeckId: number };
+  DeckUpdateModal: { parentDeckId: number };
+  WordCreateModal: { parentDeckId: number };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
-const HomeView = observer(({ route }: Props) => {
+const HomeView = ({ route }: Props) => {
   const { session } = route.params;
-
-  const deleteDeck = useDeleteDeck();
+  const { mutateAsync } = useDeleteDeck();
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   function handleDeleteDeck(
@@ -41,69 +43,102 @@ const HomeView = observer(({ route }: Props) => {
       {
         text: 'Delete',
         onPress: () => {
-          deleteDeck.mutate(deckId);
-          navigation.goBack();
+          mutateAsync(deckId).then(() => navigation.goBack());
         },
       },
     ]);
   }
 
-  if (!loadFonts()) {
-    return null;
-  }
-
   return (
     <Stack.Navigator initialRouteName="Decks">
-      <Stack.Screen
-        name="Decks"
-        initialParams={{ userId: session?.user?.id }}
-        component={ListOfDecks}
-        options={{
-          gestureEnabled: false,
-          headerBackVisible: false,
-          headerTitle: 'My Decks',
-          headerRight: () => (
-            <Button size="$2" chromeless onPress={() => modalStore.handleModal(true)}>
-              <BookPlus />
-            </Button>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="DeckView"
-        component={DeckView}
-        options={({ route, navigation }) => ({
-          headerTitle: route.params.currentDeckName,
-          headerBackTitleVisible: false,
-          headerRight: () => (
-            <XStack>
-              <Button size="$2" chromeless onPress={() => deckModalStore.setIsDeckModalOpen(true)}>
-                <Pencil />
-              </Button>
-              <Button
-                size="$2"
+      <Stack.Group>
+        <Stack.Screen
+          name="Decks"
+          initialParams={{ userId: session?.user?.id }}
+          component={ListOfDecks}
+          options={({ navigation }) => ({
+            gestureEnabled: false,
+            headerBackVisible: false,
+            headerTitle: 'My Decks',
+            headerRight: () => (
+              <PressableArea
                 chromeless
-                onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
+                size="small"
+                onPress={() => navigation.navigate('DeckCreateModal')}
               >
-                <Trash2 />
-              </Button>
-            </XStack>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="Word"
-        component={Word}
-        options={({ route }) => ({
-          headerTitle: 'Edit Word',
-          headerBackTitleVisible: false,
-          headerStyle: {
-            backgroundColor: knowledgeColors[route.params.knowledgeLevel - 1],
-          },
-        })}
-      />
+                <TabBarIcon name="plus-square" />
+              </PressableArea>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="DeckView"
+          component={DeckView}
+          options={({ route, navigation }) => ({
+            headerTitle: route.params.currentDeckName,
+            headerBackTitleVisible: false,
+            headerRight: () => (
+              <View style={{ flexDirection: 'row', gap: 5 }}>
+                <PressableArea
+                  chromeless
+                  size="small"
+                  onPress={() =>
+                    navigation.navigate('DeckUpdateModal', {
+                      parentDeckId: route.params.currentDeckId,
+                    })
+                  }
+                >
+                  <TabBarIcon name="edit" />
+                </PressableArea>
+                <PressableArea
+                  chromeless
+                  size="small"
+                  onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
+                >
+                  <TabBarIcon name="trash-o" />
+                </PressableArea>
+              </View>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="Word"
+          component={Word}
+          options={({ route }) => ({
+            headerTitle: 'Edit Word',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: knowledgeColors[route.params.knowledgeLevel - 1],
+            },
+          })}
+        />
+      </Stack.Group>
+
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen
+          name="DeckCreateModal"
+          component={DeckCreateModal}
+          options={{
+            headerTitle: 'New Deck',
+          }}
+        />
+        <Stack.Screen
+          name="DeckUpdateModal"
+          component={DeckUpdateModal}
+          options={{
+            headerTitle: 'Edit Deck',
+          }}
+        />
+        <Stack.Screen
+          name="WordCreateModal"
+          component={WordCreateModal}
+          options={{
+            headerTitle: 'New Word',
+          }}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
-});
+};
 
 export default HomeView;
