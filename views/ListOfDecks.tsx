@@ -45,6 +45,7 @@ const ListOfDecks = ({ navigation, route }: Props) => {
                 navigation.navigate('DeckView', {
                   currentDeckId: item.id,
                   currentDeckName: item.name,
+                  deckColor: item.color,
                 });
               }}
             />

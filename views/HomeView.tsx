@@ -19,7 +19,7 @@ import PressableArea from '../ui/PressableArea';
 
 export type RootStackParamList = {
   Decks: { userId: string };
-  DeckView: { currentDeckId: number; currentDeckName: string };
+  DeckView: { currentDeckId: number; currentDeckName: string; deckColor: string };
   DecksAndWordsTabs: undefined;
   Word: { wordId: number; knowledgeLevel: number };
   DeckCreateModal: { parentDeckId: number };
@@ -76,6 +76,9 @@ const HomeView = ({ route }: Props) => {
           component={DeckView}
           options={({ route, navigation }) => ({
             headerTitle: route.params.currentDeckName,
+            headerStyle: {
+              backgroundColor: route.params.deckColor,
+            },
             headerBackTitleVisible: false,
             headerRight: () => (
               <View style={{ flexDirection: 'row', gap: 5 }}>
