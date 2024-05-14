@@ -1,15 +1,19 @@
-import { Button, Circle, Input, Label, Text, View } from 'tamagui';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Keyboard, StyleSheet } from 'react-native';
+import { Keyboard, StyleSheet, View, Text } from 'react-native';
+import Toast from 'react-native-root-toast';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import useUpdateDeck from '../hooks/useUpdateDeck';
 import { useDeck } from '../hooks/useDeck';
-import Toast from 'react-native-root-toast';
 import { colors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
 import Loader from '../components/Loader';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import Circle from '../ui/Circle';
+import PressableArea from '../ui/PressableArea';
 
 type Inputs = {
   deckName: string;
@@ -64,7 +68,7 @@ function DeckUpdateModal({ route, navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Label>Name</Label>
+      <Label text="Name" />
       <Controller
         name="deckName"
         control={control}
@@ -72,19 +76,13 @@ function DeckUpdateModal({ route, navigation }: Props) {
           required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            onChangeText={(text) => onChange(text)}
-            onBlur={onBlur}
-            value={value}
-            size="$4"
-            borderWidth={2}
-          />
+          <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
         )}
       />
-      {errors.deckName && <Text color="red">This field is required</Text>}
+      {errors.deckName && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-      <Label>Color</Label>
-      <View flexDirection="row" gap={10}>
+      <Label text="Color" />
+      <View style={{ flexDirection: 'row', gap: 10 }}>
         {colors.map((color, index) => (
           <Circle
             onPress={() => {
@@ -93,16 +91,18 @@ function DeckUpdateModal({ route, navigation }: Props) {
             }}
             key={`${color}-${index}`}
             backgroundColor={color}
-            size="$3"
-            borderWidth={3}
-            borderColor={currentColor === color ? 'black' : '$borderColor'}
+            borderColor={currentColor === color ? 'black' : undefined}
           />
         ))}
       </View>
 
-      <Button onPress={handleSubmit(onSubmit)} marginTop={10} disabled={isPending}>
-        Edit
-      </Button>
+      <PressableArea
+        onPress={handleSubmit(onSubmit)}
+        disabled={isPending}
+        style={{ marginTop: 10 }}
+      >
+        <Text>Edit</Text>
+      </PressableArea>
     </View>
   );
 }
