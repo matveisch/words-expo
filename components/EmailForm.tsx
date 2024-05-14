@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View, Text } from 'react-native';
 import { supabase } from '../helpers/initSupabase';
-import { Button, Input, Label, Text } from 'tamagui';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NavigationProps } from '../App';
+
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import InputError from '../ui/InputError';
+import PressableArea from '../ui/PressableArea';
 
 type Inputs = {
   email: string;
@@ -73,7 +76,7 @@ export default function EmailForm() {
       }}
     >
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Label>Email</Label>
+        <Label text="Email" />
         <Controller
           name="email"
           control={control}
@@ -85,17 +88,15 @@ export default function EmailForm() {
               onChangeText={(text) => onChange(text)}
               onBlur={onBlur}
               value={value}
-              size="$4"
-              borderWidth={2}
               placeholder="email@address.com"
               autoCapitalize="none"
             />
           )}
         />
-        {errors.email && <Text color="red">This field is required</Text>}
+        {errors.email && <InputError text="This field is required" />}
       </View>
       <View style={styles.verticallySpaced}>
-        <Label>Password</Label>
+        <Label text="Password" />
         <Controller
           name="password"
           control={control}
@@ -107,25 +108,23 @@ export default function EmailForm() {
               onChangeText={(text) => onChange(text)}
               onBlur={onBlur}
               value={value}
-              size="$4"
-              borderWidth={2}
               autoCapitalize="none"
               secureTextEntry={true}
               placeholder="Password"
             />
           )}
         />
-        {errors.password && <Text color="red">This field is required</Text>}
+        {errors.password && <InputError text="This field is required" />}
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button disabled={loading} onPress={handleSubmit(signInWithEmail)}>
-          Sign in
-        </Button>
+        <PressableArea disabled={loading} onPress={handleSubmit(signInWithEmail)}>
+          <Text>Sign in</Text>
+        </PressableArea>
       </View>
       <View style={styles.verticallySpaced}>
-        <Button disabled={loading} onPress={handleSubmit(signUpWithEmail)}>
-          Sign up
-        </Button>
+        <PressableArea disabled={loading} onPress={handleSubmit(signUpWithEmail)}>
+          <Text>Sign up</Text>
+        </PressableArea>
       </View>
     </View>
   );
