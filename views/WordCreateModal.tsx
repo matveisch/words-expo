@@ -1,14 +1,20 @@
-import { Button, Circle, Input, Label, SizableText, Text, View } from 'tamagui';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { knowledgeColors } from '../helpers/colors';
-import { Keyboard, StyleSheet } from 'react-native';
-import useAddWord from '../hooks/useAddWord';
 import Toast from 'react-native-root-toast';
-import { toastOptions } from '../helpers/toastOptions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { knowledgeColors } from '../helpers/colors';
+import useAddWord from '../hooks/useAddWord';
+import { toastOptions } from '../helpers/toastOptions';
 import { RootStackParamList } from './HomeView';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import InputError from '../ui/InputError';
+import Description from '../ui/Description';
+import Circle from '../ui/Circle';
+import PressableArea from '../ui/PressableArea';
 
 type Inputs = {
   word: string;
@@ -61,59 +67,41 @@ const WordCreateModal = ({ route, navigation }: Props) => {
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
-        <Label>Word</Label>
+        <Label text="Word" />
         <Controller
           name="word"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              size="$4"
-              borderWidth={2}
-            />
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.word && <Text color="red">This field is required</Text>}
+        {errors.word && <InputError text="This field is required" />}
 
-        <Label>Meaning</Label>
+        <Label text="Meaning" />
         <Controller
           name="meaning"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              size="$4"
-              borderWidth={2}
-            />
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.meaning && <Text color="red">This field is required</Text>}
+        {errors.meaning && <InputError text="This field is required" />}
 
-        <Label>Pronunciation</Label>
+        <Label text="Pronunciation" />
         <Controller
           name="pronunciation"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              size="$4"
-              borderWidth={2}
-            />
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
 
-        <Label>Knowledge Level</Label>
-        <SizableText size="$3" style={styles.knowledgeDescription}>
-          Although being calculated by the app, you can always define word knowledge level by
-          yourself.
-        </SizableText>
-        <View flexDirection="row" gap={10}>
+        <Label text="Knowledge Level" />
+        <Description
+          text="Although being calculated by the app, you can always define word knowledge level by
+          yourself."
+        />
+        <View style={{ flexDirection: 'row', gap: 10 }}>
           {knowledgeLevels.map((level, index) => (
             <Circle
               onPress={() => {
@@ -122,18 +110,19 @@ const WordCreateModal = ({ route, navigation }: Props) => {
               }}
               key={`${level}-${index}`}
               backgroundColor={knowledgeColors[index]}
-              size="$3"
-              borderWidth={3}
-              borderColor={currentLevel === level ? 'black' : '$borderColor'}
-            >
-              <Text>{level}</Text>
-            </Circle>
+              borderColor={currentLevel === level ? 'black' : undefined}
+              text={`${level}`}
+            />
           ))}
         </View>
 
-        <Button marginTop={20} onPress={handleSubmit(onSubmit)} disabled={isPending}>
-          Create
-        </Button>
+        <PressableArea
+          onPress={handleSubmit(onSubmit)}
+          disabled={isPending}
+          style={{ marginTop: 20 }}
+        >
+          <Text>Create</Text>
+        </PressableArea>
       </View>
     </KeyboardAwareScrollView>
   );

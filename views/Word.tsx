@@ -133,9 +133,7 @@ export default function Word({ route, navigation }: Props) {
               key={`${level}-${index}`}
               backgroundColor={knowledgeColors[index]}
               borderColor={currentLevel === level ? 'black' : undefined}
-            >
-              <Text>{level}</Text>
-            </Circle>
+            />
           ))}
         </View>
 
