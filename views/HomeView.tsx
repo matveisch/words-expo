@@ -7,7 +7,6 @@ import { Alert, View } from 'react-native';
 
 import ListOfDecks from './ListOfDecks';
 import DeckView from './DeckView';
-import { loadFonts } from '../helpers/loadFonts';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
 import Word from './Word';
@@ -48,10 +47,6 @@ const HomeView = ({ route }: Props) => {
         },
       },
     ]);
-  }
-
-  if (!loadFonts()) {
-    return null;
   }
 
   return (
