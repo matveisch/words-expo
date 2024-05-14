@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { FlashList } from '@shopify/flash-list';
 import { Text, View } from 'react-native';
-
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { useDecks } from '../hooks/useDecks';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
 import ListItem from '../ui/ListItem';

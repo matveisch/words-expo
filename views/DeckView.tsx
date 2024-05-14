@@ -1,5 +1,4 @@
-import { Text } from '@tamagui/core';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
