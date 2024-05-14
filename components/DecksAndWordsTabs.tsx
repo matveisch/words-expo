@@ -1,20 +1,23 @@
 import { FlashList } from '@shopify/flash-list';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text } from 'react-native';
+import PagerView from 'react-native-pager-view';
 
 import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
 import PressableArea from '../ui/PressableArea';
 import ListItem from '../ui/ListItem';
+import { defaultColors } from '../helpers/colors';
 
 const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);
+  const pagerViewRef = useRef<PagerView | null>(null);
 
   function handleButtonPress() {
     if (activeTab === 1) {
@@ -30,26 +33,39 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: 'row', gap: 10, paddingBottom: 10 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingBottom: 10,
+          gap: 10,
+        }}
+      >
         <PressableArea
           style={{ flex: 1 }}
-          outlined={activeTab === 0}
-          onPress={() => setActiveTab(0)}
+          outlined
+          backgroundColor={activeTab === 0 ? undefined : defaultColors.grey}
+          onPress={() => pagerViewRef.current?.setPage(0)}
         >
           <Text>Words</Text>
         </PressableArea>
 
         <PressableArea
           style={{ flex: 1 }}
-          outlined={activeTab === 1}
-          onPress={() => setActiveTab(1)}
+          outlined
+          backgroundColor={activeTab === 1 ? undefined : defaultColors.grey}
+          onPress={() => pagerViewRef.current?.setPage(1)}
         >
           <Text>Decks</Text>
         </PressableArea>
       </View>
 
-      {activeTab === 0 && (
-        <View style={{ flex: 1 }}>
+      <PagerView
+        initialPage={0}
+        style={{ flex: 1 }}
+        ref={pagerViewRef}
+        onPageScroll={(e) => setActiveTab(e.nativeEvent.position)}
+      >
+        <View style={{ width: '100%', height: '100%' }} key="1">
           <FlashList
             estimatedItemSize={65}
             data={words}
@@ -69,10 +85,8 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             )}
           />
         </View>
-      )}
 
-      {activeTab === 1 && (
-        <View style={{ flex: 1 }}>
+        <View style={{ width: '100%', height: '100%' }} key="2">
           <FlashList
             estimatedItemSize={44}
             data={subDecks}
@@ -93,7 +107,8 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             )}
           />
         </View>
-      )}
+      </PagerView>
+
       <PressableArea
         backgroundColor="hsl(24, 100%, 75.3%)"
         onPress={handleButtonPress}
