@@ -9,7 +9,7 @@ export function ProgressBar(props: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.bar, { width: `${progress}%` }]} />
+      <View style={[styles.bar, { width: progress ? `${progress}%` : 0 }]} />
     </View>
   );
 }
@@ -25,7 +25,5 @@ const styles = StyleSheet.create({
     height: 11,
     backgroundColor: '#00CD5E',
     borderRadius: 10,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
   },
 });

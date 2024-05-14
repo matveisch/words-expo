@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { FlashList } from '@shopify/flash-list';
-import { ListItem, Text, View } from 'tamagui';
+import { Text, View } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
-import { ChevronIcon } from '../ui/ChevronIcon';
+import ListItem from '../ui/ListItem';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -31,18 +31,15 @@ const ListOfDecks = ({ navigation, route }: Props) => {
         paddingTop: 10,
       }}
     >
-      <View flex={1}>
+      <View style={{ flex: 1 }}>
         <FlashList
           estimatedItemSize={44}
           data={decks}
-          ListEmptyComponent={<Text textAlign="center">No decks</Text>}
+          ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
             <ListItem
               backgroundColor={item.color ? item.color : undefined}
-              iconAfter={ChevronIcon}
-              pressTheme
-              borderRadius={9}
               title={item.name}
               onPress={() => {
                 navigation.navigate('DeckView', {
