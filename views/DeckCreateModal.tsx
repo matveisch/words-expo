@@ -1,12 +1,15 @@
-import { Button, Circle, Input, Label, Text } from 'tamagui';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View, Text } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import useAddDeck from '../hooks/useAddDeck';
 import { colors } from '../helpers/colors';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
+import PressableArea from '../ui/PressableArea';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import Circle from '../ui/Circle';
 
 type Inputs = {
   deckName: string;
@@ -18,8 +21,6 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateMo
 const DeckCreateModal = ({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useAddDeck();
-
-  console.log(colors);
 
   const {
     control,
@@ -51,7 +52,7 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Label>Name</Label>
+      <Label text="Name" />
       <Controller
         name="deckName"
         control={control}
@@ -59,18 +60,12 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
           required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            onChangeText={(text) => onChange(text)}
-            onBlur={onBlur}
-            value={value}
-            size="$4"
-            borderWidth={2}
-          />
+          <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
         )}
       />
-      {errors.deckName && <Text color="red">This field is required</Text>}
+      {errors.deckName && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-      <Label>Color</Label>
+      <Label text="Color" />
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {colors.map((color, index) => (
           <Circle
@@ -80,16 +75,18 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
             }}
             key={`${color}-${index}`}
             backgroundColor={color}
-            size="$3"
-            borderWidth={3}
-            borderColor={currentColor === color ? 'black' : '$borderColor'}
+            borderColor={currentColor === color ? 'black' : undefined}
           />
         ))}
       </View>
 
-      <Button onPress={handleSubmit(onSubmit)} marginTop={10} disabled={isPending}>
-        Create
-      </Button>
+      <PressableArea
+        onPress={handleSubmit(onSubmit)}
+        disabled={isPending}
+        style={{ marginTop: 10 }}
+      >
+        <Text>Create</Text>
+      </PressableArea>
     </View>
   );
 };
