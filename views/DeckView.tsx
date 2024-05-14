@@ -28,8 +28,11 @@ function DeckView({ route, navigation }: Props) {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: deck?.name,
+      headerStyle: {
+        backgroundColor: deck?.color,
+      },
     });
-  }, [deck?.name, navigation]);
+  }, [deck, navigation]);
 
   if (areWordsLoading || !words) {
     return <Loader />;

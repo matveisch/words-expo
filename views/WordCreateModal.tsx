@@ -71,6 +71,9 @@ const WordCreateModal = ({ route, navigation }: Props) => {
         <Controller
           name="word"
           control={control}
+          rules={{
+            required: true,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}

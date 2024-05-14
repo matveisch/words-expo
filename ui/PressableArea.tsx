@@ -19,11 +19,11 @@ export default function PressableArea(props: Props & PressableProps) {
       return 'rgb(210, 230, 255)';
     } else {
       if (chromeless) {
-        return '#fff';
+        return 'transparent';
       } else if (backgroundColor) {
         return backgroundColor;
       } else if (outlined) {
-        return '#fff';
+        return 'transparent';
       } else {
         return defaultColors.buttonColor;
       }
