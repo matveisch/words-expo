@@ -1,14 +1,20 @@
-import { observer } from 'mobx-react';
-import { Button, Circle, H3, Input, Label, Sheet, SizableText, Text, View } from 'tamagui';
-import { wordModalStore } from '../features/WordModalStore';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { knowledgeColors } from '../helpers/colors';
-import { Keyboard, StyleSheet } from 'react-native';
-import useAddWord from '../hooks/useAddWord';
 import Toast from 'react-native-root-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { knowledgeColors } from '../helpers/colors';
+import useAddWord from '../hooks/useAddWord';
 import { toastOptions } from '../helpers/toastOptions';
-import { currentDeckStore } from '../features/CurrentDeckStore';
+import { RootStackParamList } from './HomeView';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import InputError from '../ui/InputError';
+import Description from '../ui/Description';
+import Circle from '../ui/Circle';
+import PressableArea from '../ui/PressableArea';
 
 type Inputs = {
   word: string;
@@ -17,9 +23,14 @@ type Inputs = {
   knowledgeLevel: number;
 };
 
-const WordCreateModal = observer(() => {
-  const knowledgeLevels = [1, 2, 3, 4];
+interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateModal'> {}
+
+const WordCreateModal = ({ route, navigation }: Props) => {
+  const { parentDeckId } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
+  const { mutateAsync, isPending } = useAddWord();
+  const knowledgeLevels = [1, 2, 3, 4];
+
   const {
     control,
     handleSubmit,
@@ -34,131 +45,92 @@ const WordCreateModal = observer(() => {
       knowledgeLevel: 1,
     },
   });
-  const addWord = useAddWord();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    if (currentDeckStore.currentDeck) {
-      const newWord = {
-        word: data.word,
-        meaning: data.meaning,
-        pronunciation: data.pronunciation,
-        knowledgelevel: data.knowledgeLevel,
-        deck: currentDeckStore.currentDeck,
-      };
+    const newWord = {
+      word: data.word,
+      meaning: data.meaning,
+      pronunciation: data.pronunciation,
+      knowledgelevel: data.knowledgeLevel,
+      deck: parentDeckId,
+    };
 
-      addWord.mutateAsync(newWord).then(() => {
-        Toast.show('Word Created', toastOptions);
-        setCurrentLevel(1);
-        reset();
-      });
-
+    mutateAsync(newWord).then(() => {
+      Toast.show('Word Created', toastOptions);
+      setCurrentLevel(1);
+      reset();
       Keyboard.dismiss();
-      wordModalStore.setIsWordModalOpen(false);
-    }
+      navigation.goBack();
+    });
   };
 
   return (
-    <Sheet
-      modal
-      forceRemoveScrollEnabled={wordModalStore.isWordModalOpen}
-      open={wordModalStore.isWordModalOpen}
-      onOpenChange={(state: boolean) => {
-        wordModalStore.setIsWordModalOpen(state);
-        setCurrentLevel(1);
-        reset();
-      }}
-      dismissOnSnapToBottom
-      zIndex={100_000}
-    >
-      <Sheet.Overlay enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
-      <Sheet.Handle />
-      <Sheet.Frame padding={10}>
-        <View>
-          <H3 textAlign="center">New Word</H3>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <Label text="Word" />
+        <Controller
+          name="word"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
+          )}
+        />
+        {errors.word && <InputError text="This field is required" />}
 
-          <Label>Word</Label>
-          <Controller
-            name="word"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
-          />
-          {errors.word && <Text color="red">This field is required</Text>}
+        <Label text="Meaning" />
+        <Controller
+          name="meaning"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
+          )}
+        />
+        {errors.meaning && <InputError text="This field is required" />}
 
-          <Label>Meaning</Label>
-          <Controller
-            name="meaning"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
-          />
-          {errors.meaning && <Text color="red">This field is required</Text>}
+        <Label text="Pronunciation" />
+        <Controller
+          name="pronunciation"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
+          )}
+        />
 
-          <Label>Pronunciation</Label>
-          <Controller
-            name="pronunciation"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
-          />
-
-          <Label>Knowledge Level</Label>
-          <SizableText size="$3" style={styles.knowledgeDescription}>
-            Although being calculated by the app, you can always define word knowledge level by
-            yourself.
-          </SizableText>
-          <View flexDirection="row" gap={10}>
-            {knowledgeLevels.map((level, index) => (
-              <Circle
-                onPress={() => {
-                  setCurrentLevel(level);
-                  setValue('knowledgeLevel', level);
-                }}
-                key={`${level}-${index}`}
-                backgroundColor={knowledgeColors[index]}
-                size="$3"
-                borderWidth={3}
-                borderColor={currentLevel === level ? 'black' : '$borderColor'}
-              >
-                <Text>{level}</Text>
-              </Circle>
-            ))}
-          </View>
-
-          <Button marginTop={20} onPress={handleSubmit(onSubmit)}>
-            Create
-          </Button>
+        <Label text="Knowledge Level" />
+        <Description
+          text="Although being calculated by the app, you can always define word knowledge level by
+          yourself."
+        />
+        <View style={{ flexDirection: 'row', gap: 10 }}>
+          {knowledgeLevels.map((level, index) => (
+            <Circle
+              onPress={() => {
+                setCurrentLevel(level);
+                setValue('knowledgeLevel', level);
+              }}
+              key={`${level}-${index}`}
+              backgroundColor={knowledgeColors[index]}
+              borderColor={currentLevel === level ? 'black' : undefined}
+              text={`${level}`}
+            />
+          ))}
         </View>
-      </Sheet.Frame>
-    </Sheet>
+
+        <PressableArea
+          onPress={handleSubmit(onSubmit)}
+          disabled={isPending}
+          style={{ marginTop: 20 }}
+        >
+          <Text>Create</Text>
+        </PressableArea>
+      </View>
+    </KeyboardAwareScrollView>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {
-    // height: '100%',
-    // padding: 10,
+    padding: 10,
   },
   knowledgeDescription: {
     marginTop: -10,

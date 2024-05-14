@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { FlashList } from '@shopify/flash-list';
-import { ListItem, Text, View } from 'tamagui';
-import { ChevronRight } from '@tamagui/lucide-icons';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DeckCreateModal from './DeckCreateModal';
-import { useDecks } from '../hooks/useDecks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from './Home';
+
+import { useDecks } from '../hooks/useDecks';
+import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
+import ListItem from '../ui/ListItem';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -31,19 +31,15 @@ const ListOfDecks = ({ navigation, route }: Props) => {
         paddingTop: 10,
       }}
     >
-      <View flex={1}>
-        <DeckCreateModal />
+      <View style={{ flex: 1 }}>
         <FlashList
           estimatedItemSize={44}
           data={decks}
-          ListEmptyComponent={<Text textAlign="center">No decks</Text>}
+          ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
             <ListItem
               backgroundColor={item.color ? item.color : undefined}
-              iconAfter={ChevronRight}
-              pressTheme
-              borderRadius={9}
               title={item.name}
               onPress={() => {
                 navigation.navigate('DeckView', {

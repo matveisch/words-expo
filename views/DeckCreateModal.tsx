@@ -1,22 +1,27 @@
-import { Button, Circle, H3, Input, Label, Sheet, Text, View } from 'tamagui';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Keyboard } from 'react-native';
+import { Keyboard, StyleSheet, View, Text } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import useAddDeck from '../hooks/useAddDeck';
-import useAddSubDeck from '../hooks/useAddSubDeck';
-import { observer } from 'mobx-react';
-import { modalStore } from '../features/ModalStore';
 import { colors } from '../helpers/colors';
+import { RootStackParamList } from './HomeView';
+import PressableArea from '../ui/PressableArea';
+import Label from '../ui/Label';
+import Input from '../ui/Input';
+import Circle from '../ui/Circle';
 
 type Inputs = {
   deckName: string;
   color: string;
 };
 
-const DeckCreateModal = observer(() => {
+interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateModal'> {}
+
+const DeckCreateModal = ({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
-  const addDeck = useAddDeck();
-  const addSubDeck = useAddSubDeck();
+  const { mutateAsync, isPending } = useAddDeck();
+
   const {
     control,
     handleSubmit,
@@ -33,87 +38,63 @@ const DeckCreateModal = observer(() => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: modalStore.parentDeckId || null,
+      parent_deck: route.params ? route.params.parentDeckId : null,
       color: data.color,
     };
 
-    // add sub deck
-    if (modalStore.parentDeckId) {
-      addSubDeck.mutateAsync(newDeck).then(() => {
-        reset();
-        modalStore.setParentDeckId(undefined);
-      });
-      // add deck
-    } else {
-      addDeck.mutateAsync(newDeck).then(() => reset());
-    }
-
-    Keyboard.dismiss();
-    setCurrentColor('');
-    modalStore.handleModal(false);
+    mutateAsync(newDeck).then(() => {
+      reset();
+      Keyboard.dismiss();
+      setCurrentColor('');
+      navigation.goBack();
+    });
   };
 
   return (
-    <Sheet
-      modal
-      forceRemoveScrollEnabled={modalStore.isModalOpen}
-      open={modalStore.isModalOpen}
-      onOpenChange={(state: boolean) => {
-        modalStore.handleModal(state);
-        reset();
-        setCurrentColor('');
-      }}
-      dismissOnSnapToBottom
-      zIndex={100_000}
-    >
-      <Sheet.Overlay enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
-      <Sheet.Handle />
-      <Sheet.Frame padding={10}>
-        <View>
-          <H3 textAlign="center">New Deck</H3>
-          <Label>Name</Label>
-          <Controller
-            name="deckName"
-            control={control}
-            rules={{
-              required: true,
+    <View style={styles.container}>
+      <Label text="Name" />
+      <Controller
+        name="deckName"
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
+        )}
+      />
+      {errors.deckName && <Text style={{ color: 'red' }}>This field is required</Text>}
+
+      <Label text="Color" />
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        {colors.map((color, index) => (
+          <Circle
+            onPress={() => {
+              setValue('color', color);
+              setCurrentColor(color);
             }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                value={value}
-                size="$4"
-                borderWidth={2}
-              />
-            )}
+            key={`${color}-${index}`}
+            backgroundColor={color}
+            borderColor={currentColor === color ? 'black' : undefined}
           />
-          {errors.deckName && <Text color="red">This field is required</Text>}
+        ))}
+      </View>
 
-          <Label>Color</Label>
-          <View flexDirection="row" gap={10}>
-            {colors.map((color, index) => (
-              <Circle
-                onPress={() => {
-                  setValue('color', color);
-                  setCurrentColor(color);
-                }}
-                key={`${color}-${index}`}
-                backgroundColor={color}
-                size="$3"
-                borderWidth={3}
-                borderColor={currentColor === color ? 'black' : '$borderColor'}
-              />
-            ))}
-          </View>
-
-          <Button onPress={handleSubmit(onSubmit)} marginTop={10}>
-            Create
-          </Button>
-        </View>
-      </Sheet.Frame>
-    </Sheet>
+      <PressableArea
+        onPress={handleSubmit(onSubmit)}
+        disabled={isPending}
+        style={{ marginTop: 10 }}
+      >
+        <Text>Create</Text>
+      </PressableArea>
+    </View>
   );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+  },
 });
 
 export default DeckCreateModal;
