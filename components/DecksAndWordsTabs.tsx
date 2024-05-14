@@ -110,7 +110,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
       </PagerView>
 
       <PressableArea
-        backgroundColor="hsl(24, 100%, 75.3%)"
+        backgroundColor={defaultColors.orange}
         onPress={handleButtonPress}
         style={styles.newItemButton}
       >

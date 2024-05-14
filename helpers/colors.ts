@@ -2,6 +2,7 @@ export const defaultColors = {
   buttonColor: '#EEEDEB',
   inputColor: '#EEEDEB',
   grey: '#EEEDEB',
+  orange: 'hsl(24, 100%, 75.3%)',
 };
 
 export const colors = [
