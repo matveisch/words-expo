@@ -96,7 +96,15 @@ function DeckView({ route, navigation }: Props) {
       </View>
 
       <View style={styles.studyButtonsContainer}>
-        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.activeColor}>
+        <PressableArea
+          style={styles.studyButton}
+          backgroundColor={defaultColors.activeColor}
+          onPress={() =>
+            navigation.navigate('Studying', {
+              deckId: currentDeckId,
+            })
+          }
+        >
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
         </PressableArea>
 

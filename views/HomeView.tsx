@@ -16,6 +16,7 @@ import DeckUpdateModal from './DeckUpdateModal';
 import WordCreateModal from './WordCreateModal';
 import { TabBarIcon } from '../ui/TabBarIcon';
 import PressableArea from '../ui/PressableArea';
+import { StudyingView } from './StudyingView';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: { parentDeckId: number };
   WordCreateModal: { parentDeckId: number };
+  Studying: { deckId: number };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
@@ -71,6 +73,7 @@ const HomeView = ({ route }: Props) => {
             ),
           })}
         />
+
         <Stack.Screen
           name="DeckView"
           component={DeckView}
@@ -102,6 +105,7 @@ const HomeView = ({ route }: Props) => {
             ),
           })}
         />
+
         <Stack.Screen
           name="Word"
           component={Word}
@@ -112,6 +116,20 @@ const HomeView = ({ route }: Props) => {
               backgroundColor: knowledgeColors[route.params.knowledgeLevel - 1],
             },
             headerShadowVisible: false,
+          })}
+        />
+        <Stack.Screen
+          name="Studying"
+          component={StudyingView}
+          options={({ navigation }) => ({
+            headerShadowVisible: false,
+            headerBackTitleVisible: false,
+            headerBackVisible: false,
+            headerLeft: () => (
+              <PressableArea chromeless size="small" onPress={() => navigation.goBack()}>
+                <TabBarIcon name="close" />
+              </PressableArea>
+            ),
           })}
         />
       </Stack.Group>
