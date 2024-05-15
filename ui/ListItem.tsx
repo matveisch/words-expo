@@ -17,12 +17,22 @@ export default function ListItem(props: Props & PressableProps) {
         styles.container,
         {
           backgroundColor: backgroundColor ? backgroundColor : defaultColors.grey,
+          paddingVertical: subTitle ? 10 : 18,
         },
       ]}
       {...otherProps}
     >
       <View style={styles.textGroup}>
-        <Text style={styles.title}>{title}</Text>
+        <Text
+          style={[
+            styles.title,
+            {
+              fontSize: subTitle ? 14 : 16,
+            },
+          ]}
+        >
+          {title}
+        </Text>
         {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
       </View>
       <ChevronIcon />
@@ -34,7 +44,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     paddingHorizontal: 18,
-    paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
   },
@@ -43,7 +52,6 @@ const styles = StyleSheet.create({
   },
   title: {
     lineHeight: 23,
-    fontSize: 14,
     color: 'hsl(0, 0%, 9.0%)',
     fontWeight: '500',
   },

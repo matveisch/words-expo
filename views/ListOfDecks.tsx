@@ -25,7 +25,7 @@ const ListOfDecks = ({ navigation, route }: Props) => {
       style={{
         height: '100%',
         paddingHorizontal: 10,
-        paddingBottom: insets.bottom,
+        // paddingBottom: insets.bottom,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
         paddingTop: 10,

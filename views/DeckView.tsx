@@ -55,16 +55,6 @@ function DeckView({ route, navigation }: Props) {
         // paddingBottom: 10,
       }}
     >
-      <View style={styles.studyButtonsContainer}>
-        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.orange}>
-          <Text>Study words</Text>
-        </PressableArea>
-
-        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.orange}>
-          <Text>Revise words</Text>
-        </PressableArea>
-      </View>
-
       {/*<View style={styles.buttonsContainer}>*/}
       {/*  <PressableArea style={styles.button} backgroundColor={knowledgeColors[0]}>*/}
       {/*    <Text*/}
@@ -111,6 +101,16 @@ function DeckView({ route, navigation }: Props) {
         </View>
       </View>
 
+      <View style={styles.studyButtonsContainer}>
+        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.orange}>
+          <Text>Study words</Text>
+        </PressableArea>
+
+        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.orange}>
+          <Text>Revise words</Text>
+        </PressableArea>
+      </View>
+
       {/*<View>*/}
       {/*  <Button>Study all the words</Button>*/}
       {/*</View>*/}
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     paddingBottom: 10,
+    marginTop: 10,
   },
   studyButton: {
     flex: 1,
