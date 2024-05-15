@@ -2,7 +2,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { PieChart, pieDataItem } from 'react-native-gifted-charts';
+import { PieChart } from 'react-native-gifted-charts';
 
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { useWords } from '../hooks/useWords';
@@ -35,9 +35,9 @@ function DeckView({ route, navigation }: Props) {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: deck?.name,
-      headerStyle: {
-        backgroundColor: deck?.color,
-      },
+      // headerStyle: {
+      //   backgroundColor: deck?.color,
+      // },
     });
   }, [deck, navigation]);
 
@@ -88,7 +88,6 @@ function DeckView({ route, navigation }: Props) {
           data={graphData}
           radius={90}
           innerRadius={80}
-          onPress={(item: pieDataItem, index: number) => console.log(item)}
           centerLabelComponent={() => <Text style={{ fontSize: 70 }}>{words?.length}</Text>}
         />
         <View style={{ justifyContent: 'space-evenly' }}>
@@ -102,12 +101,12 @@ function DeckView({ route, navigation }: Props) {
       </View>
 
       <View style={styles.studyButtonsContainer}>
-        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.orange}>
-          <Text>Study words</Text>
+        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.activeColor}>
+          <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
         </PressableArea>
 
-        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.orange}>
-          <Text>Revise words</Text>
+        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.activeColor}>
+          <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
         </PressableArea>
       </View>
 

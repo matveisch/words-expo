@@ -3,6 +3,8 @@ export const defaultColors = {
   inputColor: '#EEEDEB',
   grey: '#EEEDEB',
   orange: 'hsl(24, 100%, 75.3%)',
+  activeColor: '#009963',
+  white: '#FFFFFF',
 };
 
 export const colors = [

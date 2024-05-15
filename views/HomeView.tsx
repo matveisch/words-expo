@@ -58,8 +58,8 @@ const HomeView = ({ route }: Props) => {
           component={ListOfDecks}
           options={({ navigation }) => ({
             gestureEnabled: false,
-            headerBackVisible: false,
             headerTitle: 'My Decks',
+            headerShadowVisible: false,
             headerRight: () => (
               <PressableArea
                 chromeless
@@ -76,9 +76,10 @@ const HomeView = ({ route }: Props) => {
           component={DeckView}
           options={({ route, navigation }) => ({
             headerTitle: route.params.currentDeckName,
-            headerStyle: {
-              backgroundColor: route.params.deckColor,
-            },
+            // headerStyle: {
+            //   backgroundColor: route.params.deckColor,
+            // },
+            headerShadowVisible: false,
             headerBackTitleVisible: false,
             headerRight: () => (
               <View style={{ flexDirection: 'row', gap: 5 }}>
@@ -113,6 +114,7 @@ const HomeView = ({ route }: Props) => {
             headerStyle: {
               backgroundColor: knowledgeColors[route.params.knowledgeLevel - 1],
             },
+            headerShadowVisible: false,
           })}
         />
       </Stack.Group>
@@ -123,6 +125,7 @@ const HomeView = ({ route }: Props) => {
           component={DeckCreateModal}
           options={{
             headerTitle: 'New Deck',
+            headerShadowVisible: false,
           }}
         />
         <Stack.Screen
@@ -130,6 +133,7 @@ const HomeView = ({ route }: Props) => {
           component={DeckUpdateModal}
           options={{
             headerTitle: 'Edit Deck',
+            headerShadowVisible: false,
           }}
         />
         <Stack.Screen
@@ -137,6 +141,7 @@ const HomeView = ({ route }: Props) => {
           component={WordCreateModal}
           options={{
             headerTitle: 'New Word',
+            headerShadowVisible: false,
           }}
         />
       </Stack.Group>

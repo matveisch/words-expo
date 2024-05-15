@@ -1,4 +1,4 @@
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, Theme } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,7 +24,7 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const Tab = createBottomTabNavigator<RootTabsParamList>();
 
-  const MyTheme = {
+  const MyTheme: Theme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
@@ -56,13 +56,17 @@ export default function App() {
                   initialParams={{ session: session }}
                   options={{
                     headerShown: false,
+                    headerShadowVisible: false,
                     tabBarIcon: () => <TabBarIcon name="home" />,
                   }}
                 />
                 <Tab.Screen
                   name="Settings"
                   component={SettingsView}
-                  options={{ tabBarIcon: () => <TabBarIcon name="gear" /> }}
+                  options={{
+                    tabBarIcon: () => <TabBarIcon name="gear" />,
+                    headerShadowVisible: false,
+                  }}
                 />
               </Tab.Navigator>
             ) : (

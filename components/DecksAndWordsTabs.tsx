@@ -77,7 +77,12 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
         </View>
         <Animated.View
           style={[
-            { height: 5, width: 181.7, backgroundColor: defaultColors.orange, borderRadius: 8 },
+            {
+              height: 5,
+              width: 181.7,
+              backgroundColor: defaultColors.activeColor,
+              borderRadius: 8,
+            },
             animatedStyles,
           ]}
         />
@@ -134,11 +139,13 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
       </PagerView>
 
       <PressableArea
-        backgroundColor={defaultColors.orange}
+        backgroundColor={defaultColors.activeColor}
         onPress={handleButtonPress}
         style={styles.newItemButton}
       >
-        <Text>{`Add new ${activeTab === 0 ? 'word' : 'deck'}`}</Text>
+        <Text
+          style={{ color: defaultColors.white, fontWeight: 700 }}
+        >{`Add new ${activeTab === 0 ? 'word' : 'deck'}`}</Text>
       </PressableArea>
     </View>
   );
