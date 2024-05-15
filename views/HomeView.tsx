@@ -76,9 +76,6 @@ const HomeView = ({ route }: Props) => {
           component={DeckView}
           options={({ route, navigation }) => ({
             headerTitle: route.params.currentDeckName,
-            // headerStyle: {
-            //   backgroundColor: route.params.deckColor,
-            // },
             headerShadowVisible: false,
             headerBackTitleVisible: false,
             headerRight: () => (

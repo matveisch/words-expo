@@ -35,9 +35,6 @@ function DeckView({ route, navigation }: Props) {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: deck?.name,
-      // headerStyle: {
-      //   backgroundColor: deck?.color,
-      // },
     });
   }, [deck, navigation]);
 
@@ -52,7 +49,6 @@ function DeckView({ route, navigation }: Props) {
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
         paddingTop: 10,
-        // paddingBottom: 10,
       }}
     >
       {/*<View style={styles.buttonsContainer}>*/}
@@ -109,10 +105,6 @@ function DeckView({ route, navigation }: Props) {
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
         </PressableArea>
       </View>
-
-      {/*<View>*/}
-      {/*  <Button>Study all the words</Button>*/}
-      {/*</View>*/}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
     </View>
