@@ -80,7 +80,6 @@ function DeckView({ route, navigation }: Props) {
       <View style={{ paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <PieChart
           donut
-          shadow
           data={graphData}
           radius={90}
           innerRadius={80}
