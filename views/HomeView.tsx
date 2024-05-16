@@ -125,6 +125,7 @@ const HomeView = ({ route }: Props) => {
             headerShadowVisible: false,
             headerBackTitleVisible: false,
             headerBackVisible: false,
+            headerTitle: '',
             headerLeft: () => (
               <Button chromeless size="small" onPress={() => navigation.goBack()}>
                 <TabBarIcon name="close" />

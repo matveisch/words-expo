@@ -2,12 +2,13 @@ import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
 import { useWords } from '../hooks/useWords';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
 import { TabBarIcon } from '../ui/TabBarIcon';
+import { Word } from '../types/Word';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -20,51 +21,107 @@ function shuffleArray(array: any[]) {
 
 export const StudyingView = ({ route }: Props) => {
   const { deckId } = route.params;
-
   const { data: words } = useWords(deckId);
-  const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
-  notLearnedWords && shuffleArray(notLearnedWords);
-
+  const [wordsToLearn, setWordsToLearn] = useState<Word[] | undefined>(undefined);
+  const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [beingChecked, setBeingChecked] = useState<boolean>(false);
 
-  if (!notLearnedWords) {
+  useEffect(() => {
+    const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
+    if (notLearnedWords) {
+      shuffleArray(notLearnedWords);
+      setWordsToLearn(notLearnedWords);
+    }
+  }, []);
+
+  function wordCheck(word: Word, answer: string) {
+    return answer.toLowerCase().trim() === word.word.toLowerCase().trim();
+  }
+
+  function handleAnswer() {
+    setBeingChecked(true);
+    Keyboard.dismiss();
+
+    if (wordsToLearn) {
+      const isAnswerRight = wordCheck(wordsToLearn[currentIndex], answer);
+      if (isAnswerRight) {
+        setIsSuccess(true);
+      } else {
+        setIsSuccess(false);
+      }
+    }
+  }
+
+  function handleNextWord() {
+    setBeingChecked(false);
+    setIsSuccess(false);
+    setAnswer('');
+    if (wordsToLearn && currentIndex + 1 < wordsToLearn.length) setCurrentIndex(currentIndex + 1);
+  }
+
+  function getBackgroundColor() {
+    if (isSuccess) {
+      return defaultColors.successColor;
+    } else if (!isSuccess && beingChecked) {
+      return defaultColors.errorColor;
+    } else {
+      return defaultColors.subColor;
+    }
+  }
+
+  if (!words || !wordsToLearn) {
     return <Loader />;
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.wordTitle}>{notLearnedWords[currentIndex].meaning}</Text>
+      <Text style={styles.wordTitle}>{wordsToLearn[currentIndex].meaning}</Text>
       <View style={styles.explainedContainer}>
         {isSuccess && (
           <View style={styles.innerExplainedContainer}>
-            <Text style={styles.explainedText}>{notLearnedWords[currentIndex].pronunciation}</Text>
+            <Text style={styles.explainedText}>{wordsToLearn[currentIndex].pronunciation}</Text>
             <View style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }} />
-            <Text style={styles.explainedText}>{notLearnedWords[currentIndex].word}</Text>
+            <Text style={styles.explainedText}>{wordsToLearn[currentIndex].word}</Text>
           </View>
         )}
       </View>
       <View style={{ flexDirection: 'row', gap: 10 }}>
-        <Input placeholder="Enter word" style={{ flex: 1 }} />
-        <Button
-          onPress={() => {
-            Keyboard.dismiss();
-            setIsSuccess(!isSuccess);
+        <Input
+          placeholder="Enter word"
+          style={{
+            flex: 1,
+            backgroundColor: getBackgroundColor(),
           }}
-        >
-          <TabBarIcon name="check" size={20} />
-        </Button>
-      </View>
-      {isSuccess && (
-        <View style={styles.successButtons}>
-          <Button style={{ flex: 1 }} backgroundColor={defaultColors.activeColor}>
-            <Text style={{ color: defaultColors.white, fontWeight: 700 }}>I answered right</Text>
+          onChangeText={setAnswer}
+          value={answer}
+          editable={!beingChecked}
+          selectTextOnFocus={!beingChecked}
+        />
+        {!beingChecked && (
+          <Button onPress={handleAnswer}>
+            <TabBarIcon name="check" size={20} />
           </Button>
-          <Button style={{ flex: 1 }} backgroundColor={defaultColors.activeColor}>
+        )}
+      </View>
+
+      <View style={styles.successButtons}>
+        {!isSuccess && beingChecked && (
+          <Button style={{ flex: 1 }}>
+            <Text style={{ fontWeight: 500 }}>I answered right</Text>
+          </Button>
+        )}
+        {beingChecked && (
+          <Button
+            style={{ flex: 1 }}
+            backgroundColor={defaultColors.activeColor}
+            onPress={handleNextWord}
+          >
             <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Next word</Text>
           </Button>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 };

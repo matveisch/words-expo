@@ -5,6 +5,9 @@ export const defaultColors = {
   orange: 'hsl(24, 100%, 75.3%)',
   activeColor: '#009963',
   white: '#FFFFFF',
+  errorColor: '#F8D7DA',
+  successColor: '#D5E8D4',
+  secondaryButtonColor: '#607D8B',
 };
 
 export const colors = [
