@@ -25,7 +25,7 @@ export default function PressableArea(props: Props & PressableProps) {
       } else if (outlined) {
         return 'transparent';
       } else {
-        return defaultColors.buttonColor;
+        return defaultColors.subColor;
       }
     }
   }
@@ -39,7 +39,7 @@ export default function PressableArea(props: Props & PressableProps) {
           paddingHorizontal: size === 'small' ? undefined : 18,
           padding: size === 'small' ? 5 : undefined,
           borderWidth: outlined ? 2 : undefined,
-          borderColor: outlined ? defaultColors.grey : undefined,
+          borderColor: outlined ? defaultColors.subColor : undefined,
         },
         styles.button,
         style,

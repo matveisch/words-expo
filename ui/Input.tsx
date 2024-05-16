@@ -11,7 +11,7 @@ export default function Input(props: Props) {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: defaultColors.grey,
+    backgroundColor: defaultColors.subColor,
     paddingVertical: 13,
     paddingHorizontal: 10,
     borderRadius: 8,

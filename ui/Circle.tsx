@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
+import { Pressable, PressableProps, StyleSheet, Text } from 'react-native';
 import { defaultColors } from '../helpers/colors';
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function Circle(props: Props & PressableProps) {
-  const { text, borderColor = defaultColors.grey, backgroundColor, ...otherProps } = props;
+  const { text, borderColor = defaultColors.subColor, backgroundColor, ...otherProps } = props;
 
   return (
     <Pressable

@@ -16,7 +16,7 @@ export default function ListItem(props: Props & PressableProps) {
       style={[
         styles.container,
         {
-          backgroundColor: backgroundColor ? backgroundColor : defaultColors.grey,
+          backgroundColor: backgroundColor ? backgroundColor : defaultColors.subColor,
           paddingVertical: subTitle ? 10 : 18,
         },
       ]}
