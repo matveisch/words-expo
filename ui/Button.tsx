@@ -11,7 +11,7 @@ type Props = {
   outlined?: boolean;
 };
 
-export default function PressableArea(props: Props & PressableProps) {
+export default function Button(props: Props & PressableProps) {
   const { chromeless, outlined, size, backgroundColor, children, style, ...otherProps } = props;
 
   function getBackgroundColor(pressed: boolean) {

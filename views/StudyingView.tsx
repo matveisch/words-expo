@@ -5,7 +5,7 @@ import { useWords } from '../hooks/useWords';
 import { useState } from 'react';
 import Loader from '../components/Loader';
 import Input from '../ui/Input';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
 import { TabBarIcon } from '../ui/TabBarIcon';
 
@@ -36,23 +36,23 @@ export const StudyingView = ({ route }: Props) => {
       </View>
       <View style={{ flexDirection: 'row', gap: 10 }}>
         <Input placeholder="Enter word" style={{ flex: 1 }} />
-        <PressableArea
+        <Button
           onPress={() => {
             Keyboard.dismiss();
             setIsSuccess(!isSuccess);
           }}
         >
           <TabBarIcon name="check" size={20} />
-        </PressableArea>
+        </Button>
       </View>
       {isSuccess && (
         <View style={styles.successButtons}>
-          <PressableArea style={{ flex: 1 }} backgroundColor={defaultColors.activeColor}>
+          <Button style={{ flex: 1 }} backgroundColor={defaultColors.activeColor}>
             <Text style={{ color: defaultColors.white, fontWeight: 700 }}>I answered right</Text>
-          </PressableArea>
-          <PressableArea style={{ flex: 1 }} backgroundColor={defaultColors.activeColor}>
+          </Button>
+          <Button style={{ flex: 1 }} backgroundColor={defaultColors.activeColor}>
             <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Next word</Text>
-          </PressableArea>
+          </Button>
         </View>
       )}
     </View>

@@ -15,7 +15,7 @@ import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
 import WordCreateModal from './WordCreateModal';
 import { TabBarIcon } from '../ui/TabBarIcon';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 import { StudyingView } from './StudyingView';
 
 export type RootStackParamList = {
@@ -63,13 +63,13 @@ const HomeView = ({ route }: Props) => {
             headerTitle: 'My Decks',
             headerShadowVisible: false,
             headerRight: () => (
-              <PressableArea
+              <Button
                 chromeless
                 size="small"
                 onPress={() => navigation.navigate('DeckCreateModal')}
               >
                 <TabBarIcon name="plus-square" />
-              </PressableArea>
+              </Button>
             ),
           })}
         />
@@ -83,7 +83,7 @@ const HomeView = ({ route }: Props) => {
             headerBackTitleVisible: false,
             headerRight: () => (
               <View style={{ flexDirection: 'row', gap: 5 }}>
-                <PressableArea
+                <Button
                   chromeless
                   size="small"
                   onPress={() =>
@@ -93,14 +93,14 @@ const HomeView = ({ route }: Props) => {
                   }
                 >
                   <TabBarIcon name="edit" />
-                </PressableArea>
-                <PressableArea
+                </Button>
+                <Button
                   chromeless
                   size="small"
                   onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
                 >
                   <TabBarIcon name="trash-o" />
-                </PressableArea>
+                </Button>
               </View>
             ),
           })}
@@ -126,9 +126,9 @@ const HomeView = ({ route }: Props) => {
             headerBackTitleVisible: false,
             headerBackVisible: false,
             headerLeft: () => (
-              <PressableArea chromeless size="small" onPress={() => navigation.goBack()}>
+              <Button chromeless size="small" onPress={() => navigation.goBack()}>
                 <TabBarIcon name="close" />
-              </PressableArea>
+              </Button>
             ),
           })}
         />

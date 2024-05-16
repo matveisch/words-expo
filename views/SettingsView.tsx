@@ -5,7 +5,7 @@ import { TabBarIcon } from '../ui/TabBarIcon';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Description from '../ui/Description';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 
 type Inputs = {
   wordsPerSet: string;
@@ -49,13 +49,13 @@ export default function SettingsView() {
               />
             )}
           />
-          <PressableArea
+          <Button
             onPress={() => {
               Keyboard.dismiss();
             }}
           >
             <TabBarIcon name="check" size={20} />
-          </PressableArea>
+          </Button>
         </View>
         {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
       </View>

@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 
 import { supabase } from '../helpers/initSupabase';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 
 export default function User() {
   async function handleSignOut() {
@@ -10,9 +10,9 @@ export default function User() {
 
   return (
     <View style={{ marginTop: 20 }}>
-      <PressableArea onPress={handleSignOut}>
+      <Button onPress={handleSignOut}>
         <Text>Sign out</Text>
-      </PressableArea>
+      </Button>
     </View>
   );
 }

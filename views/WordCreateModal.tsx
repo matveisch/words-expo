@@ -14,7 +14,7 @@ import Input from '../ui/Input';
 import InputError from '../ui/InputError';
 import Description from '../ui/Description';
 import Circle from '../ui/Circle';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 
 type Inputs = {
   word: string;
@@ -119,13 +119,9 @@ const WordCreateModal = ({ route, navigation }: Props) => {
           ))}
         </View>
 
-        <PressableArea
-          onPress={handleSubmit(onSubmit)}
-          disabled={isPending}
-          style={{ marginTop: 20 }}
-        >
+        <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 20 }}>
           <Text>Create</Text>
-        </PressableArea>
+        </Button>
       </View>
     </KeyboardAwareScrollView>
   );

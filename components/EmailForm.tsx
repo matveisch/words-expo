@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import InputError from '../ui/InputError';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 
 type Inputs = {
   email: string;
@@ -117,14 +117,14 @@ export default function EmailForm() {
         {errors.password && <InputError text="This field is required" />}
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <PressableArea disabled={loading} onPress={handleSubmit(signInWithEmail)}>
+        <Button disabled={loading} onPress={handleSubmit(signInWithEmail)}>
           <Text>Sign in</Text>
-        </PressableArea>
+        </Button>
       </View>
       <View style={styles.verticallySpaced}>
-        <PressableArea disabled={loading} onPress={handleSubmit(signUpWithEmail)}>
+        <Button disabled={loading} onPress={handleSubmit(signUpWithEmail)}>
           <Text>Sign up</Text>
-        </PressableArea>
+        </Button>
       </View>
     </View>
   );

@@ -9,7 +9,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { useWords } from '../hooks/useWords';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
 
@@ -58,7 +58,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
     <View style={styles.container}>
       <View style={{ marginBottom: 10 }}>
         <View style={{ flexDirection: 'row', gap: 10 }}>
-          <PressableArea
+          <Button
             style={{ flex: 1 }}
             onPress={() => {
               handleOffset(0);
@@ -67,8 +67,8 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             backgroundColor="transparent"
           >
             <Text>Words</Text>
-          </PressableArea>
-          <PressableArea
+          </Button>
+          <Button
             style={{ flex: 1 }}
             onPress={() => {
               handleOffset(191.3);
@@ -77,7 +77,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             backgroundColor="transparent"
           >
             <Text>Decks</Text>
-          </PressableArea>
+          </Button>
         </View>
         <Animated.View
           style={[
@@ -142,7 +142,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
         </View>
       </PagerView>
 
-      <PressableArea
+      <Button
         backgroundColor={defaultColors.activeColor}
         onPress={handleButtonPress}
         style={styles.newItemButton}
@@ -150,7 +150,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
         <Text
           style={{ color: defaultColors.white, fontWeight: 700 }}
         >{`Add new ${activeTab === 0 ? 'word' : 'deck'}`}</Text>
-      </PressableArea>
+      </Button>
     </View>
   );
 };

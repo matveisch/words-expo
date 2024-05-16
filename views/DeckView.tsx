@@ -11,7 +11,7 @@ import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
 import { useDeck } from '../hooks/useDeck';
 import { defaultColors, knowledgeColors } from '../helpers/colors';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 import ChartItem from '../ui/ChartItem';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
@@ -96,7 +96,7 @@ function DeckView({ route, navigation }: Props) {
       </View>
 
       <View style={styles.studyButtonsContainer}>
-        <PressableArea
+        <Button
           style={styles.studyButton}
           backgroundColor={defaultColors.activeColor}
           onPress={() =>
@@ -106,11 +106,11 @@ function DeckView({ route, navigation }: Props) {
           }
         >
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
-        </PressableArea>
+        </Button>
 
-        <PressableArea style={styles.studyButton} backgroundColor={defaultColors.activeColor}>
+        <Button style={styles.studyButton} backgroundColor={defaultColors.activeColor}>
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
-        </PressableArea>
+        </Button>
       </View>
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />

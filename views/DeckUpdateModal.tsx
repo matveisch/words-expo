@@ -13,7 +13,7 @@ import { RootStackParamList } from './HomeView';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Circle from '../ui/Circle';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 
 type Inputs = {
   deckName: string;
@@ -96,13 +96,9 @@ function DeckUpdateModal({ route, navigation }: Props) {
         ))}
       </View>
 
-      <PressableArea
-        onPress={handleSubmit(onSubmit)}
-        disabled={isPending}
-        style={{ marginTop: 10 }}
-      >
+      <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 10 }}>
         <Text>Edit</Text>
-      </PressableArea>
+      </Button>
     </View>
   );
 }

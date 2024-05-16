@@ -15,7 +15,7 @@ import Description from '../ui/Description';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Circle from '../ui/Circle';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 
 type Inputs = {
   word: string;
@@ -137,9 +137,9 @@ export default function Word({ route, navigation }: Props) {
           ))}
         </View>
 
-        <PressableArea onPress={handleSubmit(onSubmit)} style={{ marginTop: 20 }}>
+        <Button onPress={handleSubmit(onSubmit)} style={{ marginTop: 20 }}>
           <Text>Edit</Text>
-        </PressableArea>
+        </Button>
       </View>
     </KeyboardAwareScrollView>
   );

@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useAddDeck from '../hooks/useAddDeck';
 import { colors } from '../helpers/colors';
 import { RootStackParamList } from './HomeView';
-import PressableArea from '../ui/PressableArea';
+import Button from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Circle from '../ui/Circle';
@@ -80,13 +80,9 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
         ))}
       </View>
 
-      <PressableArea
-        onPress={handleSubmit(onSubmit)}
-        disabled={isPending}
-        style={{ marginTop: 10 }}
-      >
+      <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 10 }}>
         <Text>Create</Text>
-      </PressableArea>
+      </Button>
     </View>
   );
 };
