@@ -27,7 +27,11 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
   });
 
   function handleOffset(value: number) {
-    offset.value = withSpring(value);
+    offset.value = withSpring(value, {
+      mass: 1,
+      damping: 100,
+      stiffness: 200,
+    });
   }
 
   function handleButtonPress() {
@@ -92,7 +96,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
         initialPage={0}
         style={{ flex: 1 }}
         ref={pagerViewRef}
-        onPageScroll={(e) => setActiveTab(e.nativeEvent.position)}
+        onPageSelected={(e) => setActiveTab(e.nativeEvent.position)}
       >
         <View style={{ width: '100%', height: '100%' }} key="1">
           <FlashList

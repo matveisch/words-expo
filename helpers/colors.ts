@@ -17,4 +17,18 @@ export const colors = [
   'hsl(359, 74.2%, 81.7%)',
 ];
 
-export const knowledgeColors = ['#F28F88', '#F2DB88', '#D7F288', '#88F2F2'];
+export const knowledgeColors = [
+  '#F5C6CB', // Beginner Level
+  '#FAD7A0', // Intermediate Level
+  '#85C1E9', // Advanced Level
+  '#A9DFBF', // Expert Level
+];
+
+// [
+//   '#E57373', // Beginner Level
+//   '#FFB74D', // Intermediate Level
+//   '#64B5F6', // Advanced Level
+//   '#81C784', // Expert Level
+// ];
+
+// ['#F28F88', '#F2DB88', '#D7F288', '#88F2F2'];
