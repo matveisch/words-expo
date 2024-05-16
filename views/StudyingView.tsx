@@ -11,26 +11,36 @@ import { TabBarIcon } from '../ui/TabBarIcon';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 export const StudyingView = ({ route }: Props) => {
   const { deckId } = route.params;
 
   const { data: words } = useWords(deckId);
+  const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
+  notLearnedWords && shuffleArray(notLearnedWords);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  if (!words) {
+  if (!notLearnedWords) {
     return <Loader />;
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.wordTitle}>{words[currentIndex].meaning}</Text>
+      <Text style={styles.wordTitle}>{notLearnedWords[currentIndex].meaning}</Text>
       <View style={styles.explainedContainer}>
         {isSuccess && (
           <View style={styles.innerExplainedContainer}>
-            <Text style={styles.explainedText}>{words[currentIndex].pronunciation}</Text>
+            <Text style={styles.explainedText}>{notLearnedWords[currentIndex].pronunciation}</Text>
             <View style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }} />
-            <Text style={styles.explainedText}>{words[currentIndex].word}</Text>
+            <Text style={styles.explainedText}>{notLearnedWords[currentIndex].word}</Text>
           </View>
         )}
       </View>
