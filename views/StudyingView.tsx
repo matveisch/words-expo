@@ -98,6 +98,7 @@ export const StudyingView = ({ route }: Props) => {
           value={answer}
           editable={!beingChecked}
           selectTextOnFocus={!beingChecked}
+          autoFocus
         />
         {!beingChecked && (
           <Button onPress={handleAnswer}>
@@ -132,12 +133,11 @@ const styles = StyleSheet.create({
   },
   wordTitle: {
     textAlign: 'center',
-    fontWeight: 700,
-    fontSize: 30,
+    fontSize: 50,
     marginTop: 50,
   },
   explainedContainer: {
-    marginBottom: 50,
+    marginBottom: 80,
     marginTop: 10,
     height: 24,
   },
