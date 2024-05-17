@@ -9,6 +9,7 @@ import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
 import { TabBarIcon } from '../ui/TabBarIcon';
 import { Word } from '../types/Word';
+import FinishedSetBoard from '../components/FinishedSetBoard';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -27,6 +28,7 @@ export const StudyingView = ({ route }: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [beingChecked, setBeingChecked] = useState<boolean>(false);
+  const [setIsDone, setSetIsDone] = useState(false);
 
   useEffect(() => {
     const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
@@ -54,11 +56,14 @@ export const StudyingView = ({ route }: Props) => {
     }
   }
 
+  const hasWordsToLearn = () => wordsToLearn && currentIndex + 1 < wordsToLearn.length;
+
   function handleNextWord() {
     setBeingChecked(false);
     setIsSuccess(false);
     setAnswer('');
-    if (wordsToLearn && currentIndex + 1 < wordsToLearn.length) setCurrentIndex(currentIndex + 1);
+    if (hasWordsToLearn()) setCurrentIndex(currentIndex + 1);
+    if (!hasWordsToLearn()) setSetIsDone(true);
   }
 
   function getBackgroundColor() {
@@ -73,6 +78,10 @@ export const StudyingView = ({ route }: Props) => {
 
   if (!words || !wordsToLearn) {
     return <Loader />;
+  }
+
+  if (setIsDone) {
+    return <FinishedSetBoard />;
   }
 
   return (
