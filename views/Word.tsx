@@ -6,7 +6,6 @@ import Toast from 'react-native-root-toast';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { RootStackParamList } from './HomeView';
-import useWord from '../hooks/useWord';
 import { knowledgeColors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
 import useUpdateWord from '../hooks/useUpdateWord';
@@ -27,8 +26,7 @@ type Inputs = {
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
 export default function Word({ route, navigation }: Props) {
-  const { wordId } = route.params;
-  const { data: word, isLoading } = useWord(wordId);
+  const { word } = route.params;
   const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const {
@@ -52,7 +50,7 @@ export default function Word({ route, navigation }: Props) {
       meaning: data.meaning,
       pronunciation: data.pronunciation,
       knowledgelevel: data.knowledgeLevel,
-      id: wordId,
+      id: word.id,
     };
 
     updateWord.mutateAsync(updatedWord).then(() => {
@@ -81,7 +79,7 @@ export default function Word({ route, navigation }: Props) {
     }
   }, [word?.knowledgelevel, navigation]);
 
-  if (isLoading) {
+  if (!word) {
     return <Loader />;
   }
 

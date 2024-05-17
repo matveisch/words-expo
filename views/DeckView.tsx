@@ -6,7 +6,7 @@ import { PieChart } from 'react-native-gifted-charts';
 
 import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
 import { useWords } from '../hooks/useWords';
-import { Word } from '../types/Word';
+import { WordType } from '../types/WordType';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
 import { useDeck } from '../hooks/useDeck';
@@ -16,7 +16,10 @@ import ChartItem from '../ui/ChartItem';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
-function getCertainKnowledgeLevelWords(knowledgeLevel: number, words: Word[] | undefined): number {
+function getCertainKnowledgeLevelWords(
+  knowledgeLevel: number,
+  words: WordType[] | undefined
+): number {
   return words?.filter((word) => word.knowledgelevel === knowledgeLevel).length || 0;
 }
 

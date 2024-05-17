@@ -1,8 +1,8 @@
-import { Word } from '../types/Word';
+import { WordType } from '../types/WordType';
 import { supabase } from '../helpers/initSupabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type NoIdWord = Omit<Word, 'id'>;
+type NoIdWord = Omit<WordType, 'id'>;
 
 async function addWord(word: NoIdWord) {
   const { error } = await supabase.from('words').upsert(word).single();

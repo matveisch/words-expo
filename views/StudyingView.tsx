@@ -8,7 +8,7 @@ import Input from '../ui/Input';
 import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
 import { TabBarIcon } from '../ui/TabBarIcon';
-import { Word } from '../types/Word';
+import { WordType } from '../types/WordType';
 import FinishedSetBoard from '../components/FinishedSetBoard';
 import useUpdateWord from '../hooks/useUpdateWord';
 
@@ -24,7 +24,7 @@ function shuffleArray(array: any[]) {
 export const StudyingView = ({ route }: Props) => {
   const { deckId } = route.params;
   const { data: words } = useWords(deckId);
-  const [wordsToLearn, setWordsToLearn] = useState<Word[] | undefined>(undefined);
+  const [wordsToLearn, setWordsToLearn] = useState<WordType[] | undefined>(undefined);
   const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -40,7 +40,7 @@ export const StudyingView = ({ route }: Props) => {
     }
   }, []);
 
-  function wordCheck(word: Word, answer: string) {
+  function wordCheck(word: WordType, answer: string) {
     return answer.toLowerCase().trim() === word.word.toLowerCase().trim();
   }
 

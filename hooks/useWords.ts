@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
-import { Word } from '../types/Word';
+import { WordType } from '../types/WordType';
 
 export const useWords = (deckId: number) =>
   useQuery({
     queryKey: ['words', deckId],
     queryFn: () => supabase.from('words').select().eq('deck', deckId).order('id'),
     // @ts-ignore
-    select: (data): Word[] => data.data,
+    select: (data): WordType[] => data.data,
   });

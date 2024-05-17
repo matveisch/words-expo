@@ -110,8 +110,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
                 subTitle={item.meaning}
                 onPress={() => {
                   navigation.push('Word', {
-                    wordId: item.id,
-                    knowledgeLevel: item.knowledgelevel,
+                    word: item,
                   });
                 }}
               />

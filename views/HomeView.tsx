@@ -17,12 +17,13 @@ import WordCreateModal from './WordCreateModal';
 import { TabBarIcon } from '../ui/TabBarIcon';
 import Button from '../ui/Button';
 import { StudyingView } from './StudyingView';
+import { WordType } from '../types/WordType';
 
 export type RootStackParamList = {
   Decks: { userId: string };
   DeckView: { currentDeckId: number; currentDeckName: string; deckColor: string };
   DecksAndWordsTabs: undefined;
-  Word: { wordId: number; knowledgeLevel: number };
+  Word: { word: WordType };
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: { parentDeckId: number };
   WordCreateModal: { parentDeckId: number };
@@ -113,7 +114,7 @@ const HomeView = ({ route }: Props) => {
             headerTitle: 'Edit Word',
             headerBackTitleVisible: false,
             headerStyle: {
-              backgroundColor: knowledgeColors[route.params.knowledgeLevel - 1],
+              backgroundColor: knowledgeColors[route.params.word.knowledgelevel - 1],
             },
             headerShadowVisible: false,
           })}
