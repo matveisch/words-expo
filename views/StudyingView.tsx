@@ -32,6 +32,8 @@ export const StudyingView = ({ route }: Props) => {
   const [setIsDone, setSetIsDone] = useState(false);
   const updateWord = useUpdateWord();
 
+  // 1. filtering words so only with knowledge level < 4 are shown
+  // 2. shuffling them using the algorithm
   useEffect(() => {
     const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
     if (notLearnedWords) {
@@ -54,10 +56,7 @@ export const StudyingView = ({ route }: Props) => {
         updateWord
           .mutateAsync({
             id: currentWord.id,
-            knowledgelevel:
-              currentWord.knowledgelevel < 4
-                ? currentWord.knowledgelevel + 1
-                : currentWord.knowledgelevel,
+            knowledgelevel: currentWord.knowledgelevel + 1,
           })
           .then(() => {
             setBeingChecked(true);

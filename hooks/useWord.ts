@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
 import { WordType } from '../types/WordType';
 
-export default function useWord(wordId: number, knowledgeLevel?: number) {
+export default function useWord(wordId: number) {
   return useQuery({
-    queryKey: ['word', wordId, knowledgeLevel],
+    queryKey: ['word', wordId],
     queryFn: () => supabase.from('words').select().eq('id', wordId).order('id').single(),
     select: (data): WordType => {
       // @ts-ignore

@@ -18,6 +18,7 @@ import { TabBarIcon } from '../ui/TabBarIcon';
 import Button from '../ui/Button';
 import { StudyingView } from './StudyingView';
 import { WordType } from '../types/WordType';
+import useDeleteWord from '../hooks/useDeleteWord';
 
 export type RootStackParamList = {
   Decks: { userId: string };
@@ -34,7 +35,8 @@ interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
 const HomeView = ({ route }: Props) => {
   const { session } = route.params;
-  const { mutateAsync } = useDeleteDeck();
+  const { mutateAsync: deleteDeck } = useDeleteDeck();
+  const { mutateAsync: deleteWord } = useDeleteWord();
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   function handleDeleteDeck(
@@ -46,7 +48,22 @@ const HomeView = ({ route }: Props) => {
       {
         text: 'Delete',
         onPress: () => {
-          mutateAsync(deckId).then(() => navigation.goBack());
+          deleteDeck(deckId).then(() => navigation.goBack());
+        },
+      },
+    ]);
+  }
+
+  function handleDeleteWord(
+    wordId: number,
+    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView', undefined>
+  ) {
+    Alert.alert('Are you sure?', 'You are about to delete the word', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        onPress: () => {
+          deleteWord(wordId).then(() => navigation.goBack());
         },
       },
     ]);
@@ -110,13 +127,22 @@ const HomeView = ({ route }: Props) => {
         <Stack.Screen
           name="Word"
           component={Word}
-          options={({ route }) => ({
+          options={({ route, navigation }) => ({
             headerTitle: 'Edit Word',
             headerBackTitleVisible: false,
             headerStyle: {
               backgroundColor: knowledgeColors[route.params.word.knowledgelevel - 1],
             },
             headerShadowVisible: false,
+            headerRight: () => (
+              <Button
+                chromeless
+                size="small"
+                onPress={() => handleDeleteWord(route.params.word.id, navigation)}
+              >
+                <TabBarIcon name="trash-o" />
+              </Button>
+            ),
           })}
         />
         <Stack.Screen
