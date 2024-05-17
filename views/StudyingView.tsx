@@ -10,6 +10,7 @@ import { defaultColors } from '../helpers/colors';
 import { TabBarIcon } from '../ui/TabBarIcon';
 import { Word } from '../types/Word';
 import FinishedSetBoard from '../components/FinishedSetBoard';
+import useUpdateWord from '../hooks/useUpdateWord';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -29,6 +30,7 @@ export const StudyingView = ({ route }: Props) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [beingChecked, setBeingChecked] = useState<boolean>(false);
   const [setIsDone, setSetIsDone] = useState(false);
+  const updateWord = useUpdateWord();
 
   useEffect(() => {
     const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
@@ -43,14 +45,26 @@ export const StudyingView = ({ route }: Props) => {
   }
 
   function handleAnswer() {
-    setBeingChecked(true);
     Keyboard.dismiss();
 
     if (wordsToLearn) {
       const isAnswerRight = wordCheck(wordsToLearn[currentIndex], answer);
       if (isAnswerRight) {
-        setIsSuccess(true);
+        const currentWord = wordsToLearn[currentIndex];
+        updateWord
+          .mutateAsync({
+            id: currentWord.id,
+            knowledgelevel:
+              currentWord.knowledgelevel < 4
+                ? currentWord.knowledgelevel + 1
+                : currentWord.knowledgelevel,
+          })
+          .then(() => {
+            setBeingChecked(true);
+            setIsSuccess(true);
+          });
       } else {
+        setBeingChecked(true);
         setIsSuccess(false);
       }
     }

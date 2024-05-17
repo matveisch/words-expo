@@ -69,7 +69,7 @@ export default function Word({ route, navigation }: Props) {
       setValue('pronunciation', word.pronunciation);
       setCurrentLevel(word.knowledgelevel);
     }
-  }, [word]);
+  }, [word, word?.knowledgelevel]);
 
   useEffect(() => {
     if (word) {
