@@ -22,7 +22,7 @@ function shuffleArray(array: any[]) {
 }
 
 export const StudyingView = ({ route }: Props) => {
-  const { deckId } = route.params;
+  const { deckId, revise } = route.params;
   const { data: words } = useWords(deckId);
   const [wordsToLearn, setWordsToLearn] = useState<WordType[] | undefined>(undefined);
   const [answer, setAnswer] = useState('');
@@ -35,7 +35,9 @@ export const StudyingView = ({ route }: Props) => {
   // 1. filtering words so only with knowledge level < 4 are shown
   // 2. shuffling them using the algorithm
   useEffect(() => {
-    const notLearnedWords = words?.filter((word) => word.knowledgelevel < 4);
+    const notLearnedWords = words?.filter((word) =>
+      revise ? word.knowledgelevel === 4 : word.knowledgelevel < 4
+    );
     if (notLearnedWords) {
       shuffleArray(notLearnedWords);
       setWordsToLearn(notLearnedWords);
@@ -57,7 +59,7 @@ export const StudyingView = ({ route }: Props) => {
         updateWord
           .mutateAsync({
             id: currentWord.id,
-            knowledgelevel: currentWord.knowledgelevel + 1,
+            knowledgelevel: revise ? currentWord.knowledgelevel : currentWord.knowledgelevel + 1,
           })
           .then(() => {
             setBeingChecked(true);

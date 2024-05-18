@@ -27,7 +27,7 @@ export type RootStackParamList = {
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: { parentDeckId: number };
   WordCreateModal: { parentDeckId: number };
-  Studying: { deckId: number };
+  Studying: { deckId: number; revise: boolean };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}

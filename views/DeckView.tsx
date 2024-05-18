@@ -105,13 +105,23 @@ function DeckView({ route, navigation }: Props) {
           onPress={() =>
             navigation.navigate('Studying', {
               deckId: currentDeckId,
+              revise: false,
             })
           }
         >
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
         </Button>
 
-        <Button style={styles.studyButton} backgroundColor={defaultColors.activeColor}>
+        <Button
+          style={styles.studyButton}
+          backgroundColor={defaultColors.activeColor}
+          onPress={() =>
+            navigation.navigate('Studying', {
+              deckId: currentDeckId,
+              revise: true,
+            })
+          }
+        >
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
         </Button>
       </View>
