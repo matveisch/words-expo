@@ -51,8 +51,9 @@ export const StudyingView = ({ route }: Props) => {
 
     if (wordsToLearn) {
       const isAnswerRight = wordCheck(wordsToLearn[currentIndex], answer);
+      const currentWord = wordsToLearn[currentIndex];
+
       if (isAnswerRight) {
-        const currentWord = wordsToLearn[currentIndex];
         updateWord
           .mutateAsync({
             id: currentWord.id,
@@ -63,6 +64,12 @@ export const StudyingView = ({ route }: Props) => {
             setIsSuccess(true);
           });
       } else {
+        if (currentWord.knowledgelevel > 1) {
+          updateWord.mutateAsync({
+            id: currentWord.id,
+            knowledgelevel: currentWord.knowledgelevel - 1,
+          });
+        }
         setBeingChecked(true);
         setIsSuccess(false);
       }
@@ -86,6 +93,20 @@ export const StudyingView = ({ route }: Props) => {
       return defaultColors.errorColor;
     } else {
       return defaultColors.subColor;
+    }
+  }
+
+  function handleIAnsweredRight() {
+    if (wordsToLearn) {
+      const currentWord = wordsToLearn[currentIndex];
+      updateWord
+        .mutateAsync({
+          id: currentWord.id,
+          knowledgelevel: currentWord.knowledgelevel + 1,
+        })
+        .then(() => {
+          handleNextWord();
+        });
     }
   }
 
@@ -131,7 +152,7 @@ export const StudyingView = ({ route }: Props) => {
 
       <View style={styles.successButtons}>
         {!isSuccess && beingChecked && (
-          <Button style={{ flex: 1 }}>
+          <Button style={{ flex: 1 }} onPress={handleIAnsweredRight}>
             <Text style={{ fontWeight: 500 }}>I answered right</Text>
           </Button>
         )}

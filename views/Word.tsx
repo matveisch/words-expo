@@ -25,7 +25,7 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
-export default function Word({ route, navigation }: Props) {
+export default function Word({ route }: Props) {
   const { word } = route.params;
   const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
@@ -68,16 +68,6 @@ export default function Word({ route, navigation }: Props) {
       setCurrentLevel(word.knowledgelevel);
     }
   }, [word, word?.knowledgelevel]);
-
-  useEffect(() => {
-    if (word) {
-      navigation.setOptions({
-        headerStyle: {
-          backgroundColor: knowledgeColors[word.knowledgelevel - 1],
-        },
-      });
-    }
-  }, [word?.knowledgelevel, navigation]);
 
   if (!word) {
     return <Loader />;

@@ -10,7 +10,6 @@ import DeckView from './DeckView';
 import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
 import Word from './Word';
-import { knowledgeColors } from '../helpers/colors';
 import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
 import WordCreateModal from './WordCreateModal';
@@ -130,9 +129,6 @@ const HomeView = ({ route }: Props) => {
           options={({ route, navigation }) => ({
             headerTitle: 'Edit Word',
             headerBackTitleVisible: false,
-            headerStyle: {
-              backgroundColor: knowledgeColors[route.params.word.knowledgelevel - 1],
-            },
             headerShadowVisible: false,
             headerRight: () => (
               <Button
