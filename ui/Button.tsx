@@ -9,15 +9,27 @@ type Props = {
   backgroundColor?: string;
   size?: 'small' | 'default';
   outlined?: boolean;
+  isDisabled?: boolean;
 };
 
 export default function Button(props: Props & PressableProps) {
-  const { chromeless, outlined, size, backgroundColor, children, style, ...otherProps } = props;
+  const {
+    chromeless,
+    isDisabled,
+    outlined,
+    size,
+    backgroundColor,
+    children,
+    style,
+    ...otherProps
+  } = props;
 
   function getBackgroundColor(pressed: boolean) {
     if (pressed) {
       return 'rgb(210, 230, 255)';
     } else {
+      if (isDisabled) return defaultColors.disabledButtonColor;
+
       if (chromeless) {
         return 'transparent';
       } else if (backgroundColor) {
@@ -44,6 +56,7 @@ export default function Button(props: Props & PressableProps) {
         styles.button,
         style,
       ]}
+      disabled={isDisabled}
       {...otherProps}
     >
       {children}

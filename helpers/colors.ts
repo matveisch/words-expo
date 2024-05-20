@@ -8,6 +8,7 @@ export const defaultColors = {
   errorColor: '#F8D7DA',
   successColor: '#D5E8D4',
   secondaryButtonColor: '#607D8B',
+  disabledButtonColor: '#66b8a3',
 };
 
 export const colors = [

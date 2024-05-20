@@ -108,6 +108,7 @@ function DeckView({ route, navigation }: Props) {
               revise: false,
             })
           }
+          isDisabled={words.length === 0}
         >
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
         </Button>
@@ -121,6 +122,7 @@ function DeckView({ route, navigation }: Props) {
               revise: true,
             })
           }
+          isDisabled={words.length === 0}
         >
           <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
         </Button>
