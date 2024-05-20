@@ -98,35 +98,35 @@ function DeckView({ route, navigation }: Props) {
         </View>
       </View>
 
-      <View style={styles.studyButtonsContainer}>
-        <Button
-          style={styles.studyButton}
-          backgroundColor={defaultColors.activeColor}
-          onPress={() =>
-            navigation.navigate('Studying', {
-              deckId: currentDeckId,
-              revise: false,
-            })
-          }
-          isDisabled={words.length === 0}
-        >
-          <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
-        </Button>
+      {words.length !== 0 && (
+        <View style={styles.studyButtonsContainer}>
+          <Button
+            style={styles.studyButton}
+            backgroundColor={defaultColors.activeColor}
+            onPress={() =>
+              navigation.navigate('Studying', {
+                deckId: currentDeckId,
+                revise: false,
+              })
+            }
+          >
+            <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
+          </Button>
 
-        <Button
-          style={styles.studyButton}
-          backgroundColor={defaultColors.activeColor}
-          onPress={() =>
-            navigation.navigate('Studying', {
-              deckId: currentDeckId,
-              revise: true,
-            })
-          }
-          isDisabled={words.length === 0}
-        >
-          <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
-        </Button>
-      </View>
+          <Button
+            style={styles.studyButton}
+            backgroundColor={defaultColors.activeColor}
+            onPress={() =>
+              navigation.navigate('Studying', {
+                deckId: currentDeckId,
+                revise: true,
+              })
+            }
+          >
+            <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
+          </Button>
+        </View>
+      )}
 
       <DecksAndWordsTabs currentDeck={currentDeckId} />
     </View>
