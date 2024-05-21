@@ -13,7 +13,13 @@ import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
 
-const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
+type Props = {
+  currentDeck: number;
+  hasParentDeck: boolean;
+};
+
+const DecksAndWordsTabs = (props: Props) => {
+  const { currentDeck, hasParentDeck } = props;
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: words } = useWords(currentDeck);
@@ -68,22 +74,24 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
           >
             <Text>Words</Text>
           </Button>
-          <Button
-            style={{ flex: 1 }}
-            onPress={() => {
-              handleOffset(191.3);
-              pagerViewRef.current?.setPage(1);
-            }}
-            backgroundColor="transparent"
-          >
-            <Text>Decks</Text>
-          </Button>
+          {!hasParentDeck && (
+            <Button
+              style={{ flex: 1 }}
+              onPress={() => {
+                handleOffset(191.3);
+                pagerViewRef.current?.setPage(1);
+              }}
+              backgroundColor="transparent"
+            >
+              <Text>Decks</Text>
+            </Button>
+          )}
         </View>
         <Animated.View
           style={[
             {
               height: 5,
-              width: 181.7,
+              width: !hasParentDeck ? 181.7 : 'auto',
               backgroundColor: defaultColors.activeColor,
               borderRadius: 8,
             },
@@ -96,6 +104,7 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
         initialPage={0}
         style={{ flex: 1 }}
         ref={pagerViewRef}
+        scrollEnabled={!hasParentDeck}
         onPageSelected={(e) => setActiveTab(e.nativeEvent.position)}
       >
         <View style={{ width: '100%', height: '100%' }} key="1">
@@ -117,7 +126,6 @@ const DecksAndWordsTabs = ({ currentDeck }: { currentDeck: number }) => {
             )}
           />
         </View>
-
         <View style={{ width: '100%', height: '100%' }} key="2">
           <FlashList
             estimatedItemSize={44}

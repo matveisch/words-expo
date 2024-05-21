@@ -128,7 +128,7 @@ function DeckView({ route, navigation }: Props) {
         </View>
       )}
 
-      <DecksAndWordsTabs currentDeck={currentDeckId} />
+      <DecksAndWordsTabs currentDeck={currentDeckId} hasParentDeck={deck?.parent_deck !== null} />
     </View>
   );
 }
