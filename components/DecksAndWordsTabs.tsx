@@ -2,7 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, View, Text, LogBox } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
@@ -12,6 +12,7 @@ import { RootStackParamList } from '../views/HomeView';
 import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
+import { useIsMutating } from '@tanstack/react-query';
 
 type Props = {
   currentDeck: number;
@@ -23,12 +24,11 @@ const DecksAndWordsTabs = (props: Props) => {
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: subDecks, isFetched } = useSubDecks(currentDeck);
-
   const { data: words } = useWords(
     [...(subDecks?.map((deck) => deck.id) || []), currentDeck],
     isFetched
   );
-
+  // @ts-ignore
   const pagerViewRef = useRef<PagerView | null>(null);
   const offset = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
@@ -36,6 +36,7 @@ const DecksAndWordsTabs = (props: Props) => {
       transform: [{ translateX: offset.value }],
     };
   });
+  const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
 
   function handleOffset(value: number) {
     offset.value = withSpring(value, {
@@ -111,6 +112,7 @@ const DecksAndWordsTabs = (props: Props) => {
         ref={pagerViewRef}
         scrollEnabled={!hasParentDeck}
         onPageSelected={(e) => setActiveTab(e.nativeEvent.position)}
+        useNext
       >
         <View style={{ width: '100%', height: '100%' }} key="1">
           <FlashList
@@ -158,6 +160,7 @@ const DecksAndWordsTabs = (props: Props) => {
         backgroundColor={defaultColors.activeColor}
         onPress={handleButtonPress}
         style={styles.newItemButton}
+        isDisabled={isDeckMutating !== 0}
       >
         <Text
           style={{ color: defaultColors.white, fontWeight: 700 }}

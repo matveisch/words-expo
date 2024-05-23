@@ -34,8 +34,8 @@ interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
 const HomeView = ({ route }: Props) => {
   const { session } = route.params;
-  const { mutateAsync: deleteDeck } = useDeleteDeck();
-  const { mutateAsync: deleteWord } = useDeleteWord();
+  const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
+  const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   function handleDeleteDeck(
@@ -103,6 +103,7 @@ const HomeView = ({ route }: Props) => {
                 <Button
                   chromeless
                   size="small"
+                  disabled={deckIsBeingDeleted}
                   onPress={() =>
                     navigation.navigate('DeckUpdateModal', {
                       parentDeckId: route.params.currentDeckId,
@@ -114,6 +115,7 @@ const HomeView = ({ route }: Props) => {
                 <Button
                   chromeless
                   size="small"
+                  disabled={deckIsBeingDeleted}
                   onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
                 >
                   <TabBarIcon name="trash-o" />
@@ -134,6 +136,7 @@ const HomeView = ({ route }: Props) => {
               <Button
                 chromeless
                 size="small"
+                disabled={wordIsBeingDeleted}
                 onPress={() => handleDeleteWord(route.params.word.id, navigation)}
               >
                 <TabBarIcon name="trash-o" />

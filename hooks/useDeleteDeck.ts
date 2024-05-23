@@ -10,6 +10,7 @@ async function deleteDeck(deckId: number) {
 export default function useDeleteDeck() {
   const queryClient = useQueryClient();
   return useMutation({
+    mutationKey: ['deleteDeck'],
     mutationFn: (deckId: number) => deleteDeck(deckId),
     onSuccess: () =>
       Promise.all([
