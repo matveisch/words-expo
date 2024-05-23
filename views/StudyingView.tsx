@@ -129,10 +129,14 @@ export const StudyingView = ({ route }: Props) => {
     <View style={styles.container}>
       <Text style={styles.wordTitle}>{wordsToLearn[currentIndex].meaning}</Text>
       <View style={styles.explainedContainer}>
-        {isSuccess && (
+        {beingChecked && (
           <View style={styles.innerExplainedContainer}>
-            <Text style={styles.explainedText}>{wordsToLearn[currentIndex].pronunciation}</Text>
-            <View style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }} />
+            {wordsToLearn[currentIndex].pronunciation && (
+              <>
+                <Text style={styles.explainedText}>{wordsToLearn[currentIndex].pronunciation}</Text>
+                <View style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }} />
+              </>
+            )}
             <Text style={styles.explainedText}>{wordsToLearn[currentIndex].word}</Text>
           </View>
         )}

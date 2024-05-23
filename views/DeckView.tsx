@@ -122,19 +122,21 @@ function DeckView({ route, navigation }: Props) {
             <ThemedText text="Study words" />
           </Button>
 
-          <Button
-            style={styles.studyButton}
-            backgroundColor={defaultColors.activeColor}
-            isDisabled={isDeckMutating !== 0}
-            onPress={() =>
-              navigation.navigate('Studying', {
-                deckId: currentDeckId,
-                revise: true,
-              })
-            }
-          >
-            <ThemedText text="Revise words" />
-          </Button>
+          {getCertainKnowledgeLevelWords(4, words) !== 0 && (
+            <Button
+              style={styles.studyButton}
+              backgroundColor={defaultColors.activeColor}
+              isDisabled={isDeckMutating !== 0}
+              onPress={() =>
+                navigation.navigate('Studying', {
+                  deckId: currentDeckId,
+                  revise: true,
+                })
+              }
+            >
+              <ThemedText text="Revise words" />
+            </Button>
+          )}
         </View>
       )}
 
