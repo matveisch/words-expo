@@ -2,7 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, LogBox } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
@@ -12,6 +12,7 @@ import { RootStackParamList } from '../views/HomeView';
 import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
+import { useAllWords } from '../hooks/useAllWords';
 
 type Props = {
   currentDeck: number;
@@ -22,8 +23,10 @@ const DecksAndWordsTabs = (props: Props) => {
   const { currentDeck, hasParentDeck } = props;
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { data: words } = useWords(currentDeck);
+  // const { data: words } = useWords(currentDeck);
   const { data: subDecks } = useSubDecks(currentDeck);
+  const { data: words, refetch } = useAllWords([...subDecks?.map((deck) => deck.id)!, currentDeck]);
+
   const pagerViewRef = useRef<PagerView | null>(null);
   const offset = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
@@ -31,6 +34,10 @@ const DecksAndWordsTabs = (props: Props) => {
       transform: [{ translateX: offset.value }],
     };
   });
+
+  useEffect(() => {
+    refetch();
+  }, [subDecks]);
 
   function handleOffset(value: number) {
     offset.value = withSpring(value, {
