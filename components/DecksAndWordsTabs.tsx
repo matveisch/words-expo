@@ -13,6 +13,7 @@ import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
 import { useIsMutating } from '@tanstack/react-query';
+import ThemedText from '../ui/ThemedText';
 
 type Props = {
   currentDeck: number;
@@ -162,9 +163,7 @@ const DecksAndWordsTabs = (props: Props) => {
         style={styles.newItemButton}
         isDisabled={isDeckMutating !== 0}
       >
-        <Text
-          style={{ color: defaultColors.white, fontWeight: 700 }}
-        >{`Add new ${activeTab === 0 ? 'word' : 'deck'}`}</Text>
+        <ThemedText text={`Add new ${activeTab === 0 ? 'word' : 'deck'}`} />
       </Button>
     </View>
   );

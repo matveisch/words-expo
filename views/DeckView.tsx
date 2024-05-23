@@ -15,6 +15,7 @@ import Button from '../ui/Button';
 import ChartItem from '../ui/ChartItem';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { useIsMutating } from '@tanstack/react-query';
+import ThemedText from '../ui/ThemedText';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -118,7 +119,7 @@ function DeckView({ route, navigation }: Props) {
               })
             }
           >
-            <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Study words</Text>
+            <ThemedText text="Study words" />
           </Button>
 
           <Button
@@ -132,7 +133,7 @@ function DeckView({ route, navigation }: Props) {
               })
             }
           >
-            <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Revise words</Text>
+            <ThemedText text="Revise words" />
           </Button>
         </View>
       )}

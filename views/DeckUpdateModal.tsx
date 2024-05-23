@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import useUpdateDeck from '../hooks/useUpdateDeck';
 import { useDeck } from '../hooks/useDeck';
-import { colors } from '../helpers/colors';
+import { colors, defaultColors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
 import Loader from '../components/Loader';
 import { RootStackParamList } from './HomeView';
@@ -14,6 +14,7 @@ import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Circle from '../ui/Circle';
 import Button from '../ui/Button';
+import ThemedText from '../ui/ThemedText';
 
 type Inputs = {
   deckName: string;
@@ -96,8 +97,13 @@ function DeckUpdateModal({ route, navigation }: Props) {
         ))}
       </View>
 
-      <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 10 }}>
-        <Text>Edit</Text>
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        isDisabled={isPending}
+        style={{ marginTop: 10 }}
+        backgroundColor={defaultColors.activeColor}
+      >
+        <ThemedText text="Edit" />
       </Button>
     </View>
   );
