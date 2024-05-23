@@ -11,6 +11,10 @@ export default function useDeleteDeck() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (deckId: number) => deleteDeck(deckId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['decks'] }),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['decks'] }),
+        queryClient.invalidateQueries({ queryKey: ['subDecks'] }),
+      ]),
   });
 }
