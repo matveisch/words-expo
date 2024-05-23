@@ -21,11 +21,11 @@ import { WordType } from '../types/WordType';
 // };
 //
 
-export const useAllWords = (deckIds: number[]) =>
+export const useAllWords = (deckIds: number[], subDecksLoaded: boolean) =>
   useQuery({
-    queryKey: ['allWords', deckIds],
+    queryKey: ['allWords', deckIds, subDecksLoaded],
     queryFn: () => supabase.from('words').select().in('deck', deckIds).order('id'),
     // @ts-ignore
     select: (data): WordType[] => data.data,
-    enabled: false,
+    enabled: !!subDecksLoaded,
   });

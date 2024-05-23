@@ -11,6 +11,7 @@ import { TabBarIcon } from '../ui/TabBarIcon';
 import { WordType } from '../types/WordType';
 import FinishedSetBoard from '../components/FinishedSetBoard';
 import useUpdateWord from '../hooks/useUpdateWord';
+import { useSubDecks } from '../hooks/useSubDecks';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -23,7 +24,11 @@ function shuffleArray(array: any[]) {
 
 export const StudyingView = ({ route }: Props) => {
   const { deckId, revise } = route.params;
-  const { data: words } = useWords(deckId);
+  const { data: subDecks, isFetched } = useSubDecks(deckId);
+  const { data: words } = useWords(
+    [...(subDecks?.map((deck) => deck.id) || []), deckId],
+    isFetched
+  );
   const [wordsToLearn, setWordsToLearn] = useState<WordType[] | undefined>(undefined);
   const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);

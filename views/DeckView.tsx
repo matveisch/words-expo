@@ -13,6 +13,7 @@ import { useDeck } from '../hooks/useDeck';
 import { defaultColors, knowledgeColors } from '../helpers/colors';
 import Button from '../ui/Button';
 import ChartItem from '../ui/ChartItem';
+import { useSubDecks } from '../hooks/useSubDecks';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -26,8 +27,12 @@ function getCertainKnowledgeLevelWords(
 function DeckView({ route, navigation }: Props) {
   const { currentDeckId } = route.params;
   const insets = useSafeAreaInsets();
-  const { data: words, isLoading: areWordsLoading } = useWords(currentDeckId);
   const { data: deck } = useDeck(currentDeckId);
+  const { data: subDecks, isFetched } = useSubDecks(currentDeckId);
+  const { data: words, isLoading: areWordsLoading } = useWords(
+    [...(subDecks?.map((deck) => deck.id) || []), currentDeckId],
+    isFetched
+  );
   const graphData = [
     { value: getCertainKnowledgeLevelWords(1, words), color: knowledgeColors[0], text: 'again' },
     { value: getCertainKnowledgeLevelWords(2, words), color: knowledgeColors[1], text: 'hard' },

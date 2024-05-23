@@ -12,7 +12,6 @@ import { RootStackParamList } from '../views/HomeView';
 import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
-import { useAllWords } from '../hooks/useAllWords';
 
 type Props = {
   currentDeck: number;
@@ -23,9 +22,12 @@ const DecksAndWordsTabs = (props: Props) => {
   const { currentDeck, hasParentDeck } = props;
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  // const { data: words } = useWords(currentDeck);
-  const { data: subDecks } = useSubDecks(currentDeck);
-  const { data: words, refetch } = useAllWords([...subDecks?.map((deck) => deck.id)!, currentDeck]);
+  const { data: subDecks, isFetched } = useSubDecks(currentDeck);
+
+  const { data: words } = useWords(
+    [...(subDecks?.map((deck) => deck.id) || []), currentDeck],
+    isFetched
+  );
 
   const pagerViewRef = useRef<PagerView | null>(null);
   const offset = useSharedValue(0);
@@ -34,10 +36,6 @@ const DecksAndWordsTabs = (props: Props) => {
       transform: [{ translateX: offset.value }],
     };
   });
-
-  useEffect(() => {
-    refetch();
-  }, [subDecks]);
 
   function handleOffset(value: number) {
     offset.value = withSpring(value, {
