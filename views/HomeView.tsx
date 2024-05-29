@@ -32,7 +32,7 @@ export type RootStackParamList = {
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
-const HomeView = ({ route }: Props) => {
+const HomeView = ({ route, navigation }: Props) => {
   const { session } = route.params;
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();

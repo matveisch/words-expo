@@ -1,4 +1,10 @@
-import { DefaultTheme, NavigationContainer, Theme } from '@react-navigation/native';
+import {
+  DefaultTheme,
+  getFocusedRouteNameFromRoute,
+  NavigationContainer,
+  RouteProp,
+  Theme,
+} from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -43,6 +49,11 @@ export default function App() {
     });
   }, []);
 
+  const getTabBarStyle = (route: RouteProp<RootTabsParamList>) => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    return routeName === 'Studying' ? 'none' : 'flex';
+  };
+
   return (
     <RootSiblingParent>
       <QueryClientProvider>
@@ -54,11 +65,12 @@ export default function App() {
                   name="Home"
                   component={HomeView}
                   initialParams={{ session: session }}
-                  options={{
+                  options={({ route }) => ({
+                    tabBarStyle: { display: getTabBarStyle(route) },
                     headerShown: false,
                     headerShadowVisible: false,
                     tabBarIcon: () => <TabBarIcon name="home" />,
-                  }}
+                  })}
                 />
                 <Tab.Screen
                   name="Settings"

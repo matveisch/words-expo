@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, View, Text } from 'react-native';
 import User from '../components/User';
 import { TabBarIcon } from '../ui/TabBarIcon';
@@ -6,21 +6,29 @@ import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Description from '../ui/Description';
 import Button from '../ui/Button';
+import { observer } from 'mobx-react';
+import { wordsLimitStore } from '../features/wordsLimitStore';
+import Toast from 'react-native-root-toast';
+import { toastOptions } from '../helpers/toastOptions';
 
 type Inputs = {
   wordsPerSet: string;
 };
 
-export default function SettingsView() {
+const SettingsView = observer(() => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
-      wordsPerSet: '20',
+      wordsPerSet: wordsLimitStore.limit.toString(),
     },
   });
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    wordsLimitStore.setLimit(Number(data.wordsPerSet));
+  };
 
   return (
     <View
@@ -51,6 +59,7 @@ export default function SettingsView() {
           />
           <Button
             onPress={() => {
+              handleSubmit(onSubmit);
               Keyboard.dismiss();
             }}
           >
@@ -63,4 +72,6 @@ export default function SettingsView() {
       <User />
     </View>
   );
-}
+});
+
+export default SettingsView;
