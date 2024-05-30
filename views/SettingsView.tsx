@@ -1,5 +1,5 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Keyboard, View, Text } from 'react-native';
+import { Keyboard, View, Text, Switch } from 'react-native';
 import User from '../components/User';
 import { TabBarIcon } from '../ui/TabBarIcon';
 import Label from '../ui/Label';
@@ -10,6 +10,7 @@ import { observer } from 'mobx-react';
 import { wordsLimitStore } from '../features/wordsLimitStore';
 import Toast from 'react-native-root-toast';
 import { toastOptions } from '../helpers/toastOptions';
+import { autoCheckStore } from '../features/autoCheckStore';
 
 type Inputs = {
   wordsPerSet: string;
@@ -33,6 +34,10 @@ const SettingsView = observer(() => {
     Keyboard.dismiss();
   };
 
+  function toggleSwitch() {
+    autoCheckStore.setAutoCheck(!autoCheckStore.autoCheck);
+  }
+
   return (
     <View
       style={{
@@ -44,27 +49,44 @@ const SettingsView = observer(() => {
       }}
     >
       <View>
-        <Label text="New words per session" />
-        <Description text="Set desired amount of words you want to learn per studying session." />
-        <View style={{ gap: 10, flexDirection: 'row' }}>
-          <Controller
-            name="wordsPerSet"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                style={{ flex: 1 }}
-                onChangeText={(text) => onChange(text)}
-                onBlur={onBlur}
-                keyboardType="number-pad"
-                value={value}
-              />
-            )}
-          />
-          <Button onPress={handleSubmit(onSubmit)}>
-            <TabBarIcon name="check" size={20} />
-          </Button>
+        <View>
+          <Label text="New words per session" />
+          <Description text="Set desired amount of words you want to learn per studying session." />
+          <View style={{ gap: 10, flexDirection: 'row' }}>
+            <Controller
+              name="wordsPerSet"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  style={{ flex: 1 }}
+                  onChangeText={(text) => onChange(text)}
+                  onBlur={onBlur}
+                  keyboardType="number-pad"
+                  value={value}
+                />
+              )}
+            />
+            <Button onPress={handleSubmit(onSubmit)}>
+              <TabBarIcon name="check" size={20} />
+            </Button>
+          </View>
+          {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
         </View>
-        {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
+
+        <View
+          style={{
+            marginTop: 20,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <View>
+            <Label text="Auto check" />
+            <Description text="Mark words by yourself or let app do it for you." />
+          </View>
+          <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
+        </View>
       </View>
 
       <User />
