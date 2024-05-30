@@ -14,6 +14,8 @@ import useUpdateWord from '../hooks/useUpdateWord';
 import { useSubDecks } from '../hooks/useSubDecks';
 import { observer } from 'mobx-react';
 import { wordsLimitStore } from '../features/wordsLimitStore';
+import { autoCheckStore } from '../features/autoCheckStore';
+import ThemedText from '../ui/ThemedText';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -58,20 +60,22 @@ export const StudyingView = observer(({ route }: Props) => {
   function handleAnswer() {
     Keyboard.dismiss();
 
-    if (wordsToLearn) {
+    if (wordsToLearn && autoCheckStore.autoCheck) {
       const isAnswerRight = wordCheck(wordsToLearn[currentIndex], answer);
       const currentWord = wordsToLearn[currentIndex];
 
       if (isAnswerRight) {
-        updateWord
-          .mutateAsync({
-            id: currentWord.id,
-            knowledgelevel: revise ? currentWord.knowledgelevel : currentWord.knowledgelevel + 1,
-          })
-          .then(() => {
-            setBeingChecked(true);
-            setIsSuccess(true);
-          });
+        if (revise) {
+          updateWord
+            .mutateAsync({
+              id: currentWord.id,
+              knowledgelevel: currentWord.knowledgelevel + 1,
+            })
+            .then(() => {
+              setBeingChecked(true);
+              setIsSuccess(true);
+            });
+        }
       } else {
         if (currentWord.knowledgelevel > 1) {
           updateWord.mutateAsync({
@@ -82,6 +86,8 @@ export const StudyingView = observer(({ route }: Props) => {
         setBeingChecked(true);
         setIsSuccess(false);
       }
+    } else {
+      setBeingChecked(true);
     }
   }
 
@@ -98,16 +104,16 @@ export const StudyingView = observer(({ route }: Props) => {
   function getBackgroundColor() {
     if (isSuccess) {
       return defaultColors.successColor;
-    } else if (!isSuccess && beingChecked) {
+    } else if (!isSuccess && beingChecked && autoCheckStore.autoCheck) {
       return defaultColors.errorColor;
     } else {
       return defaultColors.subColor;
     }
   }
 
-  function handleIAnsweredRight() {
-    if (wordsToLearn) {
-      const currentWord = wordsToLearn[currentIndex];
+  function handleAnsweredRight() {
+    const currentWord = wordsToLearn![currentIndex];
+    if (currentWord.knowledgelevel < 4) {
       updateWord
         .mutateAsync({
           id: currentWord.id,
@@ -116,6 +122,24 @@ export const StudyingView = observer(({ route }: Props) => {
         .then(() => {
           handleNextWord();
         });
+    } else {
+      handleNextWord();
+    }
+  }
+
+  function handleAnsweredWrong() {
+    const currentWord = wordsToLearn![currentIndex];
+    if (currentWord.knowledgelevel > 1) {
+      updateWord
+        .mutateAsync({
+          id: currentWord.id,
+          knowledgelevel: currentWord.knowledgelevel - 1,
+        })
+        .then(() => {
+          handleNextWord();
+        });
+    } else {
+      handleNextWord();
     }
   }
 
@@ -157,25 +181,39 @@ export const StudyingView = observer(({ route }: Props) => {
           autoFocus
         />
         {!beingChecked && (
-          <Button onPress={handleAnswer}>
+          <Button onPress={handleAnswer} isDisabled={updateWord.isPending}>
             <TabBarIcon name="check" size={20} />
           </Button>
         )}
       </View>
 
       <View style={styles.successButtons}>
-        {!isSuccess && beingChecked && (
-          <Button style={{ flex: 1 }} onPress={handleIAnsweredRight}>
+        {!isSuccess && beingChecked && autoCheckStore.autoCheck && (
+          <Button
+            style={{ flex: 1 }}
+            onPress={handleAnsweredRight}
+            isDisabled={updateWord.isPending}
+          >
             <Text style={{ fontWeight: 500 }}>I answered right</Text>
+          </Button>
+        )}
+        {beingChecked && !autoCheckStore.autoCheck && (
+          <Button
+            style={{ flex: 1 }}
+            onPress={handleAnsweredWrong}
+            isDisabled={updateWord.isPending}
+          >
+            <Text style={{ fontWeight: 500 }}>I answered wrong</Text>
           </Button>
         )}
         {beingChecked && (
           <Button
             style={{ flex: 1 }}
             backgroundColor={defaultColors.activeColor}
-            onPress={handleNextWord}
+            onPress={autoCheckStore.autoCheck ? handleNextWord : handleAnsweredRight}
+            disabled={updateWord.isPending}
           >
-            <Text style={{ color: defaultColors.white, fontWeight: 700 }}>Next word</Text>
+            <ThemedText text={!autoCheckStore.autoCheck ? 'I answered right' : 'Next word'} />
           </Button>
         )}
       </View>

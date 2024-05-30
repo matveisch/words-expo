@@ -30,7 +30,6 @@ const SettingsView = observer(() => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     wordsLimitStore.setLimit(Number(data.wordsPerSet));
     Toast.show('Limit updated', toastOptions);
-    console.log(wordsLimitStore.limit);
     Keyboard.dismiss();
   };
 
