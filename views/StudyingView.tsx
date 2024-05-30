@@ -12,6 +12,8 @@ import { WordType } from '../types/WordType';
 import FinishedSetBoard from '../components/FinishedSetBoard';
 import useUpdateWord from '../hooks/useUpdateWord';
 import { useSubDecks } from '../hooks/useSubDecks';
+import { observer } from 'mobx-react';
+import { wordsLimitStore } from '../features/wordsLimitStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -22,7 +24,7 @@ function shuffleArray(array: any[]) {
   }
 }
 
-export const StudyingView = ({ route }: Props) => {
+export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
   const { data: subDecks, isFetched } = useSubDecks(deckId);
   const { data: words } = useWords(
@@ -40,9 +42,9 @@ export const StudyingView = ({ route }: Props) => {
   // 1. filtering words so only with knowledge level < 4 are shown
   // 2. shuffling them using the algorithm
   useEffect(() => {
-    const notLearnedWords = words?.filter((word) =>
-      revise ? word.knowledgelevel === 4 : word.knowledgelevel < 4
-    );
+    const notLearnedWords = words
+      ?.filter((word) => (revise ? word.knowledgelevel === 4 : word.knowledgelevel < 4))
+      .slice(0, wordsLimitStore.limit);
     if (notLearnedWords) {
       shuffleArray(notLearnedWords);
       setWordsToLearn(notLearnedWords);
@@ -179,7 +181,7 @@ export const StudyingView = ({ route }: Props) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

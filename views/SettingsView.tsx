@@ -28,6 +28,9 @@ const SettingsView = observer(() => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     wordsLimitStore.setLimit(Number(data.wordsPerSet));
+    Toast.show('Limit updated', toastOptions);
+    console.log(wordsLimitStore.limit);
+    Keyboard.dismiss();
   };
 
   return (
@@ -57,12 +60,7 @@ const SettingsView = observer(() => {
               />
             )}
           />
-          <Button
-            onPress={() => {
-              handleSubmit(onSubmit);
-              Keyboard.dismiss();
-            }}
-          >
+          <Button onPress={handleSubmit(onSubmit)}>
             <TabBarIcon name="check" size={20} />
           </Button>
         </View>
