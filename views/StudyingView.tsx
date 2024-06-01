@@ -203,7 +203,14 @@ export const StudyingView = observer(({ route }: Props) => {
             onPress={handleAnsweredWrong}
             isDisabled={updateWord.isPending}
           >
-            <Text style={{ fontWeight: 500 }}>I answered wrong</Text>
+            <Text
+              style={{
+                fontWeight: 500,
+                color: updateWord.isPending ? defaultColors.white : undefined,
+              }}
+            >
+              I answered wrong
+            </Text>
           </Button>
         )}
         {beingChecked && (

@@ -10,7 +10,7 @@ export default function User() {
 
   return (
     <View style={{ marginTop: 20 }}>
-      <Button onPress={handleSignOut}>
+      <Button onPress={handleSignOut} isDisabled={true}>
         <Text>Sign out</Text>
       </Button>
     </View>

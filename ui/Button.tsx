@@ -28,7 +28,10 @@ export default function Button(props: Props & PressableProps) {
     if (pressed) {
       return 'rgb(210, 230, 255)';
     } else {
-      if (isDisabled && !chromeless) return defaultColors.disabledButtonColor;
+      if (isDisabled && !chromeless) {
+        if (!backgroundColor) return defaultColors.disabledSecondaryButtonColor;
+        return defaultColors.disabledButtonColor;
+      }
 
       if (chromeless) {
         return 'transparent';
