@@ -1,12 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
-import { WordType } from '../types/WordType';
+
+async function getWords(deckIds: number[]) {
+  const { data, error } = await supabase
+    .from('words')
+    .select()
+    .in('deck', deckIds)
+    .order('id', { ascending: false });
+
+  if (error) throw error;
+  return data;
+}
 
 export const useWords = (deckIds: number[], subDecksLoaded: boolean) =>
   useQuery({
     queryKey: ['words', deckIds, subDecksLoaded],
-    queryFn: () => supabase.from('words').select().in('deck', deckIds).order('id'),
-    // @ts-ignore
-    select: (data): WordType[] => data.data,
+    queryFn: () => getWords(deckIds),
     enabled: !!subDecksLoaded,
   });
