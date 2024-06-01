@@ -88,23 +88,25 @@ function DeckView({ route, navigation }: Props) {
       {/*  </PressableArea>*/}
       {/*</View>*/}
 
-      <View style={{ paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
-        <PieChart
-          donut
-          data={graphData}
-          radius={90}
-          innerRadius={80}
-          centerLabelComponent={() => <Text style={{ fontSize: 70 }}>{words?.length}</Text>}
-        />
-        <View style={{ justifyContent: 'space-evenly' }}>
-          {graphData.map(
-            (level, index) =>
-              level.value > 0 && (
-                <ChartItem text={level.text} color={level.color} key={`${level.text}-${index}`} />
-              )
-          )}
+      {words.length > 0 && (
+        <View style={{ paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          <PieChart
+            donut
+            data={graphData}
+            radius={90}
+            innerRadius={80}
+            centerLabelComponent={() => <Text style={{ fontSize: 70 }}>{words?.length}</Text>}
+          />
+          <View style={{ justifyContent: 'space-evenly' }}>
+            {graphData.map(
+              (level, index) =>
+                level.value > 0 && (
+                  <ChartItem text={level.text} color={level.color} key={`${level.text}-${index}`} />
+                )
+            )}
+          </View>
         </View>
-      </View>
+      )}
 
       {words.length !== 0 && (
         <View style={styles.studyButtonsContainer}>
