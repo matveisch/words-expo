@@ -1,11 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
-import { DeckType } from '../types/Deck';
+
+async function getSubDecks(parentDeck: number) {
+  const { data, error } = await supabase
+    .from('decks')
+    .select()
+    .eq('parent_deck', parentDeck)
+    .order('id');
+
+  if (error) throw error;
+  return data;
+}
 
 export const useSubDecks = (parentDeck: number) =>
   useQuery({
     queryKey: ['subDecks', parentDeck],
-    queryFn: () => supabase.from('decks').select().eq('parent_deck', parentDeck).order('id'),
-    // @ts-ignore
-    select: (data): DeckType[] => data.data,
+    queryFn: () => getSubDecks(parentDeck),
   });

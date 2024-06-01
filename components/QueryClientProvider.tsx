@@ -11,11 +11,11 @@ const queryClient = new QueryClient({
     queries: {
       retry: 0,
       // // no refetching whatsoever
-      // refetchOnMount: false,
-      // refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
       // // keeping data saved forever
-      // staleTime: Infinity,
-      // gcTime: Infinity,
+      staleTime: Infinity,
+      gcTime: Infinity,
     },
   },
 });

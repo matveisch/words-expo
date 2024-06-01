@@ -14,18 +14,34 @@ async function addDeck(deck: noUserIdDeck) {
     user_id: data.user?.id,
   };
 
-  const { error } = await supabase.from('decks').upsert(deckToAdd).single();
+  const { error, data: addedDeck } = await supabase
+    .from('decks')
+    .upsert(deckToAdd)
+    .select()
+    .single();
 
   if (error) throw error;
+  return addedDeck;
 }
 
 export default function useAddDeck() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (deck: noUserIdDeck) => addDeck(deck),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['decks'] });
-      queryClient.invalidateQueries({ queryKey: ['subDecks'] });
+    onSuccess: (newDeck) => {
+      if (newDeck.parent_deck === null) {
+        queryClient.setQueriesData({ queryKey: ['decks'] }, (oldDecks) => {
+          if (oldDecks instanceof Array) {
+            return [newDeck, ...oldDecks];
+          }
+        });
+      } else {
+        queryClient.setQueriesData({ queryKey: ['subDecks'] }, (oldDecks) => {
+          if (oldDecks instanceof Array) {
+            return [newDeck, ...oldDecks];
+          }
+        });
+      }
     },
   });
 }

@@ -148,7 +148,7 @@ const DecksAndWordsTabs = (props: Props) => {
                   navigation.push('DeckView', {
                     currentDeckId: item.id,
                     currentDeckName: item.name,
-                    deckColor: item.color,
+                    deckColor: item.color || '',
                   });
                 }}
               />
