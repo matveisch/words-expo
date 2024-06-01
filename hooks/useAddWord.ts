@@ -15,11 +15,12 @@ export default function useAddWord() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (word: NoIdWord) => addWord(word),
-    // queryClient.invalidateQueries({ queryKey: ['words'] })
-    onSuccess: (data) => {
-      queryClient.setQueryData(['words'], data);
-      const oldData = queryClient.getQueryData(['words']);
-      console.log(oldData);
+    onSuccess: (newWord) => {
+      queryClient.setQueriesData({ queryKey: ['words'] }, (oldWords) => {
+        if (oldWords instanceof Array) {
+          return [newWord, ...oldWords];
+        }
+      });
     },
   });
 }
