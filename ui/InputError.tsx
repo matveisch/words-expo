@@ -13,5 +13,6 @@ export default function InputError(props: Props) {
 const styles = StyleSheet.create({
   text: {
     color: 'red',
+    marginTop: 5,
   },
 });

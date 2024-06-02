@@ -17,6 +17,7 @@ import { autoCheckStore } from '../features/autoCheckStore';
 import ThemedText from '../ui/ThemedText';
 import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -154,79 +155,87 @@ export const StudyingView = observer(({ route }: Props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.wordTitle}>{wordsToLearn[currentIndex].meaning}</Text>
-      <View style={styles.explainedContainer}>
-        {beingChecked && (
-          <View style={styles.innerExplainedContainer}>
-            {wordsToLearn[currentIndex].pronunciation && (
-              <>
-                <Text style={styles.explainedText}>{wordsToLearn[currentIndex].pronunciation}</Text>
-                <View style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }} />
-              </>
-            )}
-            <Text style={styles.explainedText}>{wordsToLearn[currentIndex].word}</Text>
-          </View>
-        )}
-      </View>
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        <Input
-          placeholder="Enter word"
-          style={{
-            flex: 1,
-            backgroundColor: getBackgroundColor(),
-          }}
-          onChangeText={setAnswer}
-          value={answer}
-          editable={!beingChecked}
-          selectTextOnFocus={!beingChecked}
-          autoFocus
-        />
-        {!beingChecked && (
-          <Button onPress={handleAnswer} isDisabled={updateWord.isPending}>
-            <TabBarIcon name="check" size={20} />
-          </Button>
-        )}
-      </View>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <Text style={styles.wordTitle}>{wordsToLearn[currentIndex].meaning}</Text>
+        <View style={styles.explainedContainer}>
+          {beingChecked && (
+            <View style={styles.innerExplainedContainer}>
+              {wordsToLearn[currentIndex].pronunciation && (
+                <>
+                  <Text style={styles.explainedText}>
+                    {wordsToLearn[currentIndex].pronunciation}
+                  </Text>
+                  <View
+                    style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }}
+                  />
+                </>
+              )}
+              <Text style={styles.explainedText}>{wordsToLearn[currentIndex].word}</Text>
+            </View>
+          )}
+        </View>
+        <View style={{ flexDirection: 'row', gap: 10 }}>
+          <Input
+            placeholder="Enter word"
+            style={{
+              flex: 1,
+              backgroundColor: getBackgroundColor(),
+            }}
+            onChangeText={setAnswer}
+            value={answer}
+            editable={!beingChecked}
+            selectTextOnFocus={!beingChecked}
+            autoFocus
+            autoCorrect={false}
+            autoComplete="off"
+          />
+          {!beingChecked && (
+            <Button onPress={handleAnswer} isDisabled={updateWord.isPending}>
+              <TabBarIcon name="check" size={20} />
+            </Button>
+          )}
+        </View>
 
-      <View style={styles.successButtons}>
-        {!isSuccess && beingChecked && autoCheckStore.autoCheck && (
-          <Button
-            style={{ flex: 1 }}
-            onPress={handleAnsweredRight}
-            isDisabled={updateWord.isPending}
-          >
-            <Text style={{ fontWeight: 500 }}>I answered right</Text>
-          </Button>
-        )}
-        {beingChecked && !autoCheckStore.autoCheck && (
-          <Button
-            style={{ flex: 1 }}
-            onPress={handleAnsweredWrong}
-            isDisabled={updateWord.isPending}
-          >
-            <Text
-              style={{
-                fontWeight: 500,
-                color: updateWord.isPending ? defaultColors.white : undefined,
-              }}
+        <View style={styles.successButtons}>
+          {!isSuccess && beingChecked && autoCheckStore.autoCheck && (
+            <Button
+              style={{ flex: 1 }}
+              onPress={handleAnsweredRight}
+              isDisabled={updateWord.isPending}
             >
-              I answered wrong
-            </Text>
-          </Button>
-        )}
-        {beingChecked && (
-          <Button
-            style={{ flex: 1 }}
-            backgroundColor={defaultColors.activeColor}
-            onPress={autoCheckStore.autoCheck ? handleNextWord : handleAnsweredRight}
-            disabled={updateWord.isPending}
-          >
-            <ThemedText text={!autoCheckStore.autoCheck ? 'I answered right' : 'Next word'} />
-          </Button>
-        )}
+              <Text style={{ fontWeight: 500 }}>I answered right</Text>
+            </Button>
+          )}
+          {beingChecked && !autoCheckStore.autoCheck && (
+            <Button
+              style={{ flex: 1 }}
+              onPress={handleAnsweredWrong}
+              isDisabled={updateWord.isPending}
+            >
+              <Text
+                style={{
+                  fontWeight: 500,
+                  color: updateWord.isPending ? defaultColors.white : undefined,
+                }}
+              >
+                I answered wrong
+              </Text>
+            </Button>
+          )}
+          {beingChecked && (
+            <Button
+              style={{ flex: 1 }}
+              backgroundColor={defaultColors.activeColor}
+              onPress={autoCheckStore.autoCheck ? handleNextWord : handleAnsweredRight}
+              disabled={updateWord.isPending}
+            >
+              <ThemedText text={!autoCheckStore.autoCheck ? 'I answered right' : 'Next word'} />
+            </Button>
+          )}
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 });
 
