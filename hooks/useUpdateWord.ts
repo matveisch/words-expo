@@ -34,7 +34,12 @@ export default function useUpdateWord() {
     onSuccess: (updatedWord) => {
       queryClient.setQueriesData({ queryKey: ['words'] }, (oldData: WordType[] | undefined) => {
         if (oldData instanceof Array) {
-          return oldData.map((word) => (word.id !== updatedWord.id ? word : updatedWord));
+          const arrayToUpdate = [...oldData];
+          const updatedIndex = arrayToUpdate.findIndex((w) => w.id === updatedWord.id);
+          if (updatedIndex !== -1) {
+            arrayToUpdate[updatedIndex] = updatedWord;
+            return arrayToUpdate;
+          }
         }
       });
     },

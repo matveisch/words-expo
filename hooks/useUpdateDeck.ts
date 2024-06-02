@@ -27,7 +27,12 @@ export default function useUpdateDeck() {
     onSuccess: (updatedDeck) => {
       queryClient.setQueriesData({ queryKey: ['decks'] }, (oldData: DeckType[] | undefined) => {
         if (oldData instanceof Array) {
-          return oldData.map((deck) => (deck.id !== updatedDeck.id ? deck : updatedDeck));
+          const arrayToUpdate = [...oldData];
+          const updatedIndex = arrayToUpdate.findIndex((deck) => deck.id === updatedDeck.id);
+          if (updatedIndex !== -1) {
+            arrayToUpdate[updatedIndex] = updatedDeck;
+            return arrayToUpdate;
+          }
         }
       });
     },
