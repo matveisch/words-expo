@@ -96,7 +96,7 @@ const HomeView = ({ route }: Props) => {
           name="DeckView"
           component={DeckView}
           options={({ route, navigation }) => ({
-            headerTitle: route.params.deck.name,
+            headerTitle: '',
             headerShadowVisible: false,
             headerBackTitleVisible: false,
             headerRight: () => (

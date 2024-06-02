@@ -1,5 +1,6 @@
 import { supabase } from '../helpers/initSupabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DeckType } from '../types/Deck';
 
 type DeckToUpdate = {
   color: string;
@@ -7,23 +8,39 @@ type DeckToUpdate = {
   id: number;
 };
 
-async function updateDeck(deck: DeckToUpdate): Promise<void> {
-  const { error } = await supabase
+async function updateDeck(deck: DeckToUpdate) {
+  const { data, error } = await supabase
     .from('decks')
     .update({ color: deck.color, name: deck.name })
     .eq('id', deck.id)
+    .select()
     .single();
+
   if (error) throw error;
+  return data;
 }
 
 export default function useUpdateDeck() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (deck: DeckToUpdate) => updateDeck(deck),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['deck'] });
-      queryClient.invalidateQueries({ queryKey: ['decks'] });
-      queryClient.invalidateQueries({ queryKey: ['subDecks'] });
+    onSuccess: (updatedDeck) => {
+      if (updatedDeck.parent_deck === null) {
+        queryClient.setQueriesData({ queryKey: ['decks'] }, (oldData: DeckType[] | undefined) => {
+          if (oldData instanceof Array) {
+            return oldData.map((deck) => (deck.id !== updatedDeck.id ? deck : updatedDeck));
+          }
+        });
+      } else {
+        queryClient.setQueriesData(
+          { queryKey: ['subDecks'] },
+          (oldData: DeckType[] | undefined) => {
+            if (oldData instanceof Array) {
+              return oldData.map((deck) => (deck.id !== updatedDeck.id ? deck : updatedDeck));
+            }
+          }
+        );
+      }
     },
   });
 }

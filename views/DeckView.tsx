@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { PieChart } from 'react-native-gifted-charts';
 
@@ -40,12 +39,6 @@ function DeckView({ route, navigation }: Props) {
     { value: getCertainKnowledgeLevelWords(3, words), color: knowledgeColors[2], text: 'good' },
     { value: getCertainKnowledgeLevelWords(4, words), color: knowledgeColors[3], text: 'easy' },
   ];
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: deck?.name,
-    });
-  }, [deck, navigation]);
 
   if (areWordsLoading || !words) {
     return <Loader />;
