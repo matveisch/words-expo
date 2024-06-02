@@ -11,11 +11,12 @@ import { TabBarIcon } from '../ui/TabBarIcon';
 import { WordType } from '../types/WordType';
 import FinishedSetBoard from '../components/FinishedSetBoard';
 import useUpdateWord from '../hooks/useUpdateWord';
-import { useSubDecks } from '../hooks/useSubDecks';
 import { observer } from 'mobx-react';
 import { wordsLimitStore } from '../features/wordsLimitStore';
 import { autoCheckStore } from '../features/autoCheckStore';
 import ThemedText from '../ui/ThemedText';
+import { useDecks } from '../hooks/useDecks';
+import { sessionStore } from '../features/sessionStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -28,7 +29,8 @@ function shuffleArray(array: any[]) {
 
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
-  const { data: subDecks, isFetched } = useSubDecks(deckId);
+  const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
+  const subDecks = decks?.filter((d) => d.parent_deck === deckId);
   const { data: words } = useWords(
     [...(subDecks?.map((deck) => deck.id) || []), deckId],
     isFetched

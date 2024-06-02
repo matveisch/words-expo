@@ -1,13 +1,11 @@
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
-  NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { Alert, View } from 'react-native';
 
 import ListOfDecks from './ListOfDecks';
 import DeckView from './DeckView';
-import { RootTabsParamList } from '../App';
 import useDeleteDeck from '../hooks/useDeleteDeck';
 import Word from './Word';
 import DeckCreateModal from './DeckCreateModal';
@@ -21,7 +19,7 @@ import useDeleteWord from '../hooks/useDeleteWord';
 import { DeckType } from '../types/Deck';
 
 export type RootStackParamList = {
-  Decks: { userId: string };
+  Decks: undefined;
   DeckView: { deck: DeckType };
   DecksAndWordsTabs: undefined;
   Word: { word: WordType };
@@ -31,10 +29,7 @@ export type RootStackParamList = {
   Studying: { deckId: number; revise: boolean };
 };
 
-interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
-
-const HomeView = ({ route }: Props) => {
-  const { session } = route.params;
+const HomeView = () => {
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -74,7 +69,6 @@ const HomeView = ({ route }: Props) => {
       <Stack.Group>
         <Stack.Screen
           name="Decks"
-          initialParams={{ userId: session?.user?.id }}
           component={ListOfDecks}
           options={({ navigation }) => ({
             gestureEnabled: false,

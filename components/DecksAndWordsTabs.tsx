@@ -7,24 +7,27 @@ import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { useWords } from '../hooks/useWords';
-import { useSubDecks } from '../hooks/useSubDecks';
 import { RootStackParamList } from '../views/HomeView';
 import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
 import { useIsMutating } from '@tanstack/react-query';
 import ThemedText from '../ui/ThemedText';
+import { observer } from 'mobx-react';
+import { useDecks } from '../hooks/useDecks';
+import { sessionStore } from '../features/sessionStore';
 
 type Props = {
   currentDeck: number;
   hasParentDeck: boolean;
 };
 
-const DecksAndWordsTabs = (props: Props) => {
+const DecksAndWordsTabs = observer((props: Props) => {
   const { currentDeck, hasParentDeck } = props;
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { data: subDecks, isFetched } = useSubDecks(currentDeck);
+  const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
+  const subDecks = decks?.filter((d) => d.parent_deck === currentDeck);
   const { data: words } = useWords(
     [...(subDecks?.map((deck) => deck.id) || []), currentDeck],
     isFetched
@@ -165,7 +168,7 @@ const DecksAndWordsTabs = (props: Props) => {
       </Button>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

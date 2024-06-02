@@ -11,9 +11,11 @@ import Loader from '../components/Loader';
 import { defaultColors, knowledgeColors } from '../helpers/colors';
 import Button from '../ui/Button';
 import ChartItem from '../ui/ChartItem';
-import { useSubDecks } from '../hooks/useSubDecks';
 import { useIsMutating } from '@tanstack/react-query';
 import ThemedText from '../ui/ThemedText';
+import { useDecks } from '../hooks/useDecks';
+import { observer } from 'mobx-react';
+import { sessionStore } from '../features/sessionStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -24,10 +26,13 @@ function getCertainKnowledgeLevelWords(
   return words?.filter((word) => word.knowledgelevel === knowledgeLevel).length || 0;
 }
 
-function DeckView({ route, navigation }: Props) {
+const DeckView = observer(({ route, navigation }: Props) => {
   const { deck } = route.params;
   const insets = useSafeAreaInsets();
-  const { data: subDecks, isFetched } = useSubDecks(deck.id);
+
+  const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
+  const subDecks = decks?.filter((d) => d.parent_deck === deck.id);
+
   const { data: words, isLoading: areWordsLoading } = useWords(
     [...(subDecks?.map((deck) => deck.id) || []), deck.id],
     isFetched
@@ -136,7 +141,7 @@ function DeckView({ route, navigation }: Props) {
       <DecksAndWordsTabs currentDeck={deck.id} hasParentDeck={deck?.parent_deck !== null} />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   buttonsContainer: {

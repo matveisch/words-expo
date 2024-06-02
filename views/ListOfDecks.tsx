@@ -8,13 +8,14 @@ import { useDecks } from '../hooks/useDecks';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
 import ListItem from '../ui/ListItem';
+import { observer } from 'mobx-react';
+import { sessionStore } from '../features/sessionStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
-const ListOfDecks = ({ navigation, route }: Props) => {
+const ListOfDecks = observer(({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const { userId } = route.params;
-  const { data: decks, isLoading } = useDecks(userId);
+  const { data: decks, isLoading } = useDecks(sessionStore.session?.user.id || '');
 
   if (isLoading) {
     return <Loader />;
@@ -34,7 +35,7 @@ const ListOfDecks = ({ navigation, route }: Props) => {
       <View style={{ flex: 1 }}>
         <FlashList
           estimatedItemSize={44}
-          data={decks}
+          data={decks?.filter((deck) => deck.parent_deck === null)}
           ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           renderItem={({ item }) => (
@@ -53,6 +54,6 @@ const ListOfDecks = ({ navigation, route }: Props) => {
       <StatusBar style="auto" />
     </View>
   );
-};
+});
 
 export default ListOfDecks;

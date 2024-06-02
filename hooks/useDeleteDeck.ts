@@ -15,22 +15,11 @@ export default function useDeleteDeck() {
     mutationKey: ['deleteDeck'],
     mutationFn: (deckId: number) => deleteDeck(deckId),
     onSuccess: (deletedDeck) => {
-      if (deletedDeck.parent_deck === null) {
-        queryClient.setQueriesData({ queryKey: ['decks'] }, (oldData: DeckType[] | undefined) => {
-          if (oldData instanceof Array) {
-            return oldData.filter((deck) => deck.id !== deletedDeck.id);
-          }
-        });
-      } else {
-        queryClient.setQueriesData(
-          { queryKey: ['subDecks'] },
-          (oldData: DeckType[] | undefined) => {
-            if (oldData instanceof Array) {
-              return oldData.filter((deck) => deck.id !== deletedDeck.id);
-            }
-          }
-        );
-      }
+      queryClient.setQueriesData({ queryKey: ['decks'] }, (oldData: DeckType[] | undefined) => {
+        if (oldData instanceof Array) {
+          return oldData.filter((deck) => deck.id !== deletedDeck.id);
+        }
+      });
     },
   });
 }

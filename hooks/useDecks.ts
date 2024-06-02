@@ -5,7 +5,6 @@ async function getDecks(userId: string) {
   const { data, error } = await supabase
     .from('decks')
     .select('*')
-    .is('parent_deck', null)
     .eq('user_id', userId)
     .order('id');
 

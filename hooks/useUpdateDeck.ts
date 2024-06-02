@@ -25,22 +25,11 @@ export default function useUpdateDeck() {
   return useMutation({
     mutationFn: (deck: DeckToUpdate) => updateDeck(deck),
     onSuccess: (updatedDeck) => {
-      if (updatedDeck.parent_deck === null) {
-        queryClient.setQueriesData({ queryKey: ['decks'] }, (oldData: DeckType[] | undefined) => {
-          if (oldData instanceof Array) {
-            return oldData.map((deck) => (deck.id !== updatedDeck.id ? deck : updatedDeck));
-          }
-        });
-      } else {
-        queryClient.setQueriesData(
-          { queryKey: ['subDecks'] },
-          (oldData: DeckType[] | undefined) => {
-            if (oldData instanceof Array) {
-              return oldData.map((deck) => (deck.id !== updatedDeck.id ? deck : updatedDeck));
-            }
-          }
-        );
-      }
+      queryClient.setQueriesData({ queryKey: ['decks'] }, (oldData: DeckType[] | undefined) => {
+        if (oldData instanceof Array) {
+          return oldData.map((deck) => (deck.id !== updatedDeck.id ? deck : updatedDeck));
+        }
+      });
     },
   });
 }

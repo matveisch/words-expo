@@ -29,19 +29,11 @@ export default function useAddDeck() {
   return useMutation({
     mutationFn: (deck: noUserIdDeck) => addDeck(deck),
     onSuccess: (newDeck) => {
-      if (newDeck.parent_deck === null) {
-        queryClient.setQueriesData({ queryKey: ['decks'] }, (oldDecks) => {
-          if (oldDecks instanceof Array) {
-            return [newDeck, ...oldDecks];
-          }
-        });
-      } else {
-        queryClient.setQueriesData({ queryKey: ['subDecks'] }, (oldDecks) => {
-          if (oldDecks instanceof Array) {
-            return [newDeck, ...oldDecks];
-          }
-        });
-      }
+      queryClient.setQueriesData({ queryKey: ['decks'] }, (oldDecks) => {
+        if (oldDecks instanceof Array) {
+          return [newDeck, ...oldDecks];
+        }
+      });
     },
   });
 }
