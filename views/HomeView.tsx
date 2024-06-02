@@ -18,21 +18,22 @@ import Button from '../ui/Button';
 import { StudyingView } from './StudyingView';
 import { WordType } from '../types/WordType';
 import useDeleteWord from '../hooks/useDeleteWord';
+import { DeckType } from '../types/Deck';
 
 export type RootStackParamList = {
   Decks: { userId: string };
-  DeckView: { currentDeckId: number; currentDeckName: string; deckColor: string };
+  DeckView: { deck: DeckType };
   DecksAndWordsTabs: undefined;
   Word: { word: WordType };
   DeckCreateModal: { parentDeckId: number };
-  DeckUpdateModal: { parentDeckId: number };
+  DeckUpdateModal: { deck: DeckType };
   WordCreateModal: { parentDeckId: number };
   Studying: { deckId: number; revise: boolean };
 };
 
 interface Props extends NativeStackScreenProps<RootTabsParamList, 'Home'> {}
 
-const HomeView = ({ route, navigation }: Props) => {
+const HomeView = ({ route }: Props) => {
   const { session } = route.params;
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
@@ -95,7 +96,7 @@ const HomeView = ({ route, navigation }: Props) => {
           name="DeckView"
           component={DeckView}
           options={({ route, navigation }) => ({
-            headerTitle: route.params.currentDeckName,
+            headerTitle: route.params.deck.name,
             headerShadowVisible: false,
             headerBackTitleVisible: false,
             headerRight: () => (
@@ -106,7 +107,7 @@ const HomeView = ({ route, navigation }: Props) => {
                   disabled={deckIsBeingDeleted}
                   onPress={() =>
                     navigation.navigate('DeckUpdateModal', {
-                      parentDeckId: route.params.currentDeckId,
+                      deck: route.params.deck,
                     })
                   }
                 >
@@ -116,7 +117,7 @@ const HomeView = ({ route, navigation }: Props) => {
                   chromeless
                   size="small"
                   disabled={deckIsBeingDeleted}
-                  onPress={() => handleDeleteDeck(route.params.currentDeckId, navigation)}
+                  onPress={() => handleDeleteDeck(route.params.deck.id, navigation)}
                 >
                   <TabBarIcon name="trash-o" />
                 </Button>

@@ -9,7 +9,6 @@ import { useWords } from '../hooks/useWords';
 import { WordType } from '../types/WordType';
 import { RootStackParamList } from './HomeView';
 import Loader from '../components/Loader';
-import { useDeck } from '../hooks/useDeck';
 import { defaultColors, knowledgeColors } from '../helpers/colors';
 import Button from '../ui/Button';
 import ChartItem from '../ui/ChartItem';
@@ -27,12 +26,11 @@ function getCertainKnowledgeLevelWords(
 }
 
 function DeckView({ route, navigation }: Props) {
-  const { currentDeckId } = route.params;
+  const { deck } = route.params;
   const insets = useSafeAreaInsets();
-  const { data: deck } = useDeck(currentDeckId);
-  const { data: subDecks, isFetched } = useSubDecks(currentDeckId);
+  const { data: subDecks, isFetched } = useSubDecks(deck.id);
   const { data: words, isLoading: areWordsLoading } = useWords(
-    [...(subDecks?.map((deck) => deck.id) || []), currentDeckId],
+    [...(subDecks?.map((deck) => deck.id) || []), deck.id],
     isFetched
   );
   const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
@@ -116,7 +114,7 @@ function DeckView({ route, navigation }: Props) {
             isDisabled={isDeckMutating !== 0}
             onPress={() =>
               navigation.navigate('Studying', {
-                deckId: currentDeckId,
+                deckId: deck.id,
                 revise: false,
               })
             }
@@ -131,7 +129,7 @@ function DeckView({ route, navigation }: Props) {
               isDisabled={isDeckMutating !== 0}
               onPress={() =>
                 navigation.navigate('Studying', {
-                  deckId: currentDeckId,
+                  deckId: deck.id,
                   revise: true,
                 })
               }
@@ -142,7 +140,7 @@ function DeckView({ route, navigation }: Props) {
         </View>
       )}
 
-      <DecksAndWordsTabs currentDeck={currentDeckId} hasParentDeck={deck?.parent_deck !== null} />
+      <DecksAndWordsTabs currentDeck={deck.id} hasParentDeck={deck?.parent_deck !== null} />
     </View>
   );
 }

@@ -43,9 +43,7 @@ const ListOfDecks = ({ navigation, route }: Props) => {
               title={item.name}
               onPress={() => {
                 navigation.navigate('DeckView', {
-                  currentDeckId: item.id,
-                  currentDeckName: item.name,
-                  deckColor: item.color,
+                  deck: item,
                 });
               }}
             />

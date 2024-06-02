@@ -5,10 +5,8 @@ import Toast from 'react-native-root-toast';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import useUpdateDeck from '../hooks/useUpdateDeck';
-import { useDeck } from '../hooks/useDeck';
 import { colors, defaultColors } from '../helpers/colors';
 import { toastOptions } from '../helpers/toastOptions';
-import Loader from '../components/Loader';
 import { RootStackParamList } from './HomeView';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
@@ -24,8 +22,7 @@ type Inputs = {
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckUpdateModal'> {}
 
 function DeckUpdateModal({ route, navigation }: Props) {
-  const { parentDeckId } = route.params;
-  const { data: deck, isLoading } = useDeck(parentDeckId);
+  const { deck } = route.params;
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useUpdateDeck();
 
@@ -44,11 +41,11 @@ function DeckUpdateModal({ route, navigation }: Props) {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: parentDeckId || null,
+      parent_deck: deck.id || null,
       color: data.color,
     };
 
-    mutateAsync({ ...newDeck, id: parentDeckId }).then(() => {
+    mutateAsync({ ...newDeck, id: deck.id }).then(() => {
       Toast.show('Deck Updated', toastOptions);
       Keyboard.dismiss();
       navigation.goBack();
@@ -58,14 +55,10 @@ function DeckUpdateModal({ route, navigation }: Props) {
   useEffect(() => {
     if (deck) {
       setValue('deckName', deck.name);
-      setValue('color', deck.color);
-      setCurrentColor(deck.color);
+      setValue('color', deck.color || '');
+      setCurrentColor(deck.color || '');
     }
   }, [deck]);
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   return (
     <View style={styles.container}>

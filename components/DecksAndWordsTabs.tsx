@@ -146,9 +146,7 @@ const DecksAndWordsTabs = (props: Props) => {
                 title={item.name}
                 onPress={() => {
                   navigation.push('DeckView', {
-                    currentDeckId: item.id,
-                    currentDeckName: item.name,
-                    deckColor: item.color || '',
+                    deck: item,
                   });
                 }}
               />
