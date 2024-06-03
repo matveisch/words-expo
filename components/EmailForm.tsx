@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, Text, Image } from 'react-native';
+import { Alert, StyleSheet, View, Text, Image, Keyboard } from 'react-native';
 import { supabase } from '../helpers/initSupabase';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,6 +20,7 @@ type Inputs = {
 };
 
 const EmailForm = observer(() => {
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
 
@@ -27,6 +28,7 @@ const EmailForm = observer(() => {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<Inputs>({
     defaultValues: {
       email: '',
@@ -64,6 +66,12 @@ const EmailForm = observer(() => {
     if (!error && !session) Alert.alert('Please check your inbox for email verification!');
     setLoading(false);
     sessionStore.setSession(session);
+  }
+
+  async function resetPassword(data: Inputs) {
+    setLoading(true);
+    const { data: session, error } = await supabase.auth.resetPasswordForEmail(data.email);
+    console.log('reset');
   }
 
   return (
@@ -104,44 +112,82 @@ const EmailForm = observer(() => {
         />
         {errors.email && <InputError text="This field is required" />}
       </View>
-      <View style={styles.verticallySpaced}>
-        <Label text="Password" />
-        <Controller
-          name="password"
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              onChangeText={(text) => onChange(text)}
-              onBlur={onBlur}
-              value={value}
-              autoCapitalize="none"
-              secureTextEntry={true}
-              placeholder="Password"
+
+      {forgotPassword && (
+        <>
+          <Button
+            style={{ width: '100%', marginTop: 10 }}
+            backgroundColor={defaultColors.activeColor}
+            onPress={handleSubmit(resetPassword)}
+          >
+            <ThemedText text="Reset password" />
+          </Button>
+          <Button
+            style={{ width: '100%', marginTop: 4 }}
+            onPress={() => {
+              setForgotPassword(false);
+              reset();
+              Keyboard.dismiss();
+            }}
+          >
+            <Text>Go back</Text>
+          </Button>
+        </>
+      )}
+
+      {!forgotPassword && (
+        <>
+          <View style={styles.verticallySpaced}>
+            <Label text="Password" />
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: !forgotPassword,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onChangeText={(text) => onChange(text)}
+                  onBlur={onBlur}
+                  value={value}
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  placeholder="Password"
+                />
+              )}
             />
-          )}
-        />
-        {errors.password && <InputError text="This field is required" />}
-      </View>
-      <Button chromeless style={{ alignSelf: 'flex-end' }} size="small">
-        <Text>Forgot password?</Text>
-      </Button>
-      <View style={[styles.verticallySpaced, styles.mt20, { marginTop: 20 }]}>
-        <Button
-          disabled={loading}
-          onPress={handleSubmit(signInWithEmail)}
-          backgroundColor={defaultColors.activeColor}
-        >
-          <ThemedText text="Sign in" />
-        </Button>
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button disabled={loading} onPress={handleSubmit(signUpWithEmail)}>
-          <Text>Sign up</Text>
-        </Button>
-      </View>
+            {errors.password && <InputError text="This field is required" />}
+          </View>
+
+          <Button
+            chromeless
+            style={{ alignSelf: 'flex-end' }}
+            size="small"
+            onPress={() => {
+              setForgotPassword(true);
+              reset();
+              Keyboard.dismiss();
+            }}
+          >
+            <Text>Forgot password?</Text>
+          </Button>
+
+          <View style={[styles.verticallySpaced, styles.mt20, { marginTop: 20 }]}>
+            <Button
+              disabled={loading}
+              onPress={handleSubmit(signInWithEmail)}
+              backgroundColor={defaultColors.activeColor}
+            >
+              <ThemedText text="Sign in" />
+            </Button>
+          </View>
+          <View style={styles.verticallySpaced}>
+            <Button disabled={loading} onPress={handleSubmit(signUpWithEmail)}>
+              <Text>Sign up</Text>
+            </Button>
+          </View>
+        </>
+      )}
     </Animated.View>
   );
 });
