@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View, Text } from 'react-native';
+import { Alert, StyleSheet, View, Text, Image } from 'react-native';
 import { supabase } from '../helpers/initSupabase';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +11,8 @@ import Button from '../ui/Button';
 import Animated, { SlideInRight } from 'react-native-reanimated';
 import { sessionStore } from '../features/sessionStore';
 import { observer } from 'mobx-react';
+import { defaultColors } from '../helpers/colors';
+import ThemedText from '../ui/ThemedText';
 
 type Inputs = {
   email: string;
@@ -75,8 +77,13 @@ const EmailForm = observer(() => {
         paddingRight: insets.right + 10,
         paddingTop: insets.top,
         height: '100%',
+        alignItems: 'center',
       }}
     >
+      <View>
+        <Image source={require('../assets/icon.png')} style={{ height: 125, width: 125 }} />
+      </View>
+
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Label text="Email" />
         <Controller
@@ -118,9 +125,16 @@ const EmailForm = observer(() => {
         />
         {errors.password && <InputError text="This field is required" />}
       </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button disabled={loading} onPress={handleSubmit(signInWithEmail)}>
-          <Text>Sign in</Text>
+      <Button chromeless style={{ alignSelf: 'flex-end' }} size="small">
+        <Text>Forgot password?</Text>
+      </Button>
+      <View style={[styles.verticallySpaced, styles.mt20, { marginTop: 20 }]}>
+        <Button
+          disabled={loading}
+          onPress={handleSubmit(signInWithEmail)}
+          backgroundColor={defaultColors.activeColor}
+        >
+          <ThemedText text="Sign in" />
         </Button>
       </View>
       <View style={styles.verticallySpaced}>
