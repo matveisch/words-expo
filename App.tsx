@@ -15,7 +15,6 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import { observer } from 'mobx-react';
 
 import { supabase } from './helpers/initSupabase';
-import EmailForm from './components/EmailForm';
 import HomeView from './views/HomeView';
 import SettingsView from './views/SettingsView';
 import { TabBarIcon } from './ui/TabBarIcon';
@@ -62,29 +61,28 @@ const App = observer(() => {
         <SafeAreaProvider>
           <NavigationContainer theme={MyTheme}>
             {sessionStore.session ? (
-              <OnboardingView />
+              <Tab.Navigator>
+                <Tab.Screen
+                  name="Home"
+                  component={HomeView}
+                  options={({ route }) => ({
+                    tabBarStyle: { display: getTabBarStyle(route) },
+                    headerShown: false,
+                    headerShadowVisible: false,
+                    tabBarIcon: () => <TabBarIcon name="home" />,
+                  })}
+                />
+                <Tab.Screen
+                  name="Settings"
+                  component={SettingsView}
+                  options={{
+                    tabBarIcon: () => <TabBarIcon name="gear" />,
+                    headerShadowVisible: false,
+                  }}
+                />
+              </Tab.Navigator>
             ) : (
-              // <Tab.Navigator>
-              //   <Tab.Screen
-              //     name="Home"
-              //     component={HomeView}
-              //     options={({ route }) => ({
-              //       tabBarStyle: { display: getTabBarStyle(route) },
-              //       headerShown: false,
-              //       headerShadowVisible: false,
-              //       tabBarIcon: () => <TabBarIcon name="home" />,
-              //     })}
-              //   />
-              //   <Tab.Screen
-              //     name="Settings"
-              //     component={SettingsView}
-              //     options={{
-              //       tabBarIcon: () => <TabBarIcon name="gear" />,
-              //       headerShadowVisible: false,
-              //     }}
-              //   />
-              // </Tab.Navigator>
-              <EmailForm />
+              <OnboardingView />
             )}
           </NavigationContainer>
         </SafeAreaProvider>

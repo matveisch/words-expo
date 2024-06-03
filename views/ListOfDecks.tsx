@@ -10,6 +10,7 @@ import Loader from '../components/Loader';
 import ListItem from '../ui/ListItem';
 import { observer } from 'mobx-react';
 import { sessionStore } from '../features/sessionStore';
+import Animated, { SlideInRight } from 'react-native-reanimated';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -22,7 +23,8 @@ const ListOfDecks = observer(({ navigation }: Props) => {
   }
 
   return (
-    <View
+    <Animated.View
+      entering={SlideInRight}
       style={{
         height: '100%',
         paddingHorizontal: 10,
@@ -52,7 +54,7 @@ const ListOfDecks = observer(({ navigation }: Props) => {
         />
       </View>
       <StatusBar style="auto" />
-    </View>
+    </Animated.View>
   );
 });
 

@@ -8,13 +8,16 @@ import Label from '../ui/Label';
 import Input from '../ui/Input';
 import InputError from '../ui/InputError';
 import Button from '../ui/Button';
+import Animated, { SlideInRight } from 'react-native-reanimated';
+import { sessionStore } from '../features/sessionStore';
+import { observer } from 'mobx-react';
 
 type Inputs = {
   email: string;
   password: string;
 };
 
-export default function EmailForm() {
+const EmailForm = observer(() => {
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
 
@@ -31,13 +34,17 @@ export default function EmailForm() {
 
   async function signInWithEmail(data: Inputs) {
     setLoading(true);
-    const { error, data: session } = await supabase.auth.signInWithPassword({
+    const {
+      error,
+      data: { session },
+    } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
 
     if (error) Alert.alert(error.message);
     setLoading(false);
+    sessionStore.setSession(session);
     // if (!error) navigation.navigate('Decks', { userId: session.user?.id });
   }
 
@@ -54,17 +61,12 @@ export default function EmailForm() {
     if (error) Alert.alert(error.message);
     if (!error && !session) Alert.alert('Please check your inbox for email verification!');
     setLoading(false);
+    sessionStore.setSession(session);
   }
 
-  // const onSubmit: SubmitHandler<Inputs> = (data) => {
-  //   console.log(data);
-  //   Keyboard.dismiss();
-  //   // reset();
-  //   // setOpenCreateDeckModal(false);
-  // };
-
   return (
-    <View
+    <Animated.View
+      entering={SlideInRight}
       style={{
         padding: 12,
         backgroundColor: '#fff',
@@ -126,9 +128,9 @@ export default function EmailForm() {
           <Text>Sign up</Text>
         </Button>
       </View>
-    </View>
+    </Animated.View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   verticallySpaced: {
@@ -140,3 +142,5 @@ const styles = StyleSheet.create({
     // marginTop: 20,
   },
 });
+
+export default EmailForm;
