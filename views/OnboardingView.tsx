@@ -1,8 +1,9 @@
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import EmailForm from '../components/EmailForm';
 import { useState } from 'react';
 import Animated, { SlideInRight } from 'react-native-reanimated';
+import { Auth } from '../components/Auth.native';
 
 export default function OnboardingView() {
   const [isDone, setIsDone] = useState(false);
@@ -46,7 +47,11 @@ export default function OnboardingView() {
       {!isDone && (
         <Onboarding pages={pages} onDone={() => setIsDone(true)} onSkip={() => setIsDone(true)} />
       )}
-      {isDone && <EmailForm />}
+      {isDone && (
+        <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Auth />
+        </View>
+      )}
     </Animated.View>
   );
 }
