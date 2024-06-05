@@ -2,10 +2,15 @@ import { StyleSheet, Image, View, Text } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import React, { useState } from 'react';
 import Animated, { SlideInRight } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as WebBrowser from 'expo-web-browser';
+
 import { Auth } from '../components/Auth.native';
+import Button from '../ui/Button';
 
 export default function OnboardingView() {
   const [isDone, setIsDone] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const pages = [
     {
@@ -49,13 +54,24 @@ export default function OnboardingView() {
       {isDone && (
         <Animated.View
           entering={SlideInRight}
-          style={{ alignItems: 'center', justifyContent: 'space-evenly', height: '100%' }}
+          style={[
+            styles.authView,
+            { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 },
+          ]}
         >
-          <View style={{ marginBottom: 50, gap: 20, alignItems: 'center' }}>
+          <View style={{ marginBottom: 450, gap: 20, alignItems: 'center' }}>
             <Image source={require('../assets/icon.png')} style={{ height: 125, width: 125 }} />
             <Text style={{ fontSize: 30 }}>Log in to continue</Text>
           </View>
+
           <Auth />
+          <Button
+            chromeless
+            style={{ marginTop: 10 }}
+            onPress={() => WebBrowser.openBrowserAsync('https://www.wordem.org/privacy')}
+          >
+            <Text>Privacy Policy</Text>
+          </Button>
         </Animated.View>
       )}
     </Animated.View>
@@ -63,6 +79,7 @@ export default function OnboardingView() {
 }
 
 const styles = StyleSheet.create({
-  container: { height: '100%', padding: 10 },
+  container: { height: '100%' },
   image: { height: 200, width: 200 },
+  authView: { padding: 10, alignItems: 'center', height: '100%' },
 });
