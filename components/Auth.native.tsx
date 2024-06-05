@@ -1,15 +1,25 @@
 import { Platform } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { supabase } from '../helpers/initSupabase';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 export function Auth() {
+  GoogleSignin.configure({
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    webClientId: '103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com',
+  });
+
   if (Platform.OS === 'ios')
     return (
       <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
         cornerRadius={5}
-        style={{ width: 200, height: 64 }}
+        style={{ width: '100%', height: 64 }}
         onPress={async () => {
           try {
             const credential = await AppleAuthentication.signInAsync({
@@ -34,7 +44,7 @@ export function Auth() {
             } else {
               throw new Error('No identityToken.');
             }
-          } catch (e) {
+          } catch (e: any) {
             if (e.code === 'ERR_REQUEST_CANCELED') {
               // handle that the user canceled the sign-in flow
             } else {
@@ -44,5 +54,36 @@ export function Auth() {
         }}
       />
     );
-  return <>{/* Implement Android Auth options. */}</>;
+
+  return (
+    <GoogleSigninButton
+      size={GoogleSigninButton.Size.Wide}
+      color={GoogleSigninButton.Color.Dark}
+      onPress={async () => {
+        try {
+          await GoogleSignin.hasPlayServices();
+          const userInfo = await GoogleSignin.signIn();
+          if (userInfo.idToken) {
+            const { data, error } = await supabase.auth.signInWithIdToken({
+              provider: 'google',
+              token: userInfo.idToken,
+            });
+            console.log(error, data);
+          } else {
+            throw new Error('no ID token present!');
+          }
+        } catch (error: any) {
+          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            // user cancelled the login flow
+          } else if (error.code === statusCodes.IN_PROGRESS) {
+            // operation (e.g. sign in) is in progress already
+          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            // play services not available or outdated
+          } else {
+            // some other error happened
+          }
+        }
+      }}
+    />
+  );
 }

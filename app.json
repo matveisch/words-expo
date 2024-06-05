@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "words-expo",
-    "slug": "words-expo",
+    "name": "wordem",
+    "slug": "wordem",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,7 +30,18 @@
     },
     "plugins": [
       "expo-secure-store",
-      "expo-apple-authentication"
-    ]
+      "expo-apple-authentication",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps._some_id_here_"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f46155aa-2c56-4159-b470-47c5150db2ac"
+      }
+    }
   }
 }

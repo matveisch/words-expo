@@ -1,7 +1,6 @@
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Text } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
-import EmailForm from '../components/EmailForm';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Animated, { SlideInRight } from 'react-native-reanimated';
 import { Auth } from '../components/Auth.native';
 
@@ -48,15 +47,22 @@ export default function OnboardingView() {
         <Onboarding pages={pages} onDone={() => setIsDone(true)} onSkip={() => setIsDone(true)} />
       )}
       {isDone && (
-        <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+        <Animated.View
+          entering={SlideInRight}
+          style={{ alignItems: 'center', justifyContent: 'space-evenly', height: '100%' }}
+        >
+          <View style={{ marginBottom: 50, gap: 20, alignItems: 'center' }}>
+            <Image source={require('../assets/icon.png')} style={{ height: 125, width: 125 }} />
+            <Text style={{ fontSize: 30 }}>Log in to continue</Text>
+          </View>
           <Auth />
-        </View>
+        </Animated.View>
       )}
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { height: '100%' },
+  container: { height: '100%', padding: 10 },
   image: { height: 200, width: 200 },
 });
