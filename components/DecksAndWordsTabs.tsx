@@ -16,6 +16,7 @@ import ThemedText from '../ui/ThemedText';
 import { observer } from 'mobx-react';
 import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
+import useUser from '../hooks/useUser';
 
 type Props = {
   currentDeck: number;
@@ -32,7 +33,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
     [...(subDecks?.map((deck) => deck.id) || []), currentDeck],
     isFetched
   );
-  // @ts-ignore
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
   const pagerViewRef = useRef<PagerView | null>(null);
   const offset = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
@@ -69,6 +70,8 @@ const DecksAndWordsTabs = observer((props: Props) => {
       handleOffset(191.3);
     }
   }, [activeTab]);
+
+  console.log({ user });
 
   return (
     <View style={styles.container}>

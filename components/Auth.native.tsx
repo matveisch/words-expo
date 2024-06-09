@@ -8,8 +8,11 @@ import { supabase } from '../helpers/initSupabase';
 // } from '@react-native-google-signin/google-signin';
 import { observer } from 'mobx-react';
 import { sessionStore } from '../features/sessionStore';
+import useAddUser from '../hooks/useAddUser';
 
 export const Auth = observer(() => {
+  const { mutate, data } = useAddUser();
+
   // GoogleSignin.configure({
   //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
   //   webClientId: '103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com',
@@ -39,9 +42,16 @@ export const Auth = observer(() => {
                 provider: 'apple',
                 token: credential.identityToken,
               });
-              // console.log(JSON.stringify({ error, user }, null, 2));
+              console.log(JSON.stringify({ error, user }, null, 2));
 
               if (!error) {
+                if (user)
+                  mutate({
+                    name: '',
+                    email: user.email || '',
+                    pro: false,
+                    user_uid: user?.id,
+                  });
                 sessionStore.setSession(session);
               }
             } else {

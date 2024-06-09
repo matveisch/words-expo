@@ -33,13 +33,37 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "deck_parent_deck_fkey"
+            foreignKeyName: "decks_parent_deck_fkey"
             columns: ["parent_deck"]
             isOneToOne: false
             referencedRelation: "decks"
             referencedColumns: ["id"]
           },
         ]
+      }
+      users: {
+        Row: {
+          email: string
+          id: number
+          name: string
+          pro: boolean | null
+          user_uid: string
+        }
+        Insert: {
+          email: string
+          id?: never
+          name: string
+          pro?: boolean | null
+          user_uid: string
+        }
+        Update: {
+          email?: string
+          id?: never
+          name?: string
+          pro?: boolean | null
+          user_uid?: string
+        }
+        Relationships: []
       }
       words: {
         Row: {
@@ -68,7 +92,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "word_deck_fkey"
+            foreignKeyName: "words_deck_fkey"
             columns: ["deck"]
             isOneToOne: false
             referencedRelation: "decks"
