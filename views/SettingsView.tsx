@@ -11,12 +11,17 @@ import { wordsLimitStore } from '../features/wordsLimitStore';
 import Toast from 'react-native-root-toast';
 import { toastOptions } from '../helpers/toastOptions';
 import { autoCheckStore } from '../features/autoCheckStore';
+import useUser from '../hooks/useUser';
+import { sessionStore } from '../features/sessionStore';
+import LockedFeature from '../components/LockedFeature';
+import Loader from '../components/Loader';
 
 type Inputs = {
   wordsPerSet: string;
 };
 
 const SettingsView = observer(() => {
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
   const {
     control,
     handleSubmit,
@@ -37,6 +42,8 @@ const SettingsView = observer(() => {
     autoCheckStore.setAutoCheck(!autoCheckStore.autoCheck);
   }
 
+  if (!user) return <Loader />;
+
   return (
     <View
       style={{
@@ -48,44 +55,50 @@ const SettingsView = observer(() => {
       }}
     >
       <View>
-        <View>
-          <Label text="New words per session" />
-          <Description text="Set desired amount of words you want to learn per studying session." />
-          <View style={{ gap: 10, flexDirection: 'row' }}>
-            <Controller
-              name="wordsPerSet"
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  style={{ flex: 1 }}
-                  onChangeText={(text) => onChange(text)}
-                  onBlur={onBlur}
-                  keyboardType="number-pad"
-                  value={value}
+        {user.pro ? (
+          <LockedFeature text="Get pro version to get access to additional settings" />
+        ) : (
+          <>
+            <View>
+              <Label text="New words per session" />
+              <Description text="Set desired amount of words you want to learn per studying session." />
+              <View style={{ gap: 10, flexDirection: 'row' }}>
+                <Controller
+                  name="wordsPerSet"
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      style={{ flex: 1 }}
+                      onChangeText={(text) => onChange(text)}
+                      onBlur={onBlur}
+                      keyboardType="number-pad"
+                      value={value}
+                    />
+                  )}
                 />
-              )}
-            />
-            <Button onPress={handleSubmit(onSubmit)}>
-              <TabBarIcon name="check" size={20} />
-            </Button>
-          </View>
-          {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
-        </View>
+                <Button onPress={handleSubmit(onSubmit)}>
+                  <TabBarIcon name="check" size={20} />
+                </Button>
+              </View>
+              {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
+            </View>
 
-        <View
-          style={{
-            marginTop: 20,
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <View>
-            <Label text="Auto check" />
-            <Description text="Mark words by yourself or let app do it for you." />
-          </View>
-          <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
-        </View>
+            <View
+              style={{
+                marginTop: 20,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <View>
+                <Label text="Auto check" />
+                <Description text="Mark words by yourself or let app do it for you." />
+              </View>
+              <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
+            </View>
+          </>
+        )}
       </View>
 
       <User />
