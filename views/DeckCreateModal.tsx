@@ -10,6 +10,11 @@ import Button from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Circle from '../ui/Circle';
+import { observer } from 'mobx-react';
+import useUser from '../hooks/useUser';
+import { sessionStore } from '../features/sessionStore';
+import LockedFeature from '../components/LockedFeature';
+import Loader from '../components/Loader';
 
 type Inputs = {
   deckName: string;
@@ -18,9 +23,10 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateModal'> {}
 
-const DeckCreateModal = ({ navigation, route }: Props) => {
+const DeckCreateModal = observer(({ navigation, route }: Props) => {
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useAddDeck();
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
 
   const {
     control,
@@ -50,6 +56,8 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
     });
   };
 
+  if (!user) return <Loader />;
+
   return (
     <View style={styles.container}>
       <Label text="Name" />
@@ -65,27 +73,35 @@ const DeckCreateModal = ({ navigation, route }: Props) => {
       />
       {errors.deckName && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-      <Label text="Color" />
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        {colors.map((color, index) => (
-          <Circle
-            onPress={() => {
-              setValue('color', color);
-              setCurrentColor(color);
-            }}
-            key={`${color}-${index}`}
-            backgroundColor={color}
-            borderColor={currentColor === color ? 'black' : undefined}
-          />
-        ))}
-      </View>
+      {user.pro ? (
+        <View style={{ marginTop: 10 }}>
+          <LockedFeature text="Get pro version to unlock deck customization" />
+        </View>
+      ) : (
+        <>
+          <Label text="Color" />
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            {colors.map((color, index) => (
+              <Circle
+                onPress={() => {
+                  setValue('color', color);
+                  setCurrentColor(color);
+                }}
+                key={`${color}-${index}`}
+                backgroundColor={color}
+                borderColor={currentColor === color ? 'black' : undefined}
+              />
+            ))}
+          </View>
+        </>
+      )}
 
       <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 10 }}>
         <Text>Create</Text>
       </Button>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

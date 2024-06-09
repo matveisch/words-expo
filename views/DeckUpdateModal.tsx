@@ -13,6 +13,11 @@ import Input from '../ui/Input';
 import Circle from '../ui/Circle';
 import Button from '../ui/Button';
 import ThemedText from '../ui/ThemedText';
+import { observer } from 'mobx-react';
+import useUser from '../hooks/useUser';
+import { sessionStore } from '../features/sessionStore';
+import Loader from '../components/Loader';
+import LockedFeature from '../components/LockedFeature';
 
 type Inputs = {
   deckName: string;
@@ -21,10 +26,11 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckUpdateModal'> {}
 
-function DeckUpdateModal({ route, navigation }: Props) {
+const DeckUpdateModal = observer(({ route, navigation }: Props) => {
   const { deck } = route.params;
   const [currentColor, setCurrentColor] = useState('');
   const { mutateAsync, isPending } = useUpdateDeck();
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
 
   const {
     control,
@@ -60,6 +66,10 @@ function DeckUpdateModal({ route, navigation }: Props) {
     }
   }, [deck]);
 
+  if (!user) {
+    return <Loader />;
+  }
+
   return (
     <View style={styles.container}>
       <Label text="Name" />
@@ -75,20 +85,28 @@ function DeckUpdateModal({ route, navigation }: Props) {
       />
       {errors.deckName && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-      <Label text="Color" />
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        {colors.map((color, index) => (
-          <Circle
-            onPress={() => {
-              setValue('color', color);
-              setCurrentColor(color);
-            }}
-            key={`${color}-${index}`}
-            backgroundColor={color}
-            borderColor={currentColor === color ? 'black' : undefined}
-          />
-        ))}
-      </View>
+      {user.pro ? (
+        <View style={{ marginTop: 10 }}>
+          <LockedFeature text="Get pro version to unlock deck customization" />
+        </View>
+      ) : (
+        <>
+          <Label text="Color" />
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            {colors.map((color, index) => (
+              <Circle
+                onPress={() => {
+                  setValue('color', color);
+                  setCurrentColor(color);
+                }}
+                key={`${color}-${index}`}
+                backgroundColor={color}
+                borderColor={currentColor === color ? 'black' : undefined}
+              />
+            ))}
+          </View>
+        </>
+      )}
 
       <Button
         onPress={handleSubmit(onSubmit)}
@@ -100,7 +118,7 @@ function DeckUpdateModal({ route, navigation }: Props) {
       </Button>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
