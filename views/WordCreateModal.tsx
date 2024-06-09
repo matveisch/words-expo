@@ -15,6 +15,11 @@ import InputError from '../ui/InputError';
 import Description from '../ui/Description';
 import Circle from '../ui/Circle';
 import Button from '../ui/Button';
+import { observer } from 'mobx-react';
+import useUser from '../hooks/useUser';
+import { sessionStore } from '../features/sessionStore';
+import LockedFeature from '../components/LockedFeature';
+import Loader from '../components/Loader';
 
 type Inputs = {
   word: string;
@@ -25,10 +30,11 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateModal'> {}
 
-const WordCreateModal = ({ route, navigation }: Props) => {
+const WordCreateModal = observer(({ route, navigation }: Props) => {
   const { parentDeckId } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const { mutateAsync, isPending } = useAddWord();
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
   const knowledgeLevels = [1, 2, 3, 4];
 
   const {
@@ -63,6 +69,8 @@ const WordCreateModal = ({ route, navigation }: Props) => {
       navigation.goBack();
     });
   };
+
+  if (!user) return <Loader />;
 
   return (
     <KeyboardAwareScrollView>
@@ -102,25 +110,33 @@ const WordCreateModal = ({ route, navigation }: Props) => {
           )}
         />
 
-        <Label text="Knowledge Level" />
-        <Description
-          text="Although being calculated by the app, you can always define word knowledge level by
+        {user.pro ? (
+          <View style={{ marginTop: 10 }}>
+            <LockedFeature text="Get pro version to set word knowledge level by yourself" />
+          </View>
+        ) : (
+          <>
+            <Label text="Knowledge Level" />
+            <Description
+              text="Although being calculated by the app, you can always define word knowledge level by
           yourself."
-        />
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          {knowledgeLevels.map((level, index) => (
-            <Circle
-              onPress={() => {
-                setCurrentLevel(level);
-                setValue('knowledgeLevel', level);
-              }}
-              key={`${level}-${index}`}
-              backgroundColor={knowledgeColors[index]}
-              borderColor={currentLevel === level ? 'black' : undefined}
-              text={`${level}`}
             />
-          ))}
-        </View>
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              {knowledgeLevels.map((level, index) => (
+                <Circle
+                  onPress={() => {
+                    setCurrentLevel(level);
+                    setValue('knowledgeLevel', level);
+                  }}
+                  key={`${level}-${index}`}
+                  backgroundColor={knowledgeColors[index]}
+                  borderColor={currentLevel === level ? 'black' : undefined}
+                  text={`${level}`}
+                />
+              ))}
+            </View>
+          </>
+        )}
 
         <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 20 }}>
           <Text>Create</Text>
@@ -128,7 +144,7 @@ const WordCreateModal = ({ route, navigation }: Props) => {
       </View>
     </KeyboardAwareScrollView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

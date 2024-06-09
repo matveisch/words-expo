@@ -15,6 +15,10 @@ import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Circle from '../ui/Circle';
 import Button from '../ui/Button';
+import { observer } from 'mobx-react';
+import useUser from '../hooks/useUser';
+import { sessionStore } from '../features/sessionStore';
+import LockedFeature from '../components/LockedFeature';
 
 type Inputs = {
   word: string;
@@ -25,7 +29,7 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
-export default function Word({ route }: Props) {
+const Word = observer(({ route }: Props) => {
   const { word } = route.params;
   const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
@@ -43,6 +47,7 @@ export default function Word({ route }: Props) {
     },
   });
   const updateWord = useUpdateWord();
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const updatedWord = {
@@ -69,7 +74,7 @@ export default function Word({ route }: Props) {
     }
   }, [word, word?.knowledgelevel]);
 
-  if (!word) {
+  if (!word || !user) {
     return <Loader />;
   }
 
@@ -105,25 +110,33 @@ export default function Word({ route }: Props) {
           )}
         />
 
-        <Label text="Knowledge Level" />
-        <Description
-          text="Although being calculated by the app, you can always define word knowledge level by
+        {user.pro ? (
+          <View style={{ marginTop: 10 }}>
+            <LockedFeature text="Get pro version to set word knowledge level by yourself" />
+          </View>
+        ) : (
+          <>
+            <Label text="Knowledge Level" />
+            <Description
+              text="Although being calculated by the app, you can always define word knowledge level by
           yourself."
-        />
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          {knowledgeLevels.map((level, index) => (
-            <Circle
-              onPress={() => {
-                setCurrentLevel(level);
-                setValue('knowledgeLevel', level);
-              }}
-              text={`${level}`}
-              key={`${level}-${index}`}
-              backgroundColor={knowledgeColors[index]}
-              borderColor={currentLevel === level ? 'black' : undefined}
             />
-          ))}
-        </View>
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              {knowledgeLevels.map((level, index) => (
+                <Circle
+                  onPress={() => {
+                    setCurrentLevel(level);
+                    setValue('knowledgeLevel', level);
+                  }}
+                  text={`${level}`}
+                  key={`${level}-${index}`}
+                  backgroundColor={knowledgeColors[index]}
+                  borderColor={currentLevel === level ? 'black' : undefined}
+                />
+              ))}
+            </View>
+          </>
+        )}
 
         <Button onPress={handleSubmit(onSubmit)} style={{ marginTop: 20 }}>
           <Text>Edit</Text>
@@ -131,7 +144,7 @@ export default function Word({ route }: Props) {
       </View>
     </KeyboardAwareScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -144,3 +157,5 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
 });
+
+export default Word;
