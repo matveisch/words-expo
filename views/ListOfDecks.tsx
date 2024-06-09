@@ -11,14 +11,17 @@ import ListItem from '../ui/ListItem';
 import { observer } from 'mobx-react';
 import { sessionStore } from '../features/sessionStore';
 import Animated, { SlideInRight } from 'react-native-reanimated';
+import LockedFeature from '../components/LockedFeature';
+import useUser from '../hooks/useUser';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
 const ListOfDecks = observer(({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const { data: decks, isLoading } = useDecks(sessionStore.session?.user.id || '');
+  const { data: decks } = useDecks(sessionStore.session?.user.id || '');
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
 
-  if (isLoading) {
+  if (!user || !decks) {
     return <Loader />;
   }
 
@@ -40,6 +43,13 @@ const ListOfDecks = observer(({ navigation }: Props) => {
           data={decks?.filter((deck) => deck.parent_deck === null)}
           ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          ListFooterComponent={
+            !user.pro && decks?.length > 1 ? (
+              <View style={{ marginTop: 10 }}>
+                <LockedFeature text="Get pro version to view and create more than 2 decks" />
+              </View>
+            ) : undefined
+          }
           renderItem={({ item }) => (
             <ListItem
               backgroundColor={item.color ? item.color : undefined}

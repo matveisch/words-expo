@@ -17,6 +17,11 @@ import { StudyingView } from './StudyingView';
 import { WordType } from '../types/WordType';
 import useDeleteWord from '../hooks/useDeleteWord';
 import { DeckType } from '../types/Deck';
+import { useDecks } from '../hooks/useDecks';
+import { sessionStore } from '../features/sessionStore';
+import useUser from '../hooks/useUser';
+import { observer } from 'mobx-react';
+import Loader from '../components/Loader';
 
 export type RootStackParamList = {
   Decks: undefined;
@@ -29,9 +34,11 @@ export type RootStackParamList = {
   Studying: { deckId: number; revise: boolean };
 };
 
-const HomeView = () => {
+const HomeView = observer(() => {
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
+  const { data: decks } = useDecks(sessionStore.session?.user.id || '');
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   function handleDeleteDeck(
@@ -64,6 +71,10 @@ const HomeView = () => {
     ]);
   }
 
+  if (!user || !decks) {
+    return <Loader />;
+  }
+
   return (
     <Stack.Navigator initialRouteName="Decks">
       <Stack.Group>
@@ -76,11 +87,15 @@ const HomeView = () => {
             headerShadowVisible: false,
             headerRight: () => (
               <Button
+                isDisabled={!user.pro && decks?.length > 1}
                 chromeless
                 size="small"
                 onPress={() => navigation.navigate('DeckCreateModal')}
               >
-                <TabBarIcon name="plus-square" />
+                <TabBarIcon
+                  name="plus-square"
+                  color={!user.pro && decks?.length > 1 ? 'grey' : undefined}
+                />
               </Button>
             ),
           })}
@@ -184,6 +199,6 @@ const HomeView = () => {
       </Stack.Group>
     </Stack.Navigator>
   );
-};
+});
 
 export default HomeView;

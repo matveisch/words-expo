@@ -11,7 +11,7 @@ import { sessionStore } from '../features/sessionStore';
 import useAddUser from '../hooks/useAddUser';
 
 export const Auth = observer(() => {
-  const { mutate, data } = useAddUser();
+  const { mutate } = useAddUser();
 
   // GoogleSignin.configure({
   //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
@@ -42,7 +42,7 @@ export const Auth = observer(() => {
                 provider: 'apple',
                 token: credential.identityToken,
               });
-              console.log(JSON.stringify({ error, user }, null, 2));
+              // console.log(JSON.stringify({ error, user }, null, 2));
 
               if (!error) {
                 if (user)
