@@ -55,7 +55,7 @@ const SettingsView = observer(() => {
       }}
     >
       <View>
-        {user.pro ? (
+        {!user.pro ? (
           <LockedFeature text="Get pro version to get access to additional settings" />
         ) : (
           <>

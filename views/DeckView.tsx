@@ -61,7 +61,7 @@ const DeckView = observer(({ route, navigation }: Props) => {
         paddingTop: 10,
       }}
     >
-      {!user.pro ? (
+      {user.pro ? (
         words.length > 0 && (
           <View
             style={{ paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}

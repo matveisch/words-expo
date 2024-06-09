@@ -110,7 +110,7 @@ const WordCreateModal = observer(({ route, navigation }: Props) => {
           )}
         />
 
-        {user.pro ? (
+        {!user.pro ? (
           <View style={{ marginTop: 10 }}>
             <LockedFeature text="Get pro version to set word knowledge level by yourself" />
           </View>

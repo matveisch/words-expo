@@ -73,7 +73,7 @@ const DeckCreateModal = observer(({ navigation, route }: Props) => {
       />
       {errors.deckName && <Text style={{ color: 'red' }}>This field is required</Text>}
 
-      {user.pro ? (
+      {!user.pro ? (
         <View style={{ marginTop: 10 }}>
           <LockedFeature text="Get pro version to unlock deck customization" />
         </View>

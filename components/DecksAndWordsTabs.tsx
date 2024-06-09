@@ -25,27 +25,13 @@ type Props = {
   hasParentDeck: boolean;
 };
 
-function getButtonName(userStatus: boolean, activeTab: number) {
-  if (!userStatus) {
-    // if user is pro
-    return `Add new ${activeTab === 0 ? 'word' : 'deck'}`;
-  } else {
-    // if user is NOT pro
-    if (activeTab === 0) {
-      return 'Add new word';
-    } else {
-      return 'Locked';
-    }
-  }
-}
-
 function getIsButtonDisabled(userStatus: boolean, isDeckMutating: number, activeTab: number) {
   if (isDeckMutating !== 0) {
     return true;
   } else {
     if (activeTab === 0) {
       return false;
-    } else return userStatus;
+    } else return !userStatus;
   }
 }
 
@@ -166,7 +152,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
             )}
           />
         </View>
-        {user.pro ? (
+        {!user.pro ? (
           <LockedFeature text="Get pro version to view and create sub decks" />
         ) : (
           <View style={{ width: '100%', height: '100%' }} key="2">
@@ -197,7 +183,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
         style={styles.newItemButton}
         isDisabled={getIsButtonDisabled(user.pro, isDeckMutating, activeTab)}
       >
-        <ThemedText text={getButtonName(user?.pro, activeTab)} />
+        <ThemedText text={`Add new ${activeTab === 0 ? 'word' : 'deck'}`} />
       </Button>
     </View>
   );
