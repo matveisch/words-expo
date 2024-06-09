@@ -46,21 +46,21 @@ export type Database = {
           email: string
           id: number
           name: string
-          pro: boolean | null
+          pro: boolean
           user_uid: string
         }
         Insert: {
           email: string
           id?: never
           name: string
-          pro?: boolean | null
+          pro: boolean
           user_uid: string
         }
         Update: {
           email?: string
           id?: never
           name?: string
-          pro?: boolean | null
+          pro?: boolean
           user_uid?: string
         }
         Relationships: []

@@ -17,11 +17,37 @@ import { observer } from 'mobx-react';
 import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
 import useUser from '../hooks/useUser';
+import Loader from './Loader';
+import LockedFeature from './LockedFeature';
 
 type Props = {
   currentDeck: number;
   hasParentDeck: boolean;
 };
+
+function getButtonName(userStatus: boolean, activeTab: number) {
+  if (!userStatus) {
+    // if user is pro
+    return `Add new ${activeTab === 0 ? 'word' : 'deck'}`;
+  } else {
+    // if user is NOT pro
+    if (activeTab === 0) {
+      return 'Add new word';
+    } else {
+      return 'Locked';
+    }
+  }
+}
+
+function getIsButtonDisabled(userStatus: boolean, isDeckMutating: number, activeTab: number) {
+  if (isDeckMutating !== 0) {
+    return true;
+  } else {
+    if (activeTab === 0) {
+      return false;
+    } else return userStatus;
+  }
+}
 
 const DecksAndWordsTabs = observer((props: Props) => {
   const { currentDeck, hasParentDeck } = props;
@@ -71,7 +97,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
     }
   }, [activeTab]);
 
-  console.log({ user });
+  if (!user) return <Loader />;
 
   return (
     <View style={styles.container}>
@@ -140,34 +166,38 @@ const DecksAndWordsTabs = observer((props: Props) => {
             )}
           />
         </View>
-        <View style={{ width: '100%', height: '100%' }} key="2">
-          <FlashList
-            estimatedItemSize={44}
-            data={subDecks}
-            ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            renderItem={({ item }) => (
-              <ListItem
-                backgroundColor={item.color ? item.color : undefined}
-                title={item.name}
-                onPress={() => {
-                  navigation.push('DeckView', {
-                    deck: item,
-                  });
-                }}
-              />
-            )}
-          />
-        </View>
+        {user.pro ? (
+          <LockedFeature text="Get pro version to view and create sub decks" />
+        ) : (
+          <View style={{ width: '100%', height: '100%' }} key="2">
+            <FlashList
+              estimatedItemSize={44}
+              data={subDecks}
+              ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              renderItem={({ item }) => (
+                <ListItem
+                  backgroundColor={item.color ? item.color : undefined}
+                  title={item.name}
+                  onPress={() => {
+                    navigation.push('DeckView', {
+                      deck: item,
+                    });
+                  }}
+                />
+              )}
+            />
+          </View>
+        )}
       </PagerView>
 
       <Button
         backgroundColor={defaultColors.activeColor}
         onPress={handleButtonPress}
         style={styles.newItemButton}
-        isDisabled={isDeckMutating !== 0}
+        isDisabled={getIsButtonDisabled(user.pro, isDeckMutating, activeTab)}
       >
-        <ThemedText text={`Add new ${activeTab === 0 ? 'word' : 'deck'}`} />
+        <ThemedText text={getButtonName(user?.pro, activeTab)} />
       </Button>
     </View>
   );

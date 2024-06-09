@@ -16,6 +16,8 @@ import ThemedText from '../ui/ThemedText';
 import { useDecks } from '../hooks/useDecks';
 import { observer } from 'mobx-react';
 import { sessionStore } from '../features/sessionStore';
+import useUser from '../hooks/useUser';
+import LockedFeature from '../components/LockedFeature';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -37,6 +39,7 @@ const DeckView = observer(({ route, navigation }: Props) => {
     [...(subDecks?.map((deck) => deck.id) || []), deck.id],
     isFetched
   );
+  const { data: user } = useUser(sessionStore.session?.user.id || '');
   const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
   const graphData = [
     { value: getCertainKnowledgeLevelWords(1, words), color: knowledgeColors[0], text: 'again' },
@@ -45,7 +48,7 @@ const DeckView = observer(({ route, navigation }: Props) => {
     { value: getCertainKnowledgeLevelWords(4, words), color: knowledgeColors[3], text: 'easy' },
   ];
 
-  if (areWordsLoading || !words) {
+  if (areWordsLoading || !words || !user) {
     return <Loader />;
   }
 
@@ -58,33 +61,7 @@ const DeckView = observer(({ route, navigation }: Props) => {
         paddingTop: 10,
       }}
     >
-      {/*<View style={styles.buttonsContainer}>*/}
-      {/*  <PressableArea style={styles.button} backgroundColor={knowledgeColors[0]}>*/}
-      {/*    <Text*/}
-      {/*      style={styles.buttonText}*/}
-      {/*    >{`${getCertainKnowledgeLevelWords(1, words)}\n\nagain`}</Text>*/}
-      {/*  </PressableArea>*/}
-
-      {/*  <PressableArea style={styles.button} backgroundColor={knowledgeColors[1]}>*/}
-      {/*    <Text*/}
-      {/*      style={styles.buttonText}*/}
-      {/*    >{`${getCertainKnowledgeLevelWords(2, words)}\n\nhard`}</Text>*/}
-      {/*  </PressableArea>*/}
-
-      {/*  <PressableArea style={styles.button} backgroundColor={knowledgeColors[2]}>*/}
-      {/*    <Text*/}
-      {/*      style={styles.buttonText}*/}
-      {/*    >{`${getCertainKnowledgeLevelWords(3, words)}\n\ngood`}</Text>*/}
-      {/*  </PressableArea>*/}
-
-      {/*  <PressableArea style={styles.button} backgroundColor={knowledgeColors[3]}>*/}
-      {/*    <Text*/}
-      {/*      style={styles.buttonText}*/}
-      {/*    >{`${getCertainKnowledgeLevelWords(4, words)}\n\neasy`}</Text>*/}
-      {/*  </PressableArea>*/}
-      {/*</View>*/}
-
-      {words.length > 0 && (
+      {words.length > 0 && !user.pro ? (
         <View style={{ paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
           <PieChart
             donut
@@ -102,6 +79,8 @@ const DeckView = observer(({ route, navigation }: Props) => {
             )}
           </View>
         </View>
+      ) : (
+        <LockedFeature text="Get pro version to view statistics" />
       )}
 
       {words.length !== 0 && (

@@ -2,7 +2,11 @@ import { supabase } from '../helpers/initSupabase';
 import { useQuery } from '@tanstack/react-query';
 
 async function getUser(userId: string) {
-  const { data: user, error } = await supabase.from('users').select().eq('user_uid', userId);
+  const { data: user, error } = await supabase
+    .from('users')
+    .select()
+    .eq('user_uid', userId)
+    .single();
 
   if (error) throw error;
   return user;
