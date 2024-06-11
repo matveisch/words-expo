@@ -1,6 +1,9 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { TabBarIcon } from '../ui/TabBarIcon';
 import { defaultColors } from '../helpers/colors';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../views/HomeView';
 
 type Props = {
   text: string;
@@ -8,12 +11,17 @@ type Props = {
 
 export default function LockedFeature(props: Props) {
   const { text } = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList, 'SubscriptionOffer'>>();
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('SubscriptionOffer')}
+    >
       <TabBarIcon name="lock" size={100} />
       <Text style={{ fontSize: 16, textAlign: 'center' }}>{text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

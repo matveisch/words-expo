@@ -22,6 +22,7 @@ import { sessionStore } from '../features/sessionStore';
 import useUser from '../hooks/useUser';
 import { observer } from 'mobx-react';
 import Loader from '../components/Loader';
+import SubscriptionOffer from './SubscriptionOffer';
 
 export type RootStackParamList = {
   Decks: undefined;
@@ -32,6 +33,7 @@ export type RootStackParamList = {
   DeckUpdateModal: { deck: DeckType };
   WordCreateModal: { parentDeckId: number };
   Studying: { deckId: number; revise: boolean };
+  SubscriptionOffer: undefined;
 };
 
 const HomeView = observer(() => {
@@ -194,6 +196,16 @@ const HomeView = observer(() => {
           options={{
             headerTitle: 'New Word',
             headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="SubscriptionOffer"
+          component={SubscriptionOffer}
+          options={{
+            // headerShadowVisible: false,
+            headerTitle: 'Unlock premium features',
+            // headerBackVisible: true,
+            // headerBackTitleVisible: true,
           }}
         />
       </Stack.Group>
