@@ -30,7 +30,7 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateModal'> {}
 
-const WordCreateModal = observer(({ route, navigation }: Props) => {
+const WordCreateModal = observer(({ route }: Props) => {
   const { parentDeckId } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const { mutateAsync, isPending } = useAddWord();
@@ -66,7 +66,6 @@ const WordCreateModal = observer(({ route, navigation }: Props) => {
       setCurrentLevel(1);
       reset();
       Keyboard.dismiss();
-      // navigation.goBack();
     });
   };
 
