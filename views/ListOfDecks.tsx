@@ -6,13 +6,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { useDecks } from '../hooks/useDecks';
 import { RootStackParamList } from './HomeView';
-import Loader from '../components/Loader';
 import ListItem from '../ui/ListItem';
 import { observer } from 'mobx-react';
 import { sessionStore } from '../features/sessionStore';
 import Animated, { SlideInRight } from 'react-native-reanimated';
 import LockedFeature from '../components/LockedFeature';
 import useUser from '../hooks/useUser';
+import ListItemSkeleton from '../ui/ListItemSkeleton';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -20,10 +20,6 @@ const ListOfDecks = observer(({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
   const { data: decks } = useDecks(sessionStore.session?.user.id || '');
   const { data: user } = useUser(sessionStore.session?.user.id || '');
-
-  if (!user || !decks) {
-    return <Loader />;
-  }
 
   return (
     <Animated.View
@@ -38,30 +34,40 @@ const ListOfDecks = observer(({ navigation }: Props) => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <FlashList
-          estimatedItemSize={44}
-          data={decks?.filter((deck) => deck.parent_deck === null)}
-          ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          ListFooterComponent={
-            !user.pro && decks?.length > 1 ? (
-              <View style={{ marginTop: 10 }}>
-                <LockedFeature text="Get pro version to view and create more than 2 decks" />
-              </View>
-            ) : undefined
-          }
-          renderItem={({ item }) => (
-            <ListItem
-              backgroundColor={item.color ? item.color : undefined}
-              title={item.name}
-              onPress={() => {
-                navigation.navigate('DeckView', {
-                  deck: item,
-                });
-              }}
-            />
-          )}
-        />
+        {!decks && (
+          <FlashList
+            estimatedItemSize={59}
+            renderItem={() => <ListItemSkeleton height={59} />}
+            data={[...Array(8)]}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          />
+        )}
+        {decks && (
+          <FlashList
+            estimatedItemSize={59}
+            data={decks?.filter((deck) => deck.parent_deck === null)}
+            ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            ListFooterComponent={
+              !user?.pro && decks?.length && decks.length > 1 ? (
+                <View style={{ marginTop: 10 }}>
+                  <LockedFeature text="Get pro version to view and create more than 2 decks" />
+                </View>
+              ) : undefined
+            }
+            renderItem={({ item }) => (
+              <ListItem
+                backgroundColor={item.color ? item.color : undefined}
+                title={item.name}
+                onPress={() => {
+                  navigation.navigate('DeckView', {
+                    deck: item,
+                  });
+                }}
+              />
+            )}
+          />
+        )}
       </View>
       <StatusBar style="auto" />
     </Animated.View>
