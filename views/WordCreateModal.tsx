@@ -66,7 +66,7 @@ const WordCreateModal = observer(({ route, navigation }: Props) => {
       setCurrentLevel(1);
       reset();
       Keyboard.dismiss();
-      navigation.goBack();
+      // navigation.goBack();
     });
   };
 
@@ -138,8 +138,8 @@ const WordCreateModal = observer(({ route, navigation }: Props) => {
           </>
         )}
 
-        <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 20 }}>
-          <Text>Create</Text>
+        <Button onPress={handleSubmit(onSubmit)} isDisabled={isPending} style={{ marginTop: 20 }}>
+          {isPending ? <Loader /> : <Text>Create</Text>}
         </Button>
       </View>
     </KeyboardAwareScrollView>
