@@ -19,6 +19,7 @@ import { sessionStore } from '../features/sessionStore';
 import useUser from '../hooks/useUser';
 import Loader from './Loader';
 import LockedFeature from './LockedFeature';
+import ListItemSkeleton from '../ui/ListItemSkeleton';
 
 type Props = {
   currentDeck: number;
@@ -134,45 +135,66 @@ const DecksAndWordsTabs = observer((props: Props) => {
         // useNext
       >
         <View style={{ width: '100%', height: '100%' }} key="1">
-          <FlashList
-            estimatedItemSize={65}
-            data={words}
-            ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No words</Text>}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            renderItem={({ item }) => (
-              <ListItem
-                title={item.word}
-                subTitle={item.meaning}
-                onPress={() => {
-                  navigation.push('Word', {
-                    word: item,
-                  });
-                }}
-              />
-            )}
-          />
-        </View>
-        {!user.pro ? (
-          <LockedFeature text="Get pro version to view and create sub decks" />
-        ) : (
-          <View style={{ width: '100%', height: '100%' }} key="2">
+          {words && (
             <FlashList
-              estimatedItemSize={44}
-              data={subDecks}
-              ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
+              estimatedItemSize={65}
+              data={words}
+              ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No words</Text>}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
               renderItem={({ item }) => (
                 <ListItem
-                  backgroundColor={item.color ? item.color : undefined}
-                  title={item.name}
+                  title={item.word}
+                  subTitle={item.meaning}
                   onPress={() => {
-                    navigation.push('DeckView', {
-                      deck: item,
+                    navigation.push('Word', {
+                      word: item,
                     });
                   }}
                 />
               )}
             />
+          )}
+          {!words && (
+            <FlashList
+              estimatedItemSize={65}
+              renderItem={() => <ListItemSkeleton height={65} />}
+              data={[...Array(3)]}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            />
+          )}
+        </View>
+
+        {!user.pro ? (
+          <LockedFeature text="Get pro version to view and create sub decks" />
+        ) : (
+          <View style={{ width: '100%', height: '100%' }} key="2">
+            {subDecks && (
+              <FlashList
+                estimatedItemSize={44}
+                data={subDecks}
+                ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
+                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                renderItem={({ item }) => (
+                  <ListItem
+                    backgroundColor={item.color ? item.color : undefined}
+                    title={item.name}
+                    onPress={() => {
+                      navigation.push('DeckView', {
+                        deck: item,
+                      });
+                    }}
+                  />
+                )}
+              />
+            )}
+            {!subDecks && (
+              <FlashList
+                estimatedItemSize={44}
+                renderItem={() => <ListItemSkeleton height={44} />}
+                data={[...Array(8)]}
+                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              />
+            )}
           </View>
         )}
       </PagerView>
