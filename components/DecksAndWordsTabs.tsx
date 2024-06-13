@@ -155,7 +155,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
               ListFooterComponent={
                 !user?.pro && words?.length && words.length > 19 ? (
                   <View style={{ marginTop: 10 }}>
-                    <LockedFeature text="Get pro version to view and create more than 2 words" />
+                    <LockedFeature text="Get pro version to view and create more than 20 words" />
                   </View>
                 ) : (
                   <View style={{ height: 80 }} />
