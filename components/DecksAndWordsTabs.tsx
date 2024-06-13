@@ -152,6 +152,15 @@ const DecksAndWordsTabs = observer((props: Props) => {
                   }}
                 />
               )}
+              ListFooterComponent={
+                !user?.pro && words?.length && words.length > 19 ? (
+                  <View style={{ marginTop: 10 }}>
+                    <LockedFeature text="Get pro version to view and create more than 2 words" />
+                  </View>
+                ) : (
+                  <View style={{ height: 80 }} />
+                )
+              }
             />
           )}
           {!words && (
@@ -174,6 +183,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
                 data={subDecks}
                 ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
                 ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                ListFooterComponent={<View style={{ height: 50 }} />}
                 renderItem={({ item }) => (
                   <ListItem
                     backgroundColor={item.color ? item.color : undefined}
