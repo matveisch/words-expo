@@ -68,7 +68,7 @@ export const StudyingView = observer(({ route }: Props) => {
       const currentWord = wordsToLearn[currentIndex];
 
       if (isAnswerRight) {
-        if (revise) {
+        if (!revise) {
           updateWord
             .mutateAsync({
               id: currentWord.id,
@@ -155,7 +155,7 @@ export const StudyingView = observer(({ route }: Props) => {
   }
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
         <Text style={styles.wordTitle}>{wordsToLearn[currentIndex].meaning}</Text>
         <View style={styles.explainedContainer}>
@@ -192,7 +192,7 @@ export const StudyingView = observer(({ route }: Props) => {
           />
           {!beingChecked && (
             <Button onPress={handleAnswer} isDisabled={updateWord.isPending}>
-              <TabBarIcon name="check" size={20} />
+              {updateWord.isPending ? <Loader /> : <TabBarIcon name="check" size={20} />}
             </Button>
           )}
         </View>
