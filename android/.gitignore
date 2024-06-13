@@ -1,3 +1,8 @@
+# BUCK
+buck-out/
+\.buckd/
+*.keystore.
+
 # OSX
 #
 .DS_Store

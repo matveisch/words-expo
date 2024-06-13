@@ -18,7 +18,8 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
 const ListOfDecks = observer(({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const { data: decks } = useDecks(sessionStore.session?.user.id || '');
+  const { data } = useDecks(sessionStore.session?.user.id || '');
+  const decks = data?.filter((deck) => deck.parent_deck === null);
   const { data: user } = useUser(sessionStore.session?.user.id || '');
 
   return (
@@ -45,7 +46,7 @@ const ListOfDecks = observer(({ navigation }: Props) => {
         {decks && (
           <FlashList
             estimatedItemSize={59}
-            data={decks?.filter((deck) => deck.parent_deck === null)}
+            data={decks}
             ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             ListFooterComponent={
