@@ -46,7 +46,7 @@ const ListOfDecks = observer(({ navigation }: Props) => {
         {decks && (
           <FlashList
             estimatedItemSize={59}
-            data={decks}
+            data={user?.pro ? decks : decks.slice(0, 2)}
             ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             ListFooterComponent={

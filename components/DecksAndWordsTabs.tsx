@@ -138,7 +138,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
           {words && (
             <FlashList
               estimatedItemSize={65}
-              data={words}
+              data={user?.pro ? words : words.slice(0, 20)}
               ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No words</Text>}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
               renderItem={({ item }) => (
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     flexDirection: 'column',
+    marginTop: 5,
   },
   newItemButton: {
     alignSelf: 'center',
