@@ -1,8 +1,16 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import Purchases from 'react-native-purchases';
+import { observer } from 'mobx-react';
+
 import SubscriptionItem from '../components/SubscriptionItem';
 import Button from '../ui/Button';
 import ThemedText from '../ui/ThemedText';
 import { defaultColors } from '../helpers/colors';
+import { sessionStore } from '../features/sessionStore';
+import useUpdateUser from '../hooks/useUpdateUser';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from './HomeView';
+import { useState } from 'react';
 
 const subscriptionItems = [
   {
@@ -37,7 +45,47 @@ const subscriptionItems = [
   },
 ];
 
-export default function SubscriptionOffer() {
+interface Props extends NativeStackScreenProps<RootStackParamList, 'SubscriptionOffer'> {}
+
+const SubscriptionOffer = observer(({ navigation }: Props) => {
+  const [isPending, setIsPending] = useState(false);
+  const { mutateAsync } = useUpdateUser(sessionStore.session?.user.id || '', true);
+
+  async function subscribe() {
+    try {
+      setIsPending(true);
+
+      const { current: currentOfferings } = await Purchases.getOfferings();
+      if (currentOfferings !== null && currentOfferings.availablePackages.length > 0) {
+        const proVersion = currentOfferings.availablePackages.find(
+          (pack) => pack.presentedOfferingContext.offeringIdentifier === 'wordem-pro'
+        );
+
+        if (proVersion) {
+          const { customerInfo } = await Purchases.purchasePackage(proVersion);
+
+          if (typeof customerInfo.entitlements.active['WordEmPro'] !== 'undefined') {
+            mutateAsync().then(() => {
+              setIsPending(false);
+              navigation.goBack();
+            });
+          } else {
+            throw new Error('Subscription purchase failed.');
+          }
+        } else {
+          throw new Error('Pro version package not found.');
+        }
+      } else {
+        throw new Error('No available packages.');
+      }
+    } catch (e) {
+      setIsPending(false);
+      console.error('Subscription error:', e);
+    } finally {
+      setIsPending(false);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 20, textAlign: 'center', marginVertical: 20 }}>
@@ -55,12 +103,20 @@ export default function SubscriptionOffer() {
         ))}
       </View>
 
-      <Button backgroundColor={defaultColors.activeColor} style={{ height: 50, marginTop: 40 }}>
-        <ThemedText text="Upgrade now" style={{ fontSize: 17 }} />
+      <Button
+        backgroundColor={defaultColors.activeColor}
+        style={{ height: 50, marginTop: 40 }}
+        onPress={subscribe}
+      >
+        {isPending ? (
+          <ActivityIndicator />
+        ) : (
+          <ThemedText text="Upgrade now" style={{ fontSize: 17 }} />
+        )}
       </Button>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -68,3 +124,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
+
+export default SubscriptionOffer;

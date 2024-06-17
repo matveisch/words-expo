@@ -59,32 +59,34 @@ const App = observer(() => {
     return routeName === 'Studying' ? 'none' : 'flex';
   };
 
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios') {
-  //     Purchases.configure({
-  //       apiKey: revenueCatKey || '',
-  //     });
-  //   }
-  //
-  //   async function init() {
-  //     try {
-  //       const offerings = await Purchases.getOfferings();
-  //       if (offerings.current !== null) {
-  //         // Display current offering with offerings.current
-  //         console.log(offerings.current);
-  //       }
-  //
-  //       const customerInfo = await Purchases.getCustomerInfo();
-  //       console.log(customerInfo);
-  //       if (typeof customerInfo.entitlements.active['WordEmPro'] !== 'undefined') {
-  //         console.log('pro');
-  //       }
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-  //   init();
-  // }, []);
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      Purchases.configure({
+        apiKey: revenueCatKey || '',
+      });
+    }
+
+    // Purchases.setLogLevel(LOG_LEVEL.DEBUG);
+
+    // async function init() {
+    //   try {
+    //     const offerings = await Purchases.getOfferings();
+    //     if (offerings.current !== null) {
+    //       // Display current offering with offerings.current
+    //       console.log(offerings.current.availablePackages);
+    //     }
+    //
+    //     const customerInfo = await Purchases.getCustomerInfo();
+    //     console.log(customerInfo);
+    //     if (typeof customerInfo.entitlements.active['WordEmPro'] !== 'undefined') {
+    //       console.log('pro');
+    //     }
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
+    // init();
+  }, []);
 
   return (
     <RootSiblingParent>
