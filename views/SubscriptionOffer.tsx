@@ -88,8 +88,16 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 20, textAlign: 'center', marginVertical: 20 }}>
-        Upgrade to enhance your learning experience!
+      <Text
+        style={{
+          fontSize: 24,
+          textAlign: 'center',
+          marginVertical: 20,
+          color: defaultColors.activeColor,
+          fontWeight: 'bold',
+        }}
+      >
+        Enjoy a Week Free Trial of Premium!
       </Text>
 
       <View>
@@ -105,14 +113,18 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
 
       <Button
         backgroundColor={defaultColors.activeColor}
-        style={{ height: 50, marginTop: 40 }}
+        style={{ height: 50, marginTop: 30 }}
         onPress={subscribe}
       >
         {isPending ? (
           <ActivityIndicator />
         ) : (
-          <ThemedText text="Upgrade now" style={{ fontSize: 17 }} />
+          <ThemedText text="Start Free Trial" style={{ fontSize: 17 }} />
         )}
+      </Button>
+
+      <Button chromeless style={{ marginTop: 5 }}>
+        <Text>Restore subscription</Text>
       </Button>
     </View>
   );
