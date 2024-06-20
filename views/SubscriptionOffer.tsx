@@ -64,7 +64,10 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
         });
       }
     } catch (e) {
+      setIsPending(false);
       console.error(e);
+    } finally {
+      setIsPending(false);
     }
   }
 
