@@ -51,6 +51,23 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
   const [isPending, setIsPending] = useState(false);
   const { mutateAsync } = useUpdateUser(sessionStore.session?.user.id || '', true);
 
+  async function restore() {
+    try {
+      setIsPending(true);
+
+      const restore = await Purchases.restorePurchases();
+      if (restore.entitlements.active['WordEmPro'].isActive) {
+        mutateAsync().then(() => {
+          setIsPending(false);
+          navigation.goBack();
+        });
+      }
+      // ... check restored purchaserInfo to see if entitlement is now active
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   async function subscribe() {
     try {
       setIsPending(true);
@@ -123,8 +140,8 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
         )}
       </Button>
 
-      <Button chromeless style={{ marginTop: 5 }}>
-        <Text>Restore subscription</Text>
+      <Button chromeless style={{ marginTop: 5 }} onPress={restore}>
+        {isPending ? <ActivityIndicator /> : <Text>Restore subscription</Text>}
       </Button>
     </View>
   );
