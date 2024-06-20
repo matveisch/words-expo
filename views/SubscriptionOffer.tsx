@@ -62,7 +62,6 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           navigation.goBack();
         });
       }
-      // ... check restored purchaserInfo to see if entitlement is now active
     } catch (e) {
       console.error(e);
     }

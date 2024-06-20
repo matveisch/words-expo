@@ -13,6 +13,9 @@ import Animated, { SlideInRight } from 'react-native-reanimated';
 import LockedFeature from '../components/LockedFeature';
 import useUser from '../hooks/useUser';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
+import Purchases from 'react-native-purchases';
+import useUpdateUser from '../hooks/useUpdateUser';
+import { useEffect } from 'react';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -21,6 +24,23 @@ const ListOfDecks = observer(({ navigation }: Props) => {
   const { data } = useDecks(sessionStore.session?.user.id || '');
   const decks = data?.filter((deck) => deck.parent_deck === null);
   const { data: user } = useUser(sessionStore.session?.user.id || '');
+  const { mutate } = useUpdateUser(sessionStore.session?.user.id || '', false);
+
+  useEffect(() => {
+    async function getUserInfo() {
+      try {
+        const info = await Purchases.getCustomerInfo();
+        console.log(info.entitlements.active);
+        if (typeof info.entitlements.active['WordEmPro'] === 'undefined') {
+          mutate();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    getUserInfo();
+  }, []);
 
   return (
     <Animated.View

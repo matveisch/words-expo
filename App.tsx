@@ -13,6 +13,8 @@ import { Session } from '@supabase/supabase-js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { observer } from 'mobx-react';
+import Purchases from 'react-native-purchases';
+import { Platform } from 'react-native';
 
 import { supabase } from './helpers/initSupabase';
 import HomeView from './views/HomeView';
@@ -20,8 +22,6 @@ import SettingsView from './views/SettingsView';
 import { TabBarIcon } from './ui/TabBarIcon';
 import { sessionStore } from './features/sessionStore';
 import OnboardingView from './views/OnboardingView';
-import { Platform } from 'react-native';
-import Purchases from 'react-native-purchases';
 
 export type RootTabsParamList = {
   Home: { session: Session };
@@ -65,27 +65,6 @@ const App = observer(() => {
         apiKey: revenueCatKey || '',
       });
     }
-
-    // Purchases.setLogLevel(LOG_LEVEL.DEBUG);
-
-    // async function init() {
-    //   try {
-    //     const offerings = await Purchases.getOfferings();
-    //     if (offerings.current !== null) {
-    //       // Display current offering with offerings.current
-    //       console.log(offerings.current.availablePackages);
-    //     }
-    //
-    //     const customerInfo = await Purchases.getCustomerInfo();
-    //     console.log(customerInfo);
-    //     if (typeof customerInfo.entitlements.active['WordEmPro'] !== 'undefined') {
-    //       console.log('pro');
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // }
-    // init();
   }, []);
 
   return (
