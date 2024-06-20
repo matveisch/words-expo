@@ -72,7 +72,7 @@ const WordCreateModal = observer(({ route }: Props) => {
   if (!user) return <Loader />;
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
         <Label text="Word" />
         <Controller

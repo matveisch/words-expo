@@ -11,6 +11,7 @@ import useUpdateUser from '../hooks/useUpdateUser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
 import { useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const subscriptionItems = [
   {
@@ -103,46 +104,48 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 24,
-          textAlign: 'center',
-          marginVertical: 20,
-          color: defaultColors.activeColor,
-          fontWeight: 'bold',
-        }}
-      >
-        Enjoy a Week Free Trial of Premium!
-      </Text>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <Text
+          style={{
+            fontSize: 24,
+            textAlign: 'center',
+            marginVertical: 20,
+            color: defaultColors.activeColor,
+            fontWeight: 'bold',
+          }}
+        >
+          Enjoy a Week Free Trial of Premium!
+        </Text>
 
-      <View>
-        {subscriptionItems.map((item, i) => (
-          <SubscriptionItem
-            text={item.text}
-            subText={item.subText}
-            icon={item.image}
-            key={`${item.text}-${i}`}
-          />
-        ))}
+        <View>
+          {subscriptionItems.map((item, i) => (
+            <SubscriptionItem
+              text={item.text}
+              subText={item.subText}
+              icon={item.image}
+              key={`${item.text}-${i}`}
+            />
+          ))}
+        </View>
+
+        <Button
+          backgroundColor={defaultColors.activeColor}
+          style={{ height: 50, marginTop: 30 }}
+          onPress={subscribe}
+        >
+          {isPending ? (
+            <ActivityIndicator />
+          ) : (
+            <ThemedText text="Start Free Trial" style={{ fontSize: 17 }} />
+          )}
+        </Button>
+
+        <Button chromeless style={{ marginTop: 5 }} onPress={restore}>
+          {isPending ? <ActivityIndicator /> : <Text>Restore subscription</Text>}
+        </Button>
       </View>
-
-      <Button
-        backgroundColor={defaultColors.activeColor}
-        style={{ height: 50, marginTop: 30 }}
-        onPress={subscribe}
-      >
-        {isPending ? (
-          <ActivityIndicator />
-        ) : (
-          <ThemedText text="Start Free Trial" style={{ fontSize: 17 }} />
-        )}
-      </Button>
-
-      <Button chromeless style={{ marginTop: 5 }} onPress={restore}>
-        {isPending ? <ActivityIndicator /> : <Text>Restore subscription</Text>}
-      </Button>
-    </View>
+    </KeyboardAwareScrollView>
   );
 });
 

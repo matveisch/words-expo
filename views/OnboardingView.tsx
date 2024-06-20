@@ -59,10 +59,12 @@ export default function OnboardingView() {
             { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 },
           ]}
         >
-          <View style={{ marginBottom: 450, gap: 20, alignItems: 'center' }}>
+          <View style={{ gap: 20, alignItems: 'center' }}>
             <Image source={require('../assets/icon.png')} style={{ height: 125, width: 125 }} />
             <Text style={{ fontSize: 30 }}>Log in to continue</Text>
           </View>
+
+          <View style={{ flex: 1 }} />
 
           <Auth />
           <Button
