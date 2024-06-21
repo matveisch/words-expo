@@ -67,13 +67,27 @@ export default function OnboardingView() {
           <View style={{ flex: 1 }} />
 
           <Auth />
-          <Button
-            chromeless
-            style={{ marginTop: 10 }}
-            onPress={() => WebBrowser.openBrowserAsync('https://www.wordem.org/privacy')}
-          >
-            <Text>Privacy Policy</Text>
-          </Button>
+          <View style={{ marginTop: 10, flexDirection: 'row', gap: 5 }}>
+            <Button
+              chromeless
+              style={{ flex: 1 }}
+              onPress={() => WebBrowser.openBrowserAsync('https://www.wordem.org/privacy')}
+            >
+              <Text>Privacy Policy</Text>
+            </Button>
+
+            <Button
+              chromeless
+              style={{ flex: 1 }}
+              onPress={() =>
+                WebBrowser.openBrowserAsync(
+                  'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'
+                )
+              }
+            >
+              <Text>Terms Of Use</Text>
+            </Button>
+          </View>
         </Animated.View>
       )}
     </Animated.View>
