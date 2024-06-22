@@ -29,7 +29,7 @@ export type RootTabsParamList = {
 
 // export type NavigationProps = NativeStackScreenProps<RootTabsParamList>;
 
-const revenueCatKey = process.env.EXPO_PUBLIC_REVENUE_CAT_IOS_KEY;
+const revenueCatKey = process.env.REVENUE_CAT_IOS_KEY;
 
 const App = observer(() => {
   const Tab = createBottomTabNavigator<RootTabsParamList>();

@@ -9,6 +9,7 @@ import { autoCheckStore } from '../features/autoCheckStore';
 import { wordsLimitStore } from '../features/wordsLimitStore';
 import { defaultColors } from '../helpers/colors';
 import { AuthError, PostgrestError } from '@supabase/supabase-js';
+import { supabaseAdmin } from '../helpers/supabaseAdmin';
 
 const User = observer(() => {
   const queryClient = useQueryClient();
@@ -55,7 +56,7 @@ const User = observer(() => {
       const userId = sessionStore.session?.user.id;
       if (!userId) return;
 
-      const { error: authDeleteError } = await supabase.auth.admin.deleteUser(userId);
+      const { error: authDeleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
       handleDeleteError(authDeleteError, 'auth user');
 
       const { error: userDeleteError } = await supabase

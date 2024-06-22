@@ -53,11 +53,11 @@ class LargeSecureStore {
   }
 }
 
-const supabaseUrl = 'https://cpsynqohyobfkkbkljle.supabase.co';
-const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 
 // Better put your these secret keys in .env file
-export const supabase = createClient<Database>(supabaseUrl, supabaseKey || '', {
+export const supabase = createClient<Database>(supabaseUrl || '', supabaseKey || '', {
   auth: {
     storage: new LargeSecureStore(),
     autoRefreshToken: true,
