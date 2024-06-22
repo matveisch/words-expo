@@ -30,7 +30,6 @@ const ListOfDecks = observer(({ navigation }: Props) => {
     async function getUserInfo() {
       try {
         const info = await Purchases.getCustomerInfo();
-        console.log(info.entitlements.active);
         if (typeof info.entitlements.active['WordEmPro'] === 'undefined') {
           mutate();
         }

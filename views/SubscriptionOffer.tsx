@@ -12,6 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
 import { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import useOfferings from '../hooks/useOfferings';
 
 const subscriptionItems = [
   {
@@ -51,6 +52,11 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'Subscription
 const SubscriptionOffer = observer(({ navigation }: Props) => {
   const [isPending, setIsPending] = useState(false);
   const { mutateAsync } = useUpdateUser(sessionStore.session?.user.id || '', true);
+  const { data: currentOfferings } = useOfferings();
+
+  const proVersion = currentOfferings?.availablePackages.find(
+    (pack) => pack.presentedOfferingContext.offeringIdentifier === 'wordem-pro'
+  );
 
   async function restore() {
     try {
@@ -75,12 +81,11 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
     try {
       setIsPending(true);
 
-      const { current: currentOfferings } = await Purchases.getOfferings();
-      if (currentOfferings !== null && currentOfferings.availablePackages.length > 0) {
-        const proVersion = currentOfferings.availablePackages.find(
-          (pack) => pack.presentedOfferingContext.offeringIdentifier === 'wordem-pro'
-        );
-
+      if (
+        currentOfferings !== null &&
+        currentOfferings &&
+        currentOfferings.availablePackages.length > 0
+      ) {
         if (proVersion) {
           const { customerInfo } = await Purchases.purchasePackage(proVersion);
 
@@ -140,7 +145,13 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           {isPending ? (
             <ActivityIndicator />
           ) : (
-            <ThemedText text="Start Free Trial" style={{ fontSize: 17 }} />
+            <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
+              <ThemedText
+                text={`${proVersion?.product.currencyCode} ${proVersion?.product.price}`}
+                style={{ fontSize: 17, textDecorationLine: 'line-through', textAlign: 'center' }}
+              />
+              <ThemedText text="Free for 1 Week!" style={{ fontSize: 17 }} />
+            </View>
           )}
         </Button>
 

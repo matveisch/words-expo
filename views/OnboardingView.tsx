@@ -79,11 +79,7 @@ export default function OnboardingView() {
             <Button
               chromeless
               style={{ flex: 1 }}
-              onPress={() =>
-                WebBrowser.openBrowserAsync(
-                  'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'
-                )
-              }
+              onPress={() => WebBrowser.openBrowserAsync('https://www.wordem.org/terms-of-use')}
             >
               <Text>Terms Of Use</Text>
             </Button>

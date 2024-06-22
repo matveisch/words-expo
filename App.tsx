@@ -5,7 +5,6 @@ import {
   RouteProp,
   Theme,
 } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import QueryClientProvider from './components/QueryClientProvider';
@@ -28,7 +27,7 @@ export type RootTabsParamList = {
   Settings: undefined;
 };
 
-export type NavigationProps = NativeStackScreenProps<RootTabsParamList>;
+// export type NavigationProps = NativeStackScreenProps<RootTabsParamList>;
 
 const revenueCatKey = process.env.EXPO_PUBLIC_REVENUE_CAT_IOS_KEY;
 
