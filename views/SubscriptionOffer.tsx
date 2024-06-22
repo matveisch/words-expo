@@ -149,13 +149,13 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
               <ThemedText
                 text={`${proVersion?.product.currencyCode} ${proVersion?.product.price}/month`}
                 style={{
-                  fontSize: 17,
+                  fontSize: 15,
                   textDecorationLine: 'line-through',
                   textAlign: 'center',
                   color: 'rgba(255, 255, 255, 0.7)',
                 }}
               />
-              <ThemedText text="Free for 1 Week!" style={{ fontSize: 17 }} />
+              <ThemedText text="Free for 1 Week!" style={{ fontSize: 15 }} />
             </View>
           )}
         </Button>
