@@ -123,7 +123,7 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
             fontWeight: 'bold',
           }}
         >
-          Enjoy a Week Free Trial of Premium!
+          Enjoy a Week Free Trial of WordEm Pro!
         </Text>
 
         <View>

@@ -203,7 +203,7 @@ const HomeView = observer(() => {
           component={SubscriptionOffer}
           options={{
             headerShadowVisible: false,
-            headerTitle: 'Unlock premium features',
+            headerTitle: 'Unlock pro features',
             // headerBackVisible: true,
             // headerBackTitleVisible: true,
           }}
