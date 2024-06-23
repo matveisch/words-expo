@@ -114,19 +114,19 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
-        <Text
-          style={{
-            fontSize: 24,
-            textAlign: 'center',
-            marginVertical: 20,
-            color: defaultColors.activeColor,
-            fontWeight: 'bold',
-          }}
-        >
-          Enjoy a Week Free Trial of WordEm Pro!
-        </Text>
+        {/*<Text*/}
+        {/*  style={{*/}
+        {/*    fontSize: 20,*/}
+        {/*    textAlign: 'center',*/}
+        {/*    marginBottom: 20,*/}
+        {/*    color: defaultColors.activeColor,*/}
+        {/*    fontWeight: 'bold',*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  Enjoy a Week Free Trial of WordEm Pro!*/}
+        {/*</Text>*/}
 
-        <View>
+        <View style={{ gap: 5 }}>
           {subscriptionItems.map((item, i) => (
             <SubscriptionItem
               text={item.text}
@@ -137,9 +137,29 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           ))}
         </View>
 
+        <View style={styles.detailsContainer}>
+          {/*<Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginBottom: 5 }}>*/}
+          {/*  Subscription Details*/}
+          {/*</Text>*/}
+          <View style={styles.detailsRow}>
+            <Text style={styles.detail}>Length of Subscription: </Text>
+            <Text style={styles.value}>1 month, auto-renews monthly</Text>
+          </View>
+          <View style={styles.detailsRow}>
+            <Text style={styles.detail}>Free Trial: </Text>
+            <Text style={styles.value}>1 week free</Text>
+          </View>
+          <View style={styles.detailsRow}>
+            <Text style={styles.detail}>Price After Free Trial: </Text>
+            <Text style={styles.value}>
+              {proVersion?.product.currencyCode} {proVersion?.product.price} per month
+            </Text>
+          </View>
+        </View>
+
         <Button
           backgroundColor={defaultColors.activeColor}
-          style={{ height: 50, marginTop: 30 }}
+          style={{ height: 50 }}
           onPress={subscribe}
         >
           {isPending ? (
@@ -160,9 +180,15 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           )}
         </Button>
 
-        <Button chromeless style={{ marginTop: 5 }} onPress={restore}>
+        <Button chromeless style={{ marginVertical: 5 }} onPress={restore}>
           {isPending ? <ActivityIndicator /> : <Text>Restore subscription</Text>}
         </Button>
+
+        <Text style={styles.note}>
+          After your 1-week free trial, you will be automatically billed{' '}
+          {proVersion?.product.currencyCode} {proVersion?.product.price} per month. Cancel anytime
+          in your account settings.
+        </Text>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -172,6 +198,34 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     paddingHorizontal: 10,
+  },
+  detailsContainer: {
+    borderStyle: 'solid',
+    borderWidth: 3,
+    borderRadius: 8,
+    borderColor: defaultColors.disabledSecondaryButtonColor,
+    marginVertical: 15,
+    padding: 5,
+  },
+  detailsRow: {
+    flexDirection: 'row',
+    marginBottom: 5,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  detail: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#555',
+  },
+  value: {
+    fontSize: 13,
+    color: '#333',
+  },
+  note: {
+    fontSize: 12,
+    color: '#555',
+    textAlign: 'center',
   },
 });
 

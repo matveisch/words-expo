@@ -11,7 +11,7 @@ export default function SubscriptionItem(props: Props) {
 
   return (
     <View style={styles.container}>
-      <Image source={icon} style={{ width: 80, height: 80 }} />
+      <Image source={icon} style={{ width: 70, height: 70 }} />
       <View style={{ flex: 1, gap: 5 }}>
         <Text style={{ fontSize: 18 }}>{text}</Text>
         <Text style={{ color: 'grey', fontSize: 15 }}>{subText}</Text>

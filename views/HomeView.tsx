@@ -23,6 +23,7 @@ import useUser from '../hooks/useUser';
 import { observer } from 'mobx-react';
 import Loader from '../components/Loader';
 import SubscriptionOffer from './SubscriptionOffer';
+import { defaultColors } from '../helpers/colors';
 
 export type RootStackParamList = {
   Decks: undefined;
@@ -203,7 +204,12 @@ const HomeView = observer(() => {
           component={SubscriptionOffer}
           options={{
             headerShadowVisible: false,
-            headerTitle: 'Unlock pro features',
+            headerTitle: 'Unlock WordEm Pro Features',
+            headerTitleStyle: {
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: defaultColors.activeColor,
+            },
             // headerBackVisible: true,
             // headerBackTitleVisible: true,
           }}
