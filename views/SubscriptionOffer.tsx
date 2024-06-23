@@ -138,9 +138,6 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
         </View>
 
         <View style={styles.detailsContainer}>
-          {/*<Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginBottom: 5 }}>*/}
-          {/*  Subscription Details*/}
-          {/*</Text>*/}
           <View style={styles.detailsRow}>
             <Text style={styles.detail}>Length of Subscription: </Text>
             <Text style={styles.value}>1 month, auto-renews monthly</Text>
