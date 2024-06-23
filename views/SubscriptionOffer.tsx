@@ -162,17 +162,23 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           {isPending ? (
             <ActivityIndicator />
           ) : (
-            <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                gap: 1,
+                alignItems: 'center',
+              }}
+            >
+              <ThemedText text="Try It Free" style={{ fontSize: 16 }} />
               <ThemedText
-                text={`${proVersion?.product.currencyCode} ${proVersion?.product.price}/month`}
+                text={`1 week free, then ${proVersion?.product.currencyCode} ${proVersion?.product.price}/month`}
                 style={{
-                  fontSize: 15,
-                  textDecorationLine: 'line-through',
+                  fontSize: 12,
                   textAlign: 'center',
                   color: 'rgba(255, 255, 255, 0.7)',
                 }}
               />
-              <ThemedText text="Free for 1 Week!" style={{ fontSize: 15 }} />
             </View>
           )}
         </Button>
