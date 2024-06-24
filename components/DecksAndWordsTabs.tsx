@@ -40,14 +40,17 @@ const DecksAndWordsTabs = observer((props: Props) => {
   const { currentDeck, hasParentDeck } = props;
   const [activeTab, setActiveTab] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
   const subDecks = decks?.filter((d) => d.parent_deck === currentDeck);
-  const { data: words } = useWords(
-    currentDeck,
-    [...(subDecks?.map((deck) => deck.id) || []), currentDeck],
-    isFetched
-  );
+
+  const decksIds = [...(subDecks?.map((deck) => deck.id) || []), currentDeck];
+  const { data, fetchNextPage, hasNextPage } = useWords(currentDeck, decksIds, isFetched);
+  // Combine all pages into a single array
+  const words = data?.pages.flat() || [];
+
   const { data: user } = useUser(sessionStore.session?.user.id || '');
+
   const pagerViewRef = useRef<PagerView | null>(null);
   const offset = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
@@ -138,6 +141,10 @@ const DecksAndWordsTabs = observer((props: Props) => {
         <View style={{ width: '100%', height: '100%' }} key="1">
           {words && (
             <FlashList
+              onEndReached={() => {
+                if (hasNextPage) fetchNextPage();
+              }}
+              onEndReachedThreshold={0.5}
               estimatedItemSize={65}
               data={user?.pro ? words : words.slice(0, 20)}
               ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No words</Text>}
