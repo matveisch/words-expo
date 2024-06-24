@@ -43,6 +43,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
   const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
   const subDecks = decks?.filter((d) => d.parent_deck === currentDeck);
   const { data: words } = useWords(
+    currentDeck,
     [...(subDecks?.map((deck) => deck.id) || []), currentDeck],
     isFetched
   );

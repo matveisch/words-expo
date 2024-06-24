@@ -1,6 +1,5 @@
 import { supabase } from '../helpers/initSupabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { WordType } from '../types/WordType';
 
 type WordToUpdate = {
   id: number;
@@ -31,17 +30,7 @@ export default function useUpdateWord() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (word: WordToUpdate) => updateWord(word),
-    onSuccess: (updatedWord) => {
-      queryClient.setQueriesData({ queryKey: ['words'] }, (oldData: WordType[] | undefined) => {
-        if (oldData instanceof Array) {
-          const arrayToUpdate = [...oldData];
-          const updatedIndex = arrayToUpdate.findIndex((w) => w.id === updatedWord.id);
-          if (updatedIndex !== -1) {
-            arrayToUpdate[updatedIndex] = updatedWord;
-            return arrayToUpdate;
-          }
-        }
-      });
-    },
+    onSuccess: (updatedWord) =>
+      queryClient.invalidateQueries({ queryKey: ['words', updatedWord.deck] }),
   });
 }

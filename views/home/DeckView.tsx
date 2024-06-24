@@ -36,6 +36,7 @@ const DeckView = observer(({ route, navigation }: Props) => {
   const subDecks = decks?.filter((d) => d.parent_deck === deck.id);
 
   const { data: words, isLoading: areWordsLoading } = useWords(
+    deck.id,
     [...(subDecks?.map((deck) => deck.id) || []), deck.id],
     isFetched
   );
@@ -58,14 +59,11 @@ const DeckView = observer(({ route, navigation }: Props) => {
         height: '100%',
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
-        paddingTop: 10,
       }}
     >
       {user.pro ? (
         words.length > 0 && (
-          <View
-            style={{ paddingVertical: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}
-          >
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
             <PieChart
               donut
               data={graphData}

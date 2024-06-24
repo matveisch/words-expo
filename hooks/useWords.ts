@@ -12,9 +12,9 @@ async function getWords(deckIds: number[]) {
   return data;
 }
 
-export const useWords = (deckIds: number[], subDecksLoaded: boolean) =>
+export const useWords = (currentDeckId: number, deckIds: number[], subDecksLoaded: boolean) =>
   useQuery({
-    queryKey: ['words', deckIds, subDecksLoaded],
+    queryKey: ['words', currentDeckId, deckIds, subDecksLoaded],
     queryFn: () => getWords(deckIds),
     enabled: !!subDecksLoaded,
   });

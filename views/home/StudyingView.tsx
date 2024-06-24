@@ -33,6 +33,7 @@ export const StudyingView = observer(({ route }: Props) => {
   const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
   const subDecks = decks?.filter((d) => d.parent_deck === deckId);
   const { data: words } = useWords(
+    deckId,
     [...(subDecks?.map((deck) => deck.id) || []), deckId],
     isFetched
   );
