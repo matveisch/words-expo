@@ -7,7 +7,7 @@ import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { useWords } from '../hooks/useWords';
-import { RootStackParamList } from '../views/HomeView';
+import { RootStackParamList } from '../views/home/HomeView';
 import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';

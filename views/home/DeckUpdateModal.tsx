@@ -1,37 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
+import Toast from 'react-native-root-toast';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import useAddDeck from '../hooks/useAddDeck';
-import { colors } from '../helpers/colors';
+import useUpdateDeck from '../../hooks/useUpdateDeck';
+import { colors, defaultColors } from '../../helpers/colors';
+import { toastOptions } from '../../helpers/toastOptions';
 import { RootStackParamList } from './HomeView';
-import Button from '../ui/Button';
-import Label from '../ui/Label';
-import Input from '../ui/Input';
-import Circle from '../ui/Circle';
+import Label from '../../ui/Label';
+import Input from '../../ui/Input';
+import Circle from '../../ui/Circle';
+import Button from '../../ui/Button';
+import ThemedText from '../../ui/ThemedText';
 import { observer } from 'mobx-react';
-import useUser from '../hooks/useUser';
-import { sessionStore } from '../features/sessionStore';
-import LockedFeature from '../components/LockedFeature';
-import Loader from '../components/Loader';
+import useUser from '../../hooks/useUser';
+import { sessionStore } from '../../features/sessionStore';
+import Loader from '../../components/Loader';
+import LockedFeature from '../../components/LockedFeature';
 
 type Inputs = {
   deckName: string;
   color: string;
 };
 
-interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckCreateModal'> {}
+interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckUpdateModal'> {}
 
-const DeckCreateModal = observer(({ navigation, route }: Props) => {
+const DeckUpdateModal = observer(({ route, navigation }: Props) => {
+  const { deck } = route.params;
   const [currentColor, setCurrentColor] = useState('');
-  const { mutateAsync, isPending } = useAddDeck();
+  const { mutateAsync, isPending } = useUpdateDeck();
   const { data: user } = useUser(sessionStore.session?.user.id || '');
 
   const {
     control,
     handleSubmit,
-    reset,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -44,19 +47,28 @@ const DeckCreateModal = observer(({ navigation, route }: Props) => {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const newDeck = {
       name: data.deckName,
-      parent_deck: route.params ? route.params.parentDeckId : null,
+      parent_deck: deck.id || null,
       color: data.color,
     };
 
-    mutateAsync(newDeck).then(() => {
-      reset();
+    mutateAsync({ ...newDeck, id: deck.id }).then(() => {
+      Toast.show('Deck Updated', toastOptions);
       Keyboard.dismiss();
-      setCurrentColor('');
       navigation.goBack();
     });
   };
 
-  if (!user) return <Loader />;
+  useEffect(() => {
+    if (deck) {
+      setValue('deckName', deck.name);
+      setValue('color', deck.color || '');
+      setCurrentColor(deck.color || '');
+    }
+  }, [deck]);
+
+  if (!user) {
+    return <Loader />;
+  }
 
   return (
     <View style={styles.container}>
@@ -96,8 +108,13 @@ const DeckCreateModal = observer(({ navigation, route }: Props) => {
         </>
       )}
 
-      <Button onPress={handleSubmit(onSubmit)} disabled={isPending} style={{ marginTop: 10 }}>
-        <Text>Create</Text>
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        isDisabled={isPending}
+        style={{ marginTop: 10 }}
+        backgroundColor={defaultColors.activeColor}
+      >
+        <ThemedText text="Edit" />
       </Button>
     </View>
   );
@@ -105,8 +122,8 @@ const DeckCreateModal = observer(({ navigation, route }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
+    padding: 10,
   },
 });
 
-export default DeckCreateModal;
+export default DeckUpdateModal;

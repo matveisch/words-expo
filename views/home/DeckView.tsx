@@ -3,21 +3,21 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { PieChart } from 'react-native-gifted-charts';
 
-import DecksAndWordsTabs from '../components/DecksAndWordsTabs';
-import { useWords } from '../hooks/useWords';
-import { WordType } from '../types/WordType';
+import DecksAndWordsTabs from '../../components/DecksAndWordsTabs';
+import { useWords } from '../../hooks/useWords';
+import { WordType } from '../../types/WordType';
 import { RootStackParamList } from './HomeView';
-import Loader from '../components/Loader';
-import { defaultColors, knowledgeColors } from '../helpers/colors';
-import Button from '../ui/Button';
-import ChartItem from '../ui/ChartItem';
+import Loader from '../../components/Loader';
+import { defaultColors, knowledgeColors } from '../../helpers/colors';
+import Button from '../../ui/Button';
+import ChartItem from '../../ui/ChartItem';
 import { useIsMutating } from '@tanstack/react-query';
-import ThemedText from '../ui/ThemedText';
-import { useDecks } from '../hooks/useDecks';
+import ThemedText from '../../ui/ThemedText';
+import { useDecks } from '../../hooks/useDecks';
 import { observer } from 'mobx-react';
-import { sessionStore } from '../features/sessionStore';
-import useUser from '../hooks/useUser';
-import LockedFeature from '../components/LockedFeature';
+import { sessionStore } from '../../features/sessionStore';
+import useUser from '../../hooks/useUser';
+import LockedFeature from '../../components/LockedFeature';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 

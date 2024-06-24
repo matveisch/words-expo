@@ -9,7 +9,7 @@ import { defaultColors } from '../helpers/colors';
 import { sessionStore } from '../features/sessionStore';
 import useUpdateUser from '../hooks/useUpdateUser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './home/HomeView';
 import { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import useOfferings from '../hooks/useOfferings';

@@ -1,22 +1,22 @@
 import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from './HomeView';
-import { useWords } from '../hooks/useWords';
+import { useWords } from '../../hooks/useWords';
 import { useEffect, useState } from 'react';
-import Loader from '../components/Loader';
-import Input from '../ui/Input';
-import Button from '../ui/Button';
-import { defaultColors } from '../helpers/colors';
-import { TabBarIcon } from '../ui/TabBarIcon';
-import { WordType } from '../types/WordType';
-import FinishedSetBoard from '../components/FinishedSetBoard';
-import useUpdateWord from '../hooks/useUpdateWord';
+import Loader from '../../components/Loader';
+import Input from '../../ui/Input';
+import Button from '../../ui/Button';
+import { defaultColors } from '../../helpers/colors';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import { WordType } from '../../types/WordType';
+import FinishedSetBoard from '../../components/FinishedSetBoard';
+import useUpdateWord from '../../hooks/useUpdateWord';
 import { observer } from 'mobx-react';
-import { wordsLimitStore } from '../features/wordsLimitStore';
-import { autoCheckStore } from '../features/autoCheckStore';
-import ThemedText from '../ui/ThemedText';
-import { useDecks } from '../hooks/useDecks';
-import { sessionStore } from '../features/sessionStore';
+import { wordsLimitStore } from '../../features/wordsLimitStore';
+import { autoCheckStore } from '../../features/autoCheckStore';
+import ThemedText from '../../ui/ThemedText';
+import { useDecks } from '../../hooks/useDecks';
+import { sessionStore } from '../../features/sessionStore';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}

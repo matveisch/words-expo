@@ -3,7 +3,7 @@ import { TabBarIcon } from '../ui/TabBarIcon';
 import { defaultColors } from '../helpers/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../views/HomeView';
+import { RootStackParamList } from '../views/home/HomeView';
 
 type Props = {
   text: string;

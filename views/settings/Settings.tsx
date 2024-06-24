@@ -1,26 +1,26 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, View, Text, Switch } from 'react-native';
-import User from '../components/User';
-import { TabBarIcon } from '../ui/TabBarIcon';
-import Label from '../ui/Label';
-import Input from '../ui/Input';
-import Description from '../ui/Description';
-import Button from '../ui/Button';
+import User from '../../components/User';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import Label from '../../ui/Label';
+import Input from '../../ui/Input';
+import Description from '../../ui/Description';
+import Button from '../../ui/Button';
 import { observer } from 'mobx-react';
-import { wordsLimitStore } from '../features/wordsLimitStore';
+import { wordsLimitStore } from '../../features/wordsLimitStore';
 import Toast from 'react-native-root-toast';
-import { toastOptions } from '../helpers/toastOptions';
-import { autoCheckStore } from '../features/autoCheckStore';
-import useUser from '../hooks/useUser';
-import { sessionStore } from '../features/sessionStore';
-import LockedFeature from '../components/LockedFeature';
-import Loader from '../components/Loader';
+import { toastOptions } from '../../helpers/toastOptions';
+import { autoCheckStore } from '../../features/autoCheckStore';
+import useUser from '../../hooks/useUser';
+import { sessionStore } from '../../features/sessionStore';
+import LockedFeature from '../../components/LockedFeature';
+import Loader from '../../components/Loader';
 
 type Inputs = {
   wordsPerSet: string;
 };
 
-const SettingsView = observer(() => {
+const Settings = observer(() => {
   const { data: user } = useUser(sessionStore.session?.user.id || '');
   const {
     control,
@@ -106,4 +106,4 @@ const SettingsView = observer(() => {
   );
 });
 
-export default SettingsView;
+export default Settings;

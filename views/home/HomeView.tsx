@@ -6,24 +6,24 @@ import { Alert, View } from 'react-native';
 
 import ListOfDecks from './ListOfDecks';
 import DeckView from './DeckView';
-import useDeleteDeck from '../hooks/useDeleteDeck';
+import useDeleteDeck from '../../hooks/useDeleteDeck';
 import Word from './Word';
 import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
 import WordCreateModal from './WordCreateModal';
-import { TabBarIcon } from '../ui/TabBarIcon';
-import Button from '../ui/Button';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import Button from '../../ui/Button';
 import { StudyingView } from './StudyingView';
-import { WordType } from '../types/WordType';
-import useDeleteWord from '../hooks/useDeleteWord';
-import { DeckType } from '../types/Deck';
-import { useDecks } from '../hooks/useDecks';
-import { sessionStore } from '../features/sessionStore';
-import useUser from '../hooks/useUser';
+import { WordType } from '../../types/WordType';
+import useDeleteWord from '../../hooks/useDeleteWord';
+import { DeckType } from '../../types/Deck';
+import { useDecks } from '../../hooks/useDecks';
+import { sessionStore } from '../../features/sessionStore';
+import useUser from '../../hooks/useUser';
 import { observer } from 'mobx-react';
-import Loader from '../components/Loader';
-import SubscriptionOffer from './SubscriptionOffer';
-import { defaultColors } from '../helpers/colors';
+import Loader from '../../components/Loader';
+import SubscriptionOffer from '../SubscriptionOffer';
+import { defaultColors } from '../../helpers/colors';
 
 export type RootStackParamList = {
   Decks: undefined;

@@ -16,15 +16,15 @@ import Purchases from 'react-native-purchases';
 import { Platform } from 'react-native';
 
 import { supabase } from './helpers/initSupabase';
-import HomeView from './views/HomeView';
-import SettingsView from './views/SettingsView';
+import HomeView from './views/home/HomeView';
+import SettingsView from './views/settings/SettingsView';
 import { TabBarIcon } from './ui/TabBarIcon';
 import { sessionStore } from './features/sessionStore';
 import OnboardingView from './views/OnboardingView';
 
 export type RootTabsParamList = {
-  Home: { session: Session };
-  Settings: undefined;
+  HomeTab: { session: Session };
+  SettingsTab: undefined;
 };
 
 // export type NavigationProps = NativeStackScreenProps<RootTabsParamList>;
@@ -74,7 +74,7 @@ const App = observer(() => {
             {sessionStore.session ? (
               <Tab.Navigator>
                 <Tab.Screen
-                  name="Home"
+                  name="HomeTab"
                   component={HomeView}
                   options={({ route }) => ({
                     tabBarStyle: { display: getTabBarStyle(route) },
@@ -84,11 +84,12 @@ const App = observer(() => {
                   })}
                 />
                 <Tab.Screen
-                  name="Settings"
+                  name="SettingsTab"
                   component={SettingsView}
                   options={{
-                    tabBarIcon: () => <TabBarIcon name="gear" />,
+                    headerShown: false,
                     headerShadowVisible: false,
+                    tabBarIcon: () => <TabBarIcon name="gear" />,
                   }}
                 />
               </Tab.Navigator>
