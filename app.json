@@ -18,7 +18,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.matveisch.wordem",
       "usesAppleSignIn": true,
-      "buildNumber": "5"
+      "buildNumber": "6"
     },
     "android": {
       "adaptiveIcon": {
