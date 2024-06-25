@@ -114,19 +114,7 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
   return (
     <KeyboardAwareScrollView>
       <View style={styles.container}>
-        {/*<Text*/}
-        {/*  style={{*/}
-        {/*    fontSize: 20,*/}
-        {/*    textAlign: 'center',*/}
-        {/*    marginBottom: 20,*/}
-        {/*    color: defaultColors.activeColor,*/}
-        {/*    fontWeight: 'bold',*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  Enjoy a Week Free Trial of WordEm Pro!*/}
-        {/*</Text>*/}
-
-        <View style={{ gap: 5 }}>
+        <View style={{ gap: 5, marginBottom: 20 }}>
           {subscriptionItems.map((item, i) => (
             <SubscriptionItem
               text={item.text}
@@ -137,22 +125,22 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           ))}
         </View>
 
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailsRow}>
-            <Text style={styles.detail}>Length of Subscription: </Text>
-            <Text style={styles.value}>1 month, auto-renews monthly</Text>
-          </View>
-          <View style={styles.detailsRow}>
-            <Text style={styles.detail}>Free Trial: </Text>
-            <Text style={styles.value}>1 week free</Text>
-          </View>
-          <View style={styles.detailsRow}>
-            <Text style={styles.detail}>Price After Free Trial: </Text>
-            <Text style={styles.value}>
-              {proVersion?.product.currencyCode} {proVersion?.product.price} per month
-            </Text>
-          </View>
-        </View>
+        {/*<View style={styles.detailsContainer}>*/}
+        {/*  <View style={styles.detailsRow}>*/}
+        {/*    <Text style={styles.detail}>Length of Subscription: </Text>*/}
+        {/*    <Text style={styles.value}>1 month, auto-renews monthly</Text>*/}
+        {/*  </View>*/}
+        {/*  <View style={styles.detailsRow}>*/}
+        {/*    <Text style={styles.detail}>Free Trial: </Text>*/}
+        {/*    <Text style={styles.value}>1 week free</Text>*/}
+        {/*  </View>*/}
+        {/*  <View style={styles.detailsRow}>*/}
+        {/*    <Text style={styles.detail}>Price After Free Trial: </Text>*/}
+        {/*    <Text style={styles.value}>*/}
+        {/*      {proVersion?.product.currencyCode} {proVersion?.product.price} per month*/}
+        {/*    </Text>*/}
+        {/*  </View>*/}
+        {/*</View>*/}
 
         <Button
           backgroundColor={defaultColors.activeColor}
