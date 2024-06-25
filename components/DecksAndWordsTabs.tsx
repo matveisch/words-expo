@@ -136,7 +136,6 @@ const DecksAndWordsTabs = observer((props: Props) => {
         ref={pagerViewRef}
         scrollEnabled={!hasParentDeck}
         onPageSelected={(e) => setActiveTab(e.nativeEvent.position)}
-        // useNext
       >
         <View style={{ width: '100%', height: '100%' }} key="1">
           {words && (

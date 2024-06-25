@@ -1,14 +1,15 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, View, Text, Switch } from 'react-native';
+import Toast from 'react-native-root-toast';
+import { observer } from 'mobx-react';
+
 import User from '../../components/User';
 import { TabBarIcon } from '../../ui/TabBarIcon';
 import Label from '../../ui/Label';
 import Input from '../../ui/Input';
 import Description from '../../ui/Description';
 import Button from '../../ui/Button';
-import { observer } from 'mobx-react';
 import { wordsLimitStore } from '../../features/wordsLimitStore';
-import Toast from 'react-native-root-toast';
 import { toastOptions } from '../../helpers/toastOptions';
 import { autoCheckStore } from '../../features/autoCheckStore';
 import useUser from '../../hooks/useUser';
@@ -55,7 +56,7 @@ const Settings = observer(() => {
       }}
     >
       <View>
-        {user.pro ? (
+        {!user.pro ? (
           <LockedFeature text="Get pro version to get access to additional settings" />
         ) : (
           <>
