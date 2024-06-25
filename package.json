@@ -37,7 +37,6 @@
     "react-hook-form": "^7.51.5",
     "react-native": "0.74.2",
     "react-native-get-random-values": "~1.11.0",
-    "react-native-gifted-charts": "^1.4.10",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-pager-view": "6.3.0",

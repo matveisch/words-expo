@@ -1,7 +1,6 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { PieChart } from 'react-native-gifted-charts';
 
 import DecksAndWordsTabs from '../../components/DecksAndWordsTabs';
 import { RootStackParamList } from './HomeView';
@@ -17,6 +16,7 @@ import { sessionStore } from '../../features/sessionStore';
 import useUser from '../../hooks/useUser';
 import LockedFeature from '../../components/LockedFeature';
 import { useWordsCount } from '../../hooks/useWordsCount';
+import PieChart from '../../components/PieChart';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -56,33 +56,19 @@ const DeckView = observer(({ route, navigation }: Props) => {
         paddingRight: insets.right + 10,
       }}
     >
-      {/*{user.pro ? (*/}
-      {/*  wordsCount !== null && (*/}
-      {/*    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>*/}
-      {/*      <PieChart*/}
-      {/*        donut*/}
-      {/*        data={graphData}*/}
-      {/*        radius={90}*/}
-      {/*        innerRadius={80}*/}
-      {/*        centerLabelComponent={() => <Text style={{ fontSize: 70 }}>{wordsCount}</Text>}*/}
-      {/*      />*/}
-      {/*      <View style={{ justifyContent: 'space-evenly' }}>*/}
-      {/*        {graphData.map(*/}
-      {/*          (level, index) =>*/}
-      {/*            level.value > 0 && (*/}
-      {/*              <ChartItem*/}
-      {/*                text={level.text}*/}
-      {/*                color={level.color}*/}
-      {/*                key={`${level.text}-${index}`}*/}
-      {/*              />*/}
-      {/*            )*/}
-      {/*        )}*/}
-      {/*      </View>*/}
-      {/*    </View>*/}
-      {/*  )*/}
-      {/*) : (*/}
-      {/*  <LockedFeature text="Get pro version to view statistics" />*/}
-      {/*)}*/}
+      {user.pro ? (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          <PieChart graphData={graphData} total={wordsCount || 0} />
+
+          <View style={{ justifyContent: 'space-evenly' }}>
+            {graphData.map((level, index) => (
+              <ChartItem text={level.text} color={level.color} key={`${level.text}-${index}`} />
+            ))}
+          </View>
+        </View>
+      ) : (
+        <LockedFeature text="Get pro version to view statistics" />
+      )}
 
       {wordsCount !== 0 && (
         <View style={styles.studyButtonsContainer}>
