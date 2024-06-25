@@ -105,7 +105,67 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      limited_words: {
+        Args: {
+          deck_ids: number[]
+          revise: boolean
+          words_limit: number
+        }
+        Returns: {
+          deck: number
+          id: number
+          knowledgelevel: number
+          meaning: string
+          pronunciation: string
+          word: string
+        }[]
+      }
+      random_words: {
+        Args: {
+          count: number
+          deck_ids: number[]
+        }
+        Returns: {
+          deck: number
+          id: number
+          knowledgelevel: number
+          meaning: string
+          pronunciation: string
+          word: string
+        }[]
+      }
+      words_to_learn:
+        | {
+            Args: {
+              deck_ids: number[]
+              revise: boolean
+              index_from: number
+              index_to: number
+            }
+            Returns: {
+              deck: number
+              id: number
+              knowledgelevel: number
+              meaning: string
+              pronunciation: string
+              word: string
+            }[]
+          }
+        | {
+            Args: {
+              deck_ids: number[]
+              revise: boolean
+              words_limit: number
+            }
+            Returns: {
+              deck: number
+              id: number
+              knowledgelevel: number
+              meaning: string
+              pronunciation: string
+              word: string
+            }[]
+          }
     }
     Enums: {
       [_ in never]: never

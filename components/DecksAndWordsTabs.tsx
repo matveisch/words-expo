@@ -142,7 +142,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
           {words && (
             <FlashList
               onEndReached={() => {
-                if (hasNextPage) fetchNextPage();
+                if (hasNextPage && user.pro) fetchNextPage();
               }}
               onEndReachedThreshold={0.5}
               estimatedItemSize={65}

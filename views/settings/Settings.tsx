@@ -55,17 +55,18 @@ const Settings = observer(() => {
       }}
     >
       <View>
-        {!user.pro ? (
+        {user.pro ? (
           <LockedFeature text="Get pro version to get access to additional settings" />
         ) : (
           <>
             <View>
               <Label text="New words per session" />
-              <Description text="Set desired amount of words you want to learn per studying session." />
+              <Description text="Set desired amount of words (up to 100) you want to learn per studying session." />
               <View style={{ gap: 10, flexDirection: 'row' }}>
                 <Controller
                   name="wordsPerSet"
                   control={control}
+                  rules={{ required: true }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       style={{ flex: 1 }}
@@ -73,6 +74,7 @@ const Settings = observer(() => {
                       onBlur={onBlur}
                       keyboardType="number-pad"
                       value={value}
+                      maxLength={2}
                     />
                   )}
                 />

@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from './HomeView';
-import { useWords } from '../../hooks/useWords';
 import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+import { RootStackParamList } from './HomeView';
 import Loader from '../../components/Loader';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';
@@ -11,33 +13,30 @@ import { TabBarIcon } from '../../ui/TabBarIcon';
 import { WordType } from '../../types/WordType';
 import FinishedSetBoard from '../../components/FinishedSetBoard';
 import useUpdateWord from '../../hooks/useUpdateWord';
-import { observer } from 'mobx-react';
 import { wordsLimitStore } from '../../features/wordsLimitStore';
 import { autoCheckStore } from '../../features/autoCheckStore';
 import ThemedText from '../../ui/ThemedText';
 import { useDecks } from '../../hooks/useDecks';
 import { sessionStore } from '../../features/sessionStore';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useWordsToLearn } from '../../hooks/useWordsToLearn';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
-function shuffleArray(array: any[]) {
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
+
   const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
   const subDecks = decks?.filter((d) => d.parent_deck === deckId);
-  const { data: words } = useWords(
+
+  const decksIds = [...(subDecks?.map((deck) => deck.id) || []), deckId];
+  const { data: words, refetch } = useWordsToLearn(
     deckId,
-    [...(subDecks?.map((deck) => deck.id) || []), deckId],
-    isFetched
+    decksIds,
+    isFetched,
+    wordsLimitStore.limit,
+    revise
   );
-  const [wordsToLearn, setWordsToLearn] = useState<WordType[] | undefined>(undefined);
+
   const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -45,16 +44,8 @@ export const StudyingView = observer(({ route }: Props) => {
   const [setIsDone, setSetIsDone] = useState(false);
   const updateWord = useUpdateWord();
 
-  // 1. filtering words so only with knowledge level < 4 are shown
-  // 2. shuffling them using the algorithm
   useEffect(() => {
-    const notLearnedWords = words
-      ?.filter((word) => (revise ? word.knowledgelevel === 4 : word.knowledgelevel < 4))
-      .slice(0, wordsLimitStore.limit);
-    if (notLearnedWords) {
-      shuffleArray(notLearnedWords);
-      setWordsToLearn(notLearnedWords);
-    }
+    refetch();
   }, []);
 
   function wordCheck(word: WordType, answer: string) {
@@ -64,9 +55,9 @@ export const StudyingView = observer(({ route }: Props) => {
   function handleAnswer() {
     Keyboard.dismiss();
 
-    if (wordsToLearn && autoCheckStore.autoCheck) {
-      const isAnswerRight = wordCheck(wordsToLearn[currentIndex], answer);
-      const currentWord = wordsToLearn[currentIndex];
+    if (words && autoCheckStore.autoCheck) {
+      const isAnswerRight = wordCheck(words[currentIndex], answer);
+      const currentWord = words[currentIndex];
 
       if (isAnswerRight) {
         if (!revise) {
@@ -95,7 +86,7 @@ export const StudyingView = observer(({ route }: Props) => {
     }
   }
 
-  const hasWordsToLearn = () => wordsToLearn && currentIndex + 1 < wordsToLearn.length;
+  const hasWordsToLearn = () => words && currentIndex + 1 < words.length;
 
   function handleNextWord() {
     setBeingChecked(false);
@@ -116,7 +107,7 @@ export const StudyingView = observer(({ route }: Props) => {
   }
 
   function handleAnsweredRight() {
-    const currentWord = wordsToLearn![currentIndex];
+    const currentWord = words![currentIndex];
     if (currentWord.knowledgelevel < 4) {
       updateWord
         .mutateAsync({
@@ -132,7 +123,7 @@ export const StudyingView = observer(({ route }: Props) => {
   }
 
   function handleAnsweredWrong() {
-    const currentWord = wordsToLearn![currentIndex];
+    const currentWord = words![currentIndex];
     if (currentWord.knowledgelevel > 1) {
       updateWord
         .mutateAsync({
@@ -147,7 +138,7 @@ export const StudyingView = observer(({ route }: Props) => {
     }
   }
 
-  if (!words || !wordsToLearn) {
+  if (!words) {
     return <Loader />;
   }
 
@@ -158,21 +149,19 @@ export const StudyingView = observer(({ route }: Props) => {
   return (
     <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
-        <Text style={styles.wordTitle}>{wordsToLearn[currentIndex].meaning}</Text>
+        <Text style={styles.wordTitle}>{words[currentIndex].meaning}</Text>
         <View style={styles.explainedContainer}>
           {beingChecked && (
             <View style={styles.innerExplainedContainer}>
-              {wordsToLearn[currentIndex].pronunciation && (
+              {words[currentIndex].pronunciation && (
                 <>
-                  <Text style={styles.explainedText}>
-                    {wordsToLearn[currentIndex].pronunciation}
-                  </Text>
+                  <Text style={styles.explainedText}>{words[currentIndex].pronunciation}</Text>
                   <View
                     style={{ width: 5, height: 5, backgroundColor: 'black', borderRadius: 50 }}
                   />
                 </>
               )}
-              <Text style={styles.explainedText}>{wordsToLearn[currentIndex].word}</Text>
+              <Text style={styles.explainedText}>{words[currentIndex].word}</Text>
             </View>
           )}
         </View>
