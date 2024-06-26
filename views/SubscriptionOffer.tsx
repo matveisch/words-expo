@@ -125,23 +125,6 @@ const SubscriptionOffer = observer(({ navigation }: Props) => {
           ))}
         </View>
 
-        {/*<View style={styles.detailsContainer}>*/}
-        {/*  <View style={styles.detailsRow}>*/}
-        {/*    <Text style={styles.detail}>Length of Subscription: </Text>*/}
-        {/*    <Text style={styles.value}>1 month, auto-renews monthly</Text>*/}
-        {/*  </View>*/}
-        {/*  <View style={styles.detailsRow}>*/}
-        {/*    <Text style={styles.detail}>Free Trial: </Text>*/}
-        {/*    <Text style={styles.value}>1 week free</Text>*/}
-        {/*  </View>*/}
-        {/*  <View style={styles.detailsRow}>*/}
-        {/*    <Text style={styles.detail}>Price After Free Trial: </Text>*/}
-        {/*    <Text style={styles.value}>*/}
-        {/*      {proVersion?.product.currencyCode} {proVersion?.product.price} per month*/}
-        {/*    </Text>*/}
-        {/*  </View>*/}
-        {/*</View>*/}
-
         <Button
           backgroundColor={defaultColors.activeColor}
           style={{ height: 50 }}
