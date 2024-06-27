@@ -79,6 +79,7 @@ const App = observer(() => {
                   options={({ route }) => ({
                     tabBarStyle: { display: getTabBarStyle(route) },
                     headerShown: false,
+                    tabBarLabel: 'Home',
                     headerShadowVisible: false,
                     tabBarIcon: () => <TabBarIcon name="home" />,
                   })}
@@ -89,6 +90,7 @@ const App = observer(() => {
                   options={{
                     headerShown: false,
                     headerShadowVisible: false,
+                    tabBarLabel: 'Settings',
                     tabBarIcon: () => <TabBarIcon name="gear" />,
                   }}
                 />

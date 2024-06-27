@@ -17,8 +17,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.matveisch.wordem",
-      "usesAppleSignIn": true,
-      "buildNumber": "6"
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {

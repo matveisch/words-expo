@@ -44,6 +44,7 @@ export type Database = {
       users: {
         Row: {
           email: string
+          expo_push_token: string | null
           id: number
           name: string
           pro: boolean
@@ -51,6 +52,7 @@ export type Database = {
         }
         Insert: {
           email: string
+          expo_push_token?: string | null
           id?: never
           name: string
           pro: boolean
@@ -58,6 +60,7 @@ export type Database = {
         }
         Update: {
           email?: string
+          expo_push_token?: string | null
           id?: never
           name?: string
           pro?: boolean
