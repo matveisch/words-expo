@@ -16,7 +16,6 @@ import useUser from '../../hooks/useUser';
 import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';
 import Loader from '../../components/Loader';
-import UsePush from '../../hooks/usePush';
 
 type Inputs = {
   wordsPerSet: string;
@@ -104,8 +103,6 @@ const Settings = observer(() => {
           </>
         )}
       </View>
-
-      <UsePush />
 
       <User />
     </View>
