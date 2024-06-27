@@ -16,6 +16,7 @@ import useUser from '../../hooks/useUser';
 import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';
 import Loader from '../../components/Loader';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 type Inputs = {
   wordsPerSet: string;
@@ -99,6 +100,10 @@ const Settings = observer(() => {
                 <Description text="Mark words by yourself or let app do it for you." />
               </View>
               <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
+            </View>
+
+            <View>
+              <RNDateTimePicker mode="time" value={new Date()} />
             </View>
           </>
         )}
