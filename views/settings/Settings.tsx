@@ -1,5 +1,5 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Keyboard, View, Text, Switch } from 'react-native';
+import { Keyboard, View, Text, Switch, StyleSheet } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { observer } from 'mobx-react';
 
@@ -44,6 +44,9 @@ const Settings = observer(() => {
     autoCheckStore.setAutoCheck(!autoCheckStore.autoCheck);
   }
 
+  const initialDate = new Date();
+  initialDate.setHours(9, 0, 0, 0);
+
   if (!user) return <Loader />;
 
   return (
@@ -87,14 +90,7 @@ const Settings = observer(() => {
               {errors.wordsPerSet && <Text style={{ color: 'red' }}>This field is required</Text>}
             </View>
 
-            <View
-              style={{
-                marginTop: 20,
-                alignItems: 'center',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
+            <View style={[styles.row, { marginTop: 20 }]}>
               <View>
                 <Label text="Auto check" />
                 <Description text="Mark words by yourself or let app do it for you." />
@@ -102,8 +98,20 @@ const Settings = observer(() => {
               <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
             </View>
 
-            <View>
-              <RNDateTimePicker mode="time" value={new Date()} />
+            <View style={styles.row}>
+              <View>
+                <Label text="Reminders" />
+                <Description text="Would you like to recieve remainders?" />
+              </View>
+              <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
+            </View>
+
+            <View style={styles.row}>
+              <View>
+                <Label text="Time of remainders" />
+                <Description text="Select a convenient remainders time." />
+              </View>
+              <RNDateTimePicker mode="time" value={initialDate} />
             </View>
           </>
         )}
@@ -112,6 +120,14 @@ const Settings = observer(() => {
       <User />
     </View>
   );
+});
+
+const styles = StyleSheet.create({
+  row: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
 export default Settings;
