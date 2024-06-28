@@ -17,6 +17,7 @@ import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';
 import Loader from '../../components/Loader';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { pushStore } from '../../features/pushStore';
 
 type Inputs = {
   wordsPerSet: string;
@@ -40,12 +41,7 @@ const Settings = observer(() => {
     Keyboard.dismiss();
   };
 
-  function toggleSwitch() {
-    autoCheckStore.setAutoCheck(!autoCheckStore.autoCheck);
-  }
-
-  const initialDate = new Date();
-  initialDate.setHours(9, 0, 0, 0);
+  console.log(pushStore.time);
 
   if (!user) return <Loader />;
 
@@ -95,7 +91,10 @@ const Settings = observer(() => {
                 <Label text="Auto check" />
                 <Description text="Mark words by yourself or let app do it for you." />
               </View>
-              <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
+              <Switch
+                value={autoCheckStore.autoCheck}
+                onChange={() => autoCheckStore.setAutoCheck(!autoCheckStore.autoCheck)}
+              />
             </View>
 
             <View style={styles.row}>
@@ -103,7 +102,7 @@ const Settings = observer(() => {
                 <Label text="Reminders" />
                 <Description text="Would you like to recieve remainders?" />
               </View>
-              <Switch value={autoCheckStore.autoCheck} onChange={toggleSwitch} />
+              <Switch value={pushStore.push} onChange={() => pushStore.setPush(!pushStore.push)} />
             </View>
 
             <View style={styles.row}>
@@ -111,7 +110,13 @@ const Settings = observer(() => {
                 <Label text="Time of remainders" />
                 <Description text="Select a convenient remainders time." />
               </View>
-              <RNDateTimePicker mode="time" value={initialDate} />
+              <RNDateTimePicker
+                mode="time"
+                value={new Date(pushStore.time)}
+                onChange={(e, date) => {
+                  date && pushStore.setTime(date?.toString());
+                }}
+              />
             </View>
           </>
         )}

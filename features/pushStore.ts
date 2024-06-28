@@ -2,9 +2,12 @@ import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const initialDate = new Date();
+initialDate.setHours(9, 0, 0, 0);
+
 class PushStore {
   push = true;
-  time = 90;
+  time = initialDate.toString();
 
   constructor() {
     makeAutoObservable(this);
@@ -19,7 +22,7 @@ class PushStore {
     this.push = hasPush;
   }
 
-  setTime(time: number) {
+  setTime(time: string) {
     this.time = time;
   }
 }
