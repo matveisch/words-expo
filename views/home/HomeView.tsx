@@ -28,6 +28,7 @@ import { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
+import { pushStore } from '../../features/pushStore';
 
 export type RootStackParamList = {
   Decks: undefined;
@@ -49,7 +50,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function scheduleDailyNotification() {
+async function scheduleDailyNotification(hour: number, minute: number) {
   await Notifications.scheduleNotificationAsync({
     content: {
       sound: 'default',
@@ -58,28 +59,11 @@ async function scheduleDailyNotification() {
       data: { someData: 'goes here' },
     },
     trigger: {
-      hour: 9,
-      minute: 0,
+      hour: hour,
+      minute: minute,
       repeats: true,
     },
   });
-}
-
-async function checkAndScheduleNotification() {
-  try {
-    const existingNotifications = await Notifications.getAllScheduledNotificationsAsync();
-    const hasScheduledNotification = existingNotifications.some(
-      (notification) =>
-        notification.content.title === 'Learn new words' &&
-        notification.content.body === "Don't forget to study today!"
-    );
-
-    if (!hasScheduledNotification) {
-      await scheduleDailyNotification();
-    }
-  } catch (e) {
-    console.error(e);
-  }
 }
 
 function handleRegistrationError(errorMessage: string) {
@@ -137,6 +121,24 @@ const HomeView = observer(() => {
   const { data: user } = useUser(sessionStore.session?.user.id || '');
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
+  async function checkAndScheduleNotification() {
+    const userDate = new Date(pushStore.time);
+
+    try {
+      if (pushStore.push) {
+        // if remainders are allowed
+        Notifications.cancelAllScheduledNotificationsAsync().then(async () => {
+          await scheduleDailyNotification(userDate.getHours(), userDate.getMinutes());
+        });
+      } else {
+        // if remainders are not allowed
+        Notifications.cancelAllScheduledNotificationsAsync();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((token) => {
@@ -146,6 +148,10 @@ const HomeView = observer(() => {
       })
       .catch((error: any) => console.error(error));
   }, []);
+
+  useEffect(() => {
+    checkAndScheduleNotification();
+  }, [pushStore.time, pushStore.push]);
 
   function handleDeleteDeck(
     deckId: number,

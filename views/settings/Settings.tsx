@@ -41,8 +41,6 @@ const Settings = observer(() => {
     Keyboard.dismiss();
   };
 
-  console.log(pushStore.time);
-
   if (!user) return <Loader />;
 
   return (
