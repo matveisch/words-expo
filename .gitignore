@@ -3,6 +3,7 @@
 .env*
 ios/
 android/
+credentials.json
 
 # dependencies
 node_modules/
