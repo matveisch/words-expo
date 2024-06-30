@@ -5,15 +5,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { observer } from 'mobx-react-lite';
+import { useIsMutating } from '@tanstack/react-query';
 
 import { useWords } from '../hooks/useWords';
 import { RootStackParamList } from '../views/home/HomeView';
 import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
 import { defaultColors } from '../helpers/colors';
-import { useIsMutating } from '@tanstack/react-query';
 import ThemedText from '../ui/ThemedText';
-import { observer } from 'mobx-react';
 import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
 import useUser from '../hooks/useUser';

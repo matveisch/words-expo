@@ -12,7 +12,9 @@ export default function useDeleteWord() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (wordId: number) => deleteWord(wordId),
-    onSuccess: (deletedWord) =>
-      queryClient.invalidateQueries({ queryKey: ['words', deletedWord.deck] }),
+    onSuccess: (deletedWord) => {
+      queryClient.invalidateQueries({ queryKey: ['words', deletedWord.deck] });
+      queryClient.invalidateQueries({ queryKey: ['wordsCount', deletedWord.deck] });
+    },
   });
 }

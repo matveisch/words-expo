@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { RootStackParamList } from './HomeView';
@@ -21,6 +21,10 @@ import { sessionStore } from '../../features/sessionStore';
 import { useWordsToLearn } from '../../hooks/useWordsToLearn';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
+
+export function wordCheck(word: WordType, answer: string) {
+  return answer.toLowerCase().trim() === word.word.toLowerCase().trim();
+}
 
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
@@ -47,10 +51,6 @@ export const StudyingView = observer(({ route }: Props) => {
   useEffect(() => {
     refetch();
   }, []);
-
-  function wordCheck(word: WordType, answer: string) {
-    return answer.toLowerCase().trim() === word.word.toLowerCase().trim();
-  }
 
   function handleAnswer() {
     Keyboard.dismiss();

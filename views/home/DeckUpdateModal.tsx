@@ -3,6 +3,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
 
 import useUpdateDeck from '../../hooks/useUpdateDeck';
 import { colors, defaultColors } from '../../helpers/colors';
@@ -13,7 +14,6 @@ import Input from '../../ui/Input';
 import Circle from '../../ui/Circle';
 import Button from '../../ui/Button';
 import ThemedText from '../../ui/ThemedText';
-import { observer } from 'mobx-react';
 import useUser from '../../hooks/useUser';
 import { sessionStore } from '../../features/sessionStore';
 import Loader from '../../components/Loader';

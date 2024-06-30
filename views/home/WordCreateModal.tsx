@@ -4,6 +4,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Toast from 'react-native-root-toast';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
 
 import { knowledgeColors } from '../../helpers/colors';
 import useAddWord from '../../hooks/useAddWord';
@@ -15,7 +16,6 @@ import InputError from '../../ui/InputError';
 import Description from '../../ui/Description';
 import Circle from '../../ui/Circle';
 import Button from '../../ui/Button';
-import { observer } from 'mobx-react';
 import useUser from '../../hooks/useUser';
 import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';

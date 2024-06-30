@@ -1,12 +1,13 @@
 import { Platform } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { supabase } from '../helpers/initSupabase';
+import { observer } from 'mobx-react-lite';
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
 //   statusCodes,
 // } from '@react-native-google-signin/google-signin';
-import { observer } from 'mobx-react';
+
 import { sessionStore } from '../features/sessionStore';
 import useAddUser from '../hooks/useAddUser';
 

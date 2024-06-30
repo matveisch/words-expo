@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import Purchases from 'react-native-purchases';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import SubscriptionItem from '../components/SubscriptionItem';
 import Button from '../ui/Button';

@@ -3,6 +3,11 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import { Alert, Platform, View } from 'react-native';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+import Constants from 'expo-constants';
 
 import ListOfDecks from './ListOfDecks';
 import DeckView from './DeckView';
@@ -20,14 +25,9 @@ import { DeckType } from '../../types/Deck';
 import { useDecks } from '../../hooks/useDecks';
 import { sessionStore } from '../../features/sessionStore';
 import useUser from '../../hooks/useUser';
-import { observer } from 'mobx-react';
 import Loader from '../../components/Loader';
 import SubscriptionOffer from '../SubscriptionOffer';
 import { defaultColors } from '../../helpers/colors';
-import { useEffect } from 'react';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
-import Constants from 'expo-constants';
 import { pushStore } from '../../features/pushStore';
 
 export type RootStackParamList = {

@@ -1,7 +1,7 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, View, Text, Switch, StyleSheet } from 'react-native';
 import Toast from 'react-native-root-toast';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import User from '../../components/User';
 import { TabBarIcon } from '../../ui/TabBarIcon';

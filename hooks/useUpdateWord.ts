@@ -30,7 +30,9 @@ export default function useUpdateWord() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (word: WordToUpdate) => updateWord(word),
-    onSuccess: (updatedWord) =>
-      queryClient.invalidateQueries({ queryKey: ['words', updatedWord.deck] }),
+    onSuccess: (updatedWord) => {
+      queryClient.invalidateQueries({ queryKey: ['words', updatedWord.deck] });
+      queryClient.invalidateQueries({ queryKey: ['wordsCount', updatedWord.deck] });
+    },
   });
 }

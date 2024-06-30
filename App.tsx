@@ -11,7 +11,7 @@ import QueryClientProvider from './components/QueryClientProvider';
 import { Session } from '@supabase/supabase-js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RootSiblingParent } from 'react-native-root-siblings';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import Purchases from 'react-native-purchases';
 import { Platform } from 'react-native';
 

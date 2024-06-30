@@ -15,6 +15,9 @@ export default function useAddWord() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (word: NoIdWord) => addWord(word),
-    onSuccess: (newWord) => queryClient.invalidateQueries({ queryKey: ['words', newWord.deck] }),
+    onSuccess: (newWord) => {
+      queryClient.invalidateQueries({ queryKey: ['words', newWord.deck] });
+      queryClient.invalidateQueries({ queryKey: ['wordsCount', newWord.deck] });
+    },
   });
 }

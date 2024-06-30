@@ -1,14 +1,14 @@
 import { View, Text, Alert } from 'react-native';
+import { observer } from 'mobx-react-lite';
+import { useQueryClient } from '@tanstack/react-query';
+import { AuthError, PostgrestError } from '@supabase/supabase-js';
 
 import { supabase } from '../helpers/initSupabase';
 import Button from '../ui/Button';
 import { sessionStore } from '../features/sessionStore';
-import { observer } from 'mobx-react';
-import { useQueryClient } from '@tanstack/react-query';
 import { autoCheckStore } from '../features/autoCheckStore';
 import { wordsLimitStore } from '../features/wordsLimitStore';
 import { defaultColors } from '../helpers/colors';
-import { AuthError, PostgrestError } from '@supabase/supabase-js';
 import { supabaseAdmin } from '../helpers/supabaseAdmin';
 
 const User = observer(() => {

@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { observer } from 'mobx-react-lite';
 
 import { RootStackParamList } from './HomeView';
 import { knowledgeColors } from '../../helpers/colors';
@@ -15,7 +16,6 @@ import Label from '../../ui/Label';
 import Input from '../../ui/Input';
 import Circle from '../../ui/Circle';
 import Button from '../../ui/Button';
-import { observer } from 'mobx-react';
 import useUser from '../../hooks/useUser';
 import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';

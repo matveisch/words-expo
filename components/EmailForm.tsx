@@ -3,14 +3,14 @@ import { Alert, StyleSheet, View, Text, Image, Keyboard } from 'react-native';
 import { supabase } from '../helpers/initSupabase';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { observer } from 'mobx-react-lite';
+import Animated, { SlideInRight } from 'react-native-reanimated';
 
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import InputError from '../ui/InputError';
 import Button from '../ui/Button';
-import Animated, { SlideInRight } from 'react-native-reanimated';
 import { sessionStore } from '../features/sessionStore';
-import { observer } from 'mobx-react';
 import { defaultColors } from '../helpers/colors';
 import ThemedText from '../ui/ThemedText';
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Keyboard, StyleSheet, View, Text } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
 
 import useAddDeck from '../../hooks/useAddDeck';
 import { colors } from '../../helpers/colors';
@@ -10,7 +11,6 @@ import Button from '../../ui/Button';
 import Label from '../../ui/Label';
 import Input from '../../ui/Input';
 import Circle from '../../ui/Circle';
-import { observer } from 'mobx-react';
 import useUser from '../../hooks/useUser';
 import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';
