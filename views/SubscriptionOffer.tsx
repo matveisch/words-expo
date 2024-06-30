@@ -42,7 +42,8 @@ const subscriptionItems = [
   },
   {
     text: 'Additional Settings',
-    subText: 'Turn off auto-check, manually mark answers, set words per session.',
+    subText:
+      'Turn off auto-check, manually mark answers, set words per session and customize remainders.',
     image: require('../assets/gear-icon.png'),
   },
 ];
