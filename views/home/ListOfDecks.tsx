@@ -57,6 +57,7 @@ const ListOfDecks = observer(({ navigation }: Props) => {
         {!decks && (
           <FlashList
             estimatedItemSize={59}
+            showsVerticalScrollIndicator={false}
             renderItem={() => <ListItemSkeleton height={59} />}
             data={[...Array(8)]}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

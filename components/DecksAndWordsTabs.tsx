@@ -20,6 +20,10 @@ import useUser from '../hooks/useUser';
 import Loader from './Loader';
 import LockedFeature from './LockedFeature';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
+import Input from '../ui/Input';
+import Stats from './Stats';
+import StudyButtons from './StudyButtons';
+import DecksTab from './DecksTab';
 
 type Props = {
   currentDeck: number;
@@ -144,6 +148,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
                 if (hasNextPage && user.pro) fetchNextPage();
               }}
               onEndReachedThreshold={0.5}
+              showsVerticalScrollIndicator={false}
               estimatedItemSize={65}
               data={user?.pro ? words : words.slice(0, 20)}
               ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No words</Text>}
@@ -159,6 +164,13 @@ const DecksAndWordsTabs = observer((props: Props) => {
                   }}
                 />
               )}
+              ListHeaderComponent={
+                <View style={{ marginBottom: 10 }}>
+                  <Stats deckId={currentDeck} />
+                  <StudyButtons deckId={currentDeck} />
+                  <Input placeholder="Search" />
+                </View>
+              }
               ListFooterComponent={
                 !user?.pro && words?.length && words.length > 19 ? (
                   <View style={{ marginTop: 10 }}>
@@ -173,6 +185,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
           {!words && (
             <FlashList
               estimatedItemSize={65}
+              showsVerticalScrollIndicator={false}
               renderItem={() => <ListItemSkeleton height={65} />}
               data={[...Array(3)]}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
@@ -180,40 +193,7 @@ const DecksAndWordsTabs = observer((props: Props) => {
           )}
         </View>
 
-        {!user.pro ? (
-          <LockedFeature text="Get pro version to view and create sub decks" />
-        ) : (
-          <View style={{ width: '100%', height: '100%' }} key="2">
-            {subDecks && (
-              <FlashList
-                estimatedItemSize={44}
-                data={subDecks}
-                ListEmptyComponent={<Text style={{ textAlign: 'center' }}>No decks</Text>}
-                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-                ListFooterComponent={<View style={{ height: 50 }} />}
-                renderItem={({ item }) => (
-                  <ListItem
-                    backgroundColor={item.color ? item.color : undefined}
-                    title={item.name}
-                    onPress={() => {
-                      navigation.push('DeckView', {
-                        deck: item,
-                      });
-                    }}
-                  />
-                )}
-              />
-            )}
-            {!subDecks && (
-              <FlashList
-                estimatedItemSize={44}
-                renderItem={() => <ListItemSkeleton height={44} />}
-                data={[...Array(8)]}
-                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-              />
-            )}
-          </View>
-        )}
+        <DecksTab deckId={currentDeck} />
       </PagerView>
 
       <Button
