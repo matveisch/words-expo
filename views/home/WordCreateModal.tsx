@@ -31,9 +31,9 @@ type Inputs = {
 interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateModal'> {}
 
 const WordCreateModal = observer(({ route }: Props) => {
-  const { parentDeckId } = route.params;
+  const { deck } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
-  const { mutateAsync, isPending } = useAddWord();
+  const { mutateAsync, isPending } = useAddWord(deck);
   const { data: user } = useUser(sessionStore.session?.user.id || '');
   const knowledgeLevels = [1, 2, 3, 4];
 
@@ -58,7 +58,7 @@ const WordCreateModal = observer(({ route }: Props) => {
       meaning: data.meaning,
       pronunciation: data.pronunciation,
       knowledgelevel: data.knowledgeLevel,
-      deck: parentDeckId,
+      deck: deck.id,
     };
 
     mutateAsync(newWord).then(() => {

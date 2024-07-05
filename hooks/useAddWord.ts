@@ -1,6 +1,7 @@
 import { WordType } from '../types/WordType';
 import { supabase } from '../helpers/initSupabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DeckType } from '../types/Deck';
 
 type NoIdWord = Omit<WordType, 'id'>;
 
@@ -11,13 +12,14 @@ async function addWord(word: NoIdWord) {
   return data;
 }
 
-export default function useAddWord() {
+export default function useAddWord(deck: DeckType) {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (word: NoIdWord) => addWord(word),
     onSuccess: (newWord) => {
-      queryClient.invalidateQueries({ queryKey: ['words', newWord.deck] });
-      queryClient.invalidateQueries({ queryKey: ['wordsCount', newWord.deck] });
+      queryClient.invalidateQueries({ queryKey: ['words'] });
+      queryClient.invalidateQueries({ queryKey: ['wordsCount'] });
     },
   });
 }
