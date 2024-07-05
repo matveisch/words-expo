@@ -1,7 +1,7 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { WordType } from '../types/WordType';
 import { supabase } from '../helpers/initSupabase';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DeckType } from '../types/Deck';
 
 type NoIdWord = Omit<WordType, 'id'>;
 
