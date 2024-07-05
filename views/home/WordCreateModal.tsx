@@ -33,7 +33,7 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateMo
 const WordCreateModal = observer(({ route }: Props) => {
   const { deck } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
-  const { mutateAsync, isPending } = useAddWord(deck);
+  const { mutateAsync, isPending } = useAddWord();
   const { data: user } = useUser(sessionStore.session?.user.id || '');
   const knowledgeLevels = [1, 2, 3, 4];
 

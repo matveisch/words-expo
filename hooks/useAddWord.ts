@@ -12,12 +12,12 @@ async function addWord(word: NoIdWord) {
   return data;
 }
 
-export default function useAddWord(deck: DeckType) {
+export default function useAddWord() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (word: NoIdWord) => addWord(word),
-    onSuccess: (newWord) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['words'] });
       queryClient.invalidateQueries({ queryKey: ['wordsCount'] });
     },
