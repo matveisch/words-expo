@@ -1,8 +1,9 @@
-import { ActivityIndicator, Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useMemo } from 'react';
 
 import useUser from '../hooks/useUser';
 import { sessionStore } from '../features/sessionStore';
@@ -11,7 +12,6 @@ import ListItem from '../ui/ListItem';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
 import { useDecks } from '../hooks/useDecks';
 import { RootStackParamList } from '../views/home/HomeView';
-import { useMemo } from 'react';
 
 type Props = {
   deckId: number;
@@ -34,13 +34,7 @@ const DecksTab = observer(({ deckId }: Props) => {
 
   const subDecks = useMemo(() => decks?.filter((d) => d.parent_deck === deckId), [decks, deckId]);
 
-  if (!user || userLoading || decksLoading) {
-    return <ActivityIndicator />;
-  } else if (userError || decksError) {
-    return <Text style={styles.errorText}>Failed to load data</Text>;
-  } else if (!user.pro) {
-    return <LockedFeature text="Get pro version to view and create sub decks" />;
-  } else if (!subDecks) {
+  if (!user || userLoading || decksLoading || !subDecks) {
     return (
       <FlashList
         estimatedItemSize={44}
@@ -49,6 +43,10 @@ const DecksTab = observer(({ deckId }: Props) => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     );
+  } else if (userError || decksError) {
+    return <Text style={styles.errorText}>Failed to load data</Text>;
+  } else if (!user.pro) {
+    return <LockedFeature text="Get pro version to view and create sub decks" />;
   }
 
   return (

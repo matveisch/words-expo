@@ -57,7 +57,7 @@ const WordsTab = observer(({ deckId }: Props) => {
         estimatedItemSize={65}
         showsVerticalScrollIndicator={false}
         renderItem={() => <ListItemSkeleton height={65} />}
-        data={[...Array(3)]}
+        data={[...Array(8)]}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     );
