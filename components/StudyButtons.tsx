@@ -25,9 +25,6 @@ const StudyButtons = observer(({ deckId }: Props) => {
   const { data: wordsCount } = useWordsCount(deckId, decksIds, isFetched);
   const { data: easyWordsCount } = useWordsCount(deckId, decksIds, isFetched, 4);
 
-  console.log({ wordsCount });
-  console.log({ easyWordsCount });
-
   const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
 
   return (
