@@ -145,9 +145,15 @@ export const StudyingView = observer(({ route }: Props) => {
 
   if (!words) {
     return <Loader />;
-  }
-
-  if (setIsDone) {
+  } else if (words.length === 0) {
+    return (
+      <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ textAlign: 'center', fontSize: 20 }}>
+          {`You have no new words to learn.\nRevise old ones or add some new!`}
+        </Text>
+      </View>
+    );
+  } else if (setIsDone) {
     return <FinishedSetBoard />;
   }
 
@@ -240,7 +246,7 @@ const styles = StyleSheet.create({
   },
   wordTitle: {
     textAlign: 'center',
-    fontSize: 50,
+    fontSize: 40,
     marginTop: 50,
   },
   explainedContainer: {
