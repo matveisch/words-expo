@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
+import { useIsMutating } from '@tanstack/react-query';
 
 import useUser from '../hooks/useUser';
 import { sessionStore } from '../features/sessionStore';
@@ -12,6 +13,9 @@ import ListItem from '../ui/ListItem';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
 import { useDecks } from '../hooks/useDecks';
 import { RootStackParamList } from '../views/home/HomeView';
+import { defaultColors } from '../helpers/colors';
+import ThemedText from '../ui/ThemedText';
+import Button from '../ui/Button';
 
 type Props = {
   deckId: number;
@@ -19,6 +23,8 @@ type Props = {
 
 const DecksTab = observer(({ deckId }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
 
   const {
     data: user,
@@ -69,6 +75,19 @@ const DecksTab = observer(({ deckId }: Props) => {
           />
         )}
       />
+
+      <Button
+        backgroundColor={defaultColors.activeColor}
+        onPress={() =>
+          navigation.navigate('DeckCreateModal', {
+            parentDeckId: deckId,
+          })
+        }
+        style={styles.newItemButton}
+        isDisabled={isDeckMutating !== 0}
+      >
+        <ThemedText text={`Add new deck`} />
+      </Button>
     </View>
   );
 });
@@ -90,6 +109,11 @@ const styles = StyleSheet.create({
   errorText: {
     textAlign: 'center',
     color: 'red',
+  },
+  newItemButton: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 20,
   },
 });
 

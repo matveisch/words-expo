@@ -15,6 +15,9 @@ import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
 import { useWords } from '../hooks/useWords';
 import useUser from '../hooks/useUser';
+import { defaultColors } from '../helpers/colors';
+import ThemedText from '../ui/ThemedText';
+import Button from '../ui/Button';
 
 type Props = {
   deckId: number;
@@ -96,15 +99,29 @@ const WordsTab = observer(({ deckId }: Props) => {
           </View>
         }
         ListFooterComponent={
-          !user?.pro && words?.length && words.length > 19 ? (
+          !user?.pro && words.length > 19 ? (
             <View style={styles.lockedFeature}>
               <LockedFeature text="Get pro version to view and create more than 20 words" />
+              <View style={styles.footer} />
             </View>
           ) : (
             <View style={styles.footer} />
           )
         }
       />
+
+      <Button
+        backgroundColor={defaultColors.activeColor}
+        onPress={() =>
+          navigation.navigate('WordCreateModal', {
+            deckId: deckId,
+          })
+        }
+        style={styles.newItemButton}
+        isDisabled={words.length > 19 && !user?.pro}
+      >
+        <ThemedText text={`Add new word`} />
+      </Button>
     </View>
   );
 });
@@ -134,6 +151,11 @@ const styles = StyleSheet.create({
   errorText: {
     textAlign: 'center',
     color: 'red',
+  },
+  newItemButton: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 20,
   },
 });
 

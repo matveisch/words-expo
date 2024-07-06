@@ -16,9 +16,9 @@ async function getWords(deckIds: number[], page: number, limit: number) {
 export const useWords = (currentDeckId: number, deckIds: number[], subDecksLoaded: boolean) =>
   useInfiniteQuery({
     queryKey: ['words', currentDeckId, deckIds, subDecksLoaded],
-    queryFn: ({ pageParam = 1 }) => getWords(deckIds, pageParam, 10),
+    queryFn: ({ pageParam = 1 }) => getWords(deckIds, pageParam, 20),
     getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === 10 ? allPages.length + 1 : undefined;
+      return lastPage.length === 20 ? allPages.length + 1 : undefined;
     },
     enabled: !!subDecksLoaded,
     initialPageParam: 1,
