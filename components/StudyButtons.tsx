@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
+import { useIsMutating } from '@tanstack/react-query';
 
 import { RootStackParamList } from '../views/home/HomeView';
 import { useDecks } from '../hooks/useDecks';
@@ -10,7 +11,6 @@ import { StyleSheet, View } from 'react-native';
 import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
 import ThemedText from '../ui/ThemedText';
-import { useIsMutating } from '@tanstack/react-query';
 
 type Props = {
   deckId: number;
@@ -25,11 +25,14 @@ const StudyButtons = observer(({ deckId }: Props) => {
   const { data: wordsCount } = useWordsCount(deckId, decksIds, isFetched);
   const { data: easyWordsCount } = useWordsCount(deckId, decksIds, isFetched, 4);
 
+  console.log({ wordsCount });
+  console.log({ easyWordsCount });
+
   const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
 
   return (
-    wordsCount !== 0 && (
-      <View style={styles.studyButtonsContainer}>
+    <View style={styles.studyButtonsContainer}>
+      {wordsCount !== easyWordsCount && (
         <Button
           style={styles.studyButton}
           backgroundColor={defaultColors.activeColor}
@@ -43,24 +46,24 @@ const StudyButtons = observer(({ deckId }: Props) => {
         >
           <ThemedText text="Study words" />
         </Button>
+      )}
 
-        {easyWordsCount !== 0 && (
-          <Button
-            style={styles.studyButton}
-            backgroundColor={defaultColors.activeColor}
-            isDisabled={isDeckMutating !== 0}
-            onPress={() =>
-              navigation.navigate('Studying', {
-                deckId: deckId,
-                revise: true,
-              })
-            }
-          >
-            <ThemedText text="Revise words" />
-          </Button>
-        )}
-      </View>
-    )
+      {easyWordsCount !== 0 && (
+        <Button
+          style={styles.studyButton}
+          backgroundColor={defaultColors.activeColor}
+          isDisabled={isDeckMutating !== 0}
+          onPress={() =>
+            navigation.navigate('Studying', {
+              deckId: deckId,
+              revise: true,
+            })
+          }
+        >
+          <ThemedText text="Revise words" />
+        </Button>
+      )}
+    </View>
   );
 });
 
