@@ -117,7 +117,10 @@ async function registerForPushNotificationsAsync() {
 const HomeView = observer(() => {
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
+
   const { data: decks } = useDecks(sessionStore.session?.user.id || '');
+  const numberOfParentDecks = decks?.filter((d) => d.parent_deck === null).length || 0;
+
   const { data: user } = useUser(sessionStore.session?.user.id || '');
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -199,7 +202,7 @@ const HomeView = observer(() => {
             headerShadowVisible: false,
             headerRight: () => (
               <Button
-                isDisabled={!user.pro && decks?.length > 1}
+                isDisabled={!user.pro && numberOfParentDecks > 1}
                 chromeless
                 size="small"
                 onPress={() => navigation.navigate('DeckCreateModal')}

@@ -18,7 +18,7 @@ import { autoCheckStore } from '../../features/autoCheckStore';
 import ThemedText from '../../ui/ThemedText';
 import { useDecks } from '../../hooks/useDecks';
 import { sessionStore } from '../../features/sessionStore';
-import { useWordsToLearn } from '../../hooks/useWordsToLearn';
+import { supabase } from '../../helpers/initSupabase';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -26,20 +26,29 @@ export function wordCheck(word: WordType, answer: string) {
   return answer.toLowerCase().trim() === word.word.toLowerCase().trim();
 }
 
+async function getWords(deck_ids: number[], revise: boolean, words_limit: number) {
+  let { data, error } = await supabase.rpc('limited_words', {
+    deck_ids,
+    revise,
+    words_limit,
+  });
+
+  if (error) throw error;
+  return data;
+}
+
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
 
-  const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
+  const { data: decks } = useDecks(sessionStore.session?.user.id || '');
   const subDecks = decks?.filter((d) => d.parent_deck === deckId);
-
   const decksIds = [...(subDecks?.map((deck) => deck.id) || []), deckId];
-  const { data: words, refetch } = useWordsToLearn(
-    deckId,
-    decksIds,
-    isFetched,
-    wordsLimitStore.limit,
-    revise
-  );
+
+  const [words, setWords] = useState<WordType[] | null>();
+
+  useEffect(() => {
+    getWords(decksIds, revise, wordsLimitStore.limit).then((words) => setWords(words));
+  }, []);
 
   const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,10 +56,6 @@ export const StudyingView = observer(({ route }: Props) => {
   const [beingChecked, setBeingChecked] = useState<boolean>(false);
   const [setIsDone, setSetIsDone] = useState(false);
   const updateWord = useUpdateWord();
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   function handleAnswer() {
     Keyboard.dismiss();
