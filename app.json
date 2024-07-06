@@ -17,7 +17,10 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.matveisch.wordem",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -43,6 +46,12 @@
       "eas": {
         "projectId": "f46155aa-2c56-4159-b470-47c5150db2ac"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f46155aa-2c56-4159-b470-47c5150db2ac"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
