@@ -3,10 +3,7 @@ import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
 import { useNavigation } from '@react-navigation/native';
 
-type Props = {};
-
-export default function FinishedSetBoard(props: Props) {
-  const {} = props;
+export default function FinishedSetBoard() {
   const navigation = useNavigation();
 
   return (
