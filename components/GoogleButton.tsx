@@ -1,9 +1,15 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { supabase } from '../helpers/initSupabase';
+import { observer } from 'mobx-react-lite';
 
-const GoogleButton = () => {
+import { supabase } from '../helpers/initSupabase';
+import useAddUser from '../hooks/useAddUser';
+import { sessionStore } from '../features/sessionStore';
+
+const GoogleButton = observer(() => {
+  const { mutate } = useAddUser();
+
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: '103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com',
@@ -19,11 +25,24 @@ const GoogleButton = () => {
           await GoogleSignin.hasPlayServices();
           const userInfo = await GoogleSignin.signIn();
           if (userInfo.idToken) {
-            const { data, error } = await supabase.auth.signInWithIdToken({
+            const {
+              data: { user, session },
+              error,
+            } = await supabase.auth.signInWithIdToken({
               provider: 'google',
               token: userInfo.idToken,
             });
-            console.log(error, data);
+
+            if (!error) {
+              if (user)
+                mutate({
+                  name: '',
+                  email: user.email || '',
+                  pro: false,
+                  user_uid: user?.id,
+                });
+              sessionStore.setSession(session);
+            }
           } else {
             throw new Error('no ID token present!');
           }
@@ -66,7 +85,7 @@ const GoogleButton = () => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   button: {

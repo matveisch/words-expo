@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { observer } from 'mobx-react-lite';
+
 import { supabase } from '../helpers/initSupabase';
 import { sessionStore } from '../features/sessionStore';
 import useAddUser from '../hooks/useAddUser';
-import { observer } from 'mobx-react-lite';
 
 const AppleButton = observer(() => {
   const { mutate } = useAddUser();
@@ -31,7 +32,6 @@ const AppleButton = observer(() => {
               provider: 'apple',
               token: credential.identityToken,
             });
-            // console.log(JSON.stringify({ error, user }, null, 2));
 
             if (!error) {
               if (user)
