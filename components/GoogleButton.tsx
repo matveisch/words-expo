@@ -89,8 +89,11 @@ const GoogleButton = observer(() => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#131314',
-    borderColor: '#8e918f',
+    // backgroundColor: '#131314',
+    // borderColor: '#8e918f',
+    backgroundColor: 'white',
+    borderColor: '#747775',
+
     borderWidth: 1,
     borderRadius: 6,
     padding: 0,
@@ -113,7 +116,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   text: {
-    color: '#e3e3e3',
+    // color: '#e3e3e3',
+    color: '#1f1f1f',
+
     fontSize: 18,
     fontFamily: 'Roboto',
     fontWeight: '500',

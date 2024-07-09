@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 50,
-    marginBottom: 5,
+    marginBottom: 10,
     maxWidth: 400,
   },
 });
