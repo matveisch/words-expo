@@ -27,6 +27,7 @@ export type RootTabsParamList = {
   SettingsTab: undefined;
 };
 
+// @ts-ignore
 const revenueCatKey = process.env.REVENUE_CAT_IOS_KEY;
 
 const App = observer(() => {

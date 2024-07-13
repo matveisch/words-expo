@@ -12,8 +12,9 @@ const GoogleButton = observer(() => {
 
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    webClientId: '103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com',
+    webClientId: '103397523372-i20enh919kus9mgpot7udhg5rd1qs22h.apps.googleusercontent.com',
     iosClientId: '103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com',
+    // androidClientId: '103397523372-5dm3q4i307cjnit97c93qmnrn4mbhnhj.apps.googleusercontent.com',
   });
 
   return (
@@ -25,6 +26,8 @@ const GoogleButton = observer(() => {
           await GoogleSignin.hasPlayServices();
           const userInfo = await GoogleSignin.signIn();
           if (userInfo.idToken) {
+            console.log({ userInfo });
+
             const {
               data: { user, session },
               error,
@@ -32,6 +35,8 @@ const GoogleButton = observer(() => {
               provider: 'google',
               token: userInfo.idToken,
             });
+
+            console.log(user, session, error);
 
             if (!error) {
               if (user)
