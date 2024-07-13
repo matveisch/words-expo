@@ -26,8 +26,6 @@ const GoogleButton = observer(() => {
           await GoogleSignin.hasPlayServices();
           const userInfo = await GoogleSignin.signIn();
           if (userInfo.idToken) {
-            console.log({ userInfo });
-
             const {
               data: { user, session },
               error,
