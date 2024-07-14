@@ -34,7 +34,7 @@ const GoogleButton = observer(() => {
               token: userInfo.idToken,
             });
 
-            console.log(user, session, error);
+            // console.log(user, session, error);
 
             if (!error) {
               if (user)
