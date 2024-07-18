@@ -27,9 +27,6 @@ export type RootTabsParamList = {
   SettingsTab: undefined;
 };
 
-// @ts-ignore
-const revenueCatKey = process.env.REVENUE_CAT_IOS_KEY;
-
 const App = observer(() => {
   const Tab = createBottomTabNavigator<RootTabsParamList>();
 
@@ -60,7 +57,13 @@ const App = observer(() => {
   useEffect(() => {
     if (Platform.OS === 'ios') {
       Purchases.configure({
-        apiKey: revenueCatKey || '',
+        // @ts-ignore
+        apiKey: process.env.REVENUE_CAT_IOS_KEY || '',
+      });
+    } else if (Platform.OS === 'android') {
+      Purchases.configure({
+        // @ts-ignore
+        apiKey: process.env.REVENUE_CAT_ANDROID_KEY || '',
       });
     }
   }, []);
