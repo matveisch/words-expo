@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../views/home/HomeView';
 import { observer } from 'mobx-react-lite';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import ListItem from '../ui/ListItem';
 import Stats from './Stats';
@@ -28,6 +28,7 @@ type Props = {
 const WordsTab = observer(({ deckId }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [foundWords, setFoundWords] = useState<WordType[]>([]);
+  const flashListRef = useRef<FlashList<WordType> | null>(null);
 
   const {
     data: user,
@@ -57,6 +58,13 @@ const WordsTab = observer(({ deckId }: Props) => {
   // Combine all pages into a single array
   const words = useMemo(() => data?.pages.flat() || [], [data]);
 
+  const scrollPastHeader = () => {
+    flashListRef.current?.scrollToOffset({
+      offset: 224,
+      animated: true,
+    });
+  };
+
   if (userLoading || decksLoading || wordsLoading) {
     return (
       <FlashList
@@ -74,6 +82,7 @@ const WordsTab = observer(({ deckId }: Props) => {
   return (
     <View style={styles.container} key="1">
       <FlashList
+        ref={flashListRef}
         onEndReached={() => {
           if (hasNextPage && user?.pro) fetchNextPage();
         }}
@@ -96,9 +105,13 @@ const WordsTab = observer(({ deckId }: Props) => {
         )}
         ListHeaderComponent={
           <View>
-            <Stats deckId={deckId} />
-            <StudyButtons deckId={deckId} />
-            {user?.pro && <Search setFoundWords={setFoundWords} />}
+            {foundWords.length < 1 && (
+              <View>
+                <Stats deckId={deckId} />
+                <StudyButtons deckId={deckId} />
+              </View>
+            )}
+            {user?.pro && <Search setFoundWords={setFoundWords} onInput={scrollPastHeader} />}
           </View>
         }
         ListFooterComponent={

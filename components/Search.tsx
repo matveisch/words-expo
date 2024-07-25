@@ -6,18 +6,25 @@ import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
   setFoundWords: Dispatch<SetStateAction<WordType[]>>;
+  onInput: () => void;
 };
 
 export default function Search(props: Props) {
-  const { setFoundWords } = props;
+  const { setFoundWords, onInput } = props;
 
   async function searchWords(prompt: string) {
-    const { data, error } = await supabase.from('words').select().textSearch('word', `${prompt}`);
+    const { data } = await supabase.from('words').select().textSearch('word', `${prompt}`);
     data && setFoundWords(data);
   }
 
   return (
-    <Input placeholder="Search" style={styles.input} onChangeText={(value) => searchWords(value)} />
+    <Input
+      placeholder="Search"
+      style={styles.input}
+      onChangeText={(value) => searchWords(value)}
+      clearButtonMode="while-editing"
+      onTextInput={onInput}
+    />
   );
 }
 
