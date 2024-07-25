@@ -37,6 +37,10 @@ async function getWords(deck_ids: number[], revise: boolean, words_limit: number
   return data;
 }
 
+export function calc(num1: number, num2: number) {
+  return num1 + num2;
+}
+
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
 
