@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../views/home/HomeView';
 import { observer } from 'mobx-react-lite';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import ListItem from '../ui/ListItem';
 import Stats from './Stats';
@@ -18,6 +18,8 @@ import useUser from '../hooks/useUser';
 import { defaultColors } from '../helpers/colors';
 import ThemedText from '../ui/ThemedText';
 import Button from '../ui/Button';
+import Search from './Search';
+import { WordType } from '../types/WordType';
 
 type Props = {
   deckId: number;
@@ -25,6 +27,7 @@ type Props = {
 
 const WordsTab = observer(({ deckId }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [foundWords, setFoundWords] = useState<WordType[]>([]);
 
   const {
     data: user,
@@ -77,7 +80,7 @@ const WordsTab = observer(({ deckId }: Props) => {
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
         estimatedItemSize={65}
-        data={user?.pro ? words : words.slice(0, 20)}
+        data={user?.pro ? (foundWords.length > 0 ? foundWords : words) : words.slice(0, 20)}
         ListEmptyComponent={<Text style={styles.emptyText}>No words</Text>}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         renderItem={({ item }) => (
@@ -95,7 +98,7 @@ const WordsTab = observer(({ deckId }: Props) => {
           <View>
             <Stats deckId={deckId} />
             <StudyButtons deckId={deckId} />
-            {/*<Input placeholder="Search" />*/}
+            {user?.pro && <Search setFoundWords={setFoundWords} />}
           </View>
         }
         ListFooterComponent={
