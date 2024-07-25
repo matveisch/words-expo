@@ -16,6 +16,7 @@ import LockedFeature from '../../components/LockedFeature';
 import useUser from '../../hooks/useUser';
 import ListItemSkeleton from '../../ui/ListItemSkeleton';
 import useUpdateUser from '../../hooks/useUpdateUser';
+import { secretCodeStore } from '../../features/secretCodeStore';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Decks'> {}
 
@@ -30,7 +31,11 @@ const ListOfDecks = observer(({ navigation }: Props) => {
     async function getUserInfo() {
       try {
         const info = await Purchases.getCustomerInfo();
-        if (typeof info.entitlements.active['WordEmPro'] === 'undefined') {
+        if (
+          typeof info.entitlements.active['WordEmPro'] === 'undefined' &&
+          // @ts-ignore
+          secretCodeStore.secretCode !== process.env.SECRET_CODE
+        ) {
           mutate();
         }
       } catch (e) {

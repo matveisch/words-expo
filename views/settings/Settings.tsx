@@ -18,6 +18,7 @@ import LockedFeature from '../../components/LockedFeature';
 import Loader from '../../components/Loader';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { pushStore } from '../../features/pushStore';
+import { secretCodeStore } from '../../features/secretCodeStore';
 
 type Inputs = {
   wordsPerSet: string;
@@ -33,13 +34,14 @@ const Settings = observer(() => {
   } = useForm<Inputs>({
     defaultValues: {
       wordsPerSet: wordsLimitStore.limit.toString(),
-      code: '',
+      code: secretCodeStore.secretCode,
     },
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     wordsLimitStore.setLimit(Number(data.wordsPerSet));
-    Toast.show('Limit updated', toastOptions);
+    secretCodeStore.setSecretCode(data.code);
+    Toast.show('Settings updated', toastOptions);
     Keyboard.dismiss();
   };
 
@@ -133,11 +135,12 @@ const Settings = observer(() => {
                   onChangeText={(text) => onChange(text)}
                   onBlur={onBlur}
                   value={value}
+                  secureTextEntry={true}
                   placeholder="Your special code"
                 />
               )}
             />
-            <Button>
+            <Button onPress={handleSubmit(onSubmit)}>
               <TabBarIcon name="check" size={20} />
             </Button>
           </View>
