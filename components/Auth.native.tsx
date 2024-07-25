@@ -6,7 +6,7 @@ export const Auth = () => {
   return (
     <>
       {Platform.OS === 'ios' && <AppleButton />}
-      <GoogleButton />
+      {Platform.OS === 'android' && <GoogleButton />}
     </>
   );
 };
