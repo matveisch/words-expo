@@ -82,6 +82,7 @@ const WordsTab = observer(({ deckId }: Props) => {
   return (
     <View style={styles.container} key="1">
       <FlashList
+        keyboardShouldPersistTaps="handled"
         ref={flashListRef}
         onEndReached={() => {
           if (hasNextPage && user?.pro) fetchNextPage();
