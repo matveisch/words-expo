@@ -1,5 +1,154 @@
-import { getKnowledgeLevel, hasWordsToLearn, wordCheck } from '../../../views/home/StudyingView';
+jest.mock('@expo/vector-icons/FontAwesome', () => 'FontAwesome');
+jest.mock('expo-secure-store', () => ({
+  setItemAsync: jest.fn(),
+  getItemAsync: jest.fn(),
+  deleteItemAsync: jest.fn(),
+}));
+
+import {
+  getKnowledgeLevel,
+  handleAnswer,
+  hasWordsToLearn,
+  wordCheck,
+} from '../../../views/home/StudyingView';
 import { WordType } from '../../../types/WordType';
+import { Keyboard } from 'react-native';
+import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { WordToUpdate } from '../../../hooks/useUpdateWord';
+
+jest.mock('react-native', () => ({
+  View: 'View',
+  Text: 'Text',
+  StyleSheet: {
+    create: jest.fn(),
+  },
+  Keyboard: {
+    dismiss: jest.fn(),
+  },
+}));
+
+// describe('handleAnswer', () => {
+//   const mockMutateAsync: jest.MockedFunction<
+//     UseMutateAsyncFunction<WordType, Error, WordToUpdate, unknown>
+//   > = jest.fn().mockImplementation(() => Promise.resolve({} as WordType));
+//
+//   const mockSetBeingChecked = jest.fn();
+//   const mockSetIsSuccess = jest.fn();
+//
+//   beforeEach(() => {
+//     jest.clearAllMocks();
+//   });
+//
+//   it('should handle correct answer with auto-check on', async () => {
+//     const words: WordType[] = [
+//       {
+//         id: 1,
+//         word: 'test',
+//         meaning: 'a trial',
+//         pronunciation: 'test',
+//         knowledgelevel: 2,
+//         deck: 1,
+//       },
+//     ];
+//     mockWordCheck.mockReturnValue(true);
+//     mockGetKnowledgeLevel.mockReturnValue(3);
+//     mockMutateAsync.mockResolvedValue({
+//       id: 1,
+//       word: 'test',
+//       meaning: 'a trial',
+//       pronunciation: 'test',
+//       knowledgelevel: 3,
+//       deck: 1,
+//     });
+//
+//     await handleAnswer(
+//       words,
+//       true,
+//       0,
+//       'test',
+//       mockMutateAsync,
+//       mockSetBeingChecked,
+//       mockSetIsSuccess
+//     );
+//
+//     expect(Keyboard.dismiss).toHaveBeenCalled();
+//     expect(wordCheck).toHaveBeenCalledWith(words[0], 'test');
+//     expect(getKnowledgeLevel).toHaveBeenCalledWith(2, true);
+//     expect(mockMutateAsync).toHaveBeenCalledWith({ id: 1, knowledgelevel: 3 });
+//     expect(mockSetBeingChecked).toHaveBeenCalledWith(true);
+//     expect(mockSetIsSuccess).toHaveBeenCalledWith(true);
+//   });
+//
+//   it('should handle incorrect answer with auto-check on', async () => {
+//     const words: WordType[] = [
+//       {
+//         id: 1,
+//         word: 'test',
+//         meaning: 'a trial',
+//         pronunciation: 'test',
+//         knowledgelevel: 2,
+//         deck: 1,
+//       },
+//     ];
+//     (wordCheck as jest.Mock).mockReturnValue(false);
+//     (getKnowledgeLevel as jest.Mock).mockReturnValue(1);
+//     mockMutateAsync.mockResolvedValue({
+//       id: 1,
+//       word: 'test',
+//       meaning: 'a trial',
+//       pronunciation: 'test',
+//       knowledgelevel: 1,
+//       deck: 1,
+//     });
+//
+//     await handleAnswer(
+//       words,
+//       true,
+//       0,
+//       'wrong',
+//       mockMutateAsync,
+//       mockSetBeingChecked,
+//       mockSetIsSuccess
+//     );
+//
+//     expect(Keyboard.dismiss).toHaveBeenCalled();
+//     expect(wordCheck).toHaveBeenCalledWith(words[0], 'wrong');
+//     expect(getKnowledgeLevel).toHaveBeenCalledWith(2, false);
+//     expect(mockMutateAsync).toHaveBeenCalledWith({ id: 1, knowledgelevel: 1 });
+//     expect(mockSetBeingChecked).toHaveBeenCalledWith(true);
+//     expect(mockSetIsSuccess).toHaveBeenCalledWith(false);
+//   });
+//
+//   it('should not check answer when auto-check is off', async () => {
+//     const words: WordType[] = [
+//       {
+//         id: 1,
+//         word: 'test',
+//         meaning: 'a trial',
+//         pronunciation: 'test',
+//         knowledgelevel: 2,
+//         deck: 1,
+//       },
+//     ];
+//
+//     await handleAnswer(
+//       words,
+//       false,
+//       0,
+//       'test',
+//       mockMutateAsync,
+//       mockSetBeingChecked,
+//       mockSetIsSuccess
+//     );
+//
+//     expect(Keyboard.dismiss).toHaveBeenCalled();
+//     expect(wordCheck).not.toHaveBeenCalled();
+//     expect(getKnowledgeLevel).not.toHaveBeenCalled();
+//     expect(mockMutateAsync).not.toHaveBeenCalled();
+//     expect(mockSetBeingChecked).toHaveBeenCalledWith(true);
+//     expect(mockSetIsSuccess).not.toHaveBeenCalled();
+//   });
+// });
 
 describe('getKnowledgeLevel', () => {
   test('should increase the level by 1 when the answer is correct and current level is less than 4', () => {
