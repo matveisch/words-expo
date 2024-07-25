@@ -37,8 +37,18 @@ async function getWords(deck_ids: number[], revise: boolean, words_limit: number
   return data;
 }
 
-export function calc(num1: number, num2: number) {
-  return num1 + num2;
+export const hasWordsToLearn = (
+  words: WordType[] | null | undefined,
+  currentIndex: number
+): boolean => (words ? currentIndex + 1 < words.length : false);
+
+export function getKnowledgeLevel(currentLevel: number, isAnswerRight: boolean) {
+  if (isAnswerRight && currentLevel < 4) {
+    return currentLevel + 1;
+  } else if (!isAnswerRight && currentLevel > 1) {
+    return currentLevel - 1;
+  }
+  return currentLevel;
 }
 
 export const StudyingView = observer(({ route }: Props) => {
@@ -61,48 +71,40 @@ export const StudyingView = observer(({ route }: Props) => {
   const [setIsDone, setSetIsDone] = useState(false);
   const updateWord = useUpdateWord();
 
-  function handleAnswer() {
+  function handleAnswer(
+    words: WordType[],
+    autoCheck: boolean,
+    currentIndex: number,
+    answer: string
+  ) {
     Keyboard.dismiss();
 
-    if (words && autoCheckStore.autoCheck) {
+    if (autoCheck) {
       const isAnswerRight = wordCheck(words[currentIndex], answer);
       const currentWord = words[currentIndex];
 
-      if (isAnswerRight) {
-        if (!revise) {
-          updateWord
-            .mutateAsync({
-              id: currentWord.id,
-              knowledgelevel: currentWord.knowledgelevel + 1,
-            })
-            .then(() => {
-              setBeingChecked(true);
-              setIsSuccess(true);
-            });
-        }
-      } else {
-        if (currentWord.knowledgelevel > 1) {
-          updateWord.mutateAsync({
-            id: currentWord.id,
-            knowledgelevel: currentWord.knowledgelevel - 1,
-          });
-        }
-        setBeingChecked(true);
-        setIsSuccess(false);
-      }
+      const newKnowledgeLevel = getKnowledgeLevel(currentWord.knowledgelevel, isAnswerRight);
+
+      updateWord
+        .mutateAsync({
+          id: currentWord.id,
+          knowledgelevel: newKnowledgeLevel,
+        })
+        .then(() => {
+          setBeingChecked(true);
+          setIsSuccess(isAnswerRight);
+        });
     } else {
       setBeingChecked(true);
     }
   }
 
-  const hasWordsToLearn = () => words && currentIndex + 1 < words.length;
-
   function handleNextWord() {
     setBeingChecked(false);
     setIsSuccess(false);
     setAnswer('');
-    if (hasWordsToLearn()) setCurrentIndex(currentIndex + 1);
-    if (!hasWordsToLearn()) setSetIsDone(true);
+    if (hasWordsToLearn(words, currentIndex)) setCurrentIndex(currentIndex + 1);
+    if (!hasWordsToLearn(words, currentIndex)) setSetIsDone(true);
   }
 
   function getBackgroundColor() {
@@ -196,7 +198,10 @@ export const StudyingView = observer(({ route }: Props) => {
             autoComplete="off"
           />
           {!beingChecked && (
-            <Button onPress={handleAnswer} isDisabled={updateWord.isPending}>
+            <Button
+              onPress={() => handleAnswer(words, autoCheckStore.autoCheck, currentIndex, answer)}
+              isDisabled={updateWord.isPending}
+            >
               {updateWord.isPending ? <Loader /> : <TabBarIcon name="check" size={20} />}
             </Button>
           )}

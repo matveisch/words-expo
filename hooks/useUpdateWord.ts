@@ -1,7 +1,7 @@
 import { supabase } from '../helpers/initSupabase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type WordToUpdate = {
+export type WordToUpdate = {
   id: number;
   word?: string;
   meaning?: string;
