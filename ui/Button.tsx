@@ -1,4 +1,11 @@
-import { Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 import { ReactNode } from 'react';
 import { defaultColors } from '../helpers/colors';
 
@@ -50,7 +57,7 @@ export default function Button(props: Props & PressableProps) {
       style={({ pressed }) => [
         {
           backgroundColor: getBackgroundColor(pressed),
-          height: size === 'small' ? undefined : 44,
+          height: size === 'small' ? undefined : Platform.OS === 'ios' ? 44 : 53.5,
           paddingHorizontal: size === 'small' ? undefined : 18,
           padding: size === 'small' ? 5 : undefined,
           borderWidth: outlined ? 2 : undefined,
