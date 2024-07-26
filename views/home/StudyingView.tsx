@@ -100,16 +100,6 @@ export function handleNextWord(
   }
 }
 
-export function calculateNewState(
-  currentWord: WordType,
-  isCorrect: boolean
-): { shouldUpdate: boolean; newKnowledgeLevel: number } {
-  const newKnowledgeLevel = getKnowledgeLevel(currentWord.knowledgelevel, isCorrect);
-  const shouldUpdate = newKnowledgeLevel !== currentWord.knowledgelevel;
-
-  return { shouldUpdate, newKnowledgeLevel };
-}
-
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
 
@@ -144,22 +134,10 @@ export const StudyingView = observer(({ route }: Props) => {
     const currentWord = words![currentIndex];
     const newKnowledgeLevel = getKnowledgeLevel(currentWord.knowledgelevel, isCorrect);
 
-    if (newKnowledgeLevel !== currentWord.knowledgelevel) {
-      mutateAsync({
-        id: currentWord.id,
-        knowledgelevel: newKnowledgeLevel,
-      }).then(() => {
-        handleNextWord(
-          words,
-          currentIndex,
-          setBeingChecked,
-          setIsSuccess,
-          setAnswer,
-          setCurrentIndex,
-          setSetIsDone
-        );
-      });
-    } else {
+    mutateAsync({
+      id: currentWord.id,
+      knowledgelevel: newKnowledgeLevel,
+    }).then(() => {
       handleNextWord(
         words,
         currentIndex,
@@ -169,7 +147,7 @@ export const StudyingView = observer(({ route }: Props) => {
         setCurrentIndex,
         setSetIsDone
       );
-    }
+    });
   }
 
   if (!words) {
