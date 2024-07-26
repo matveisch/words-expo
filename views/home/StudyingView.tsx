@@ -81,6 +81,35 @@ export function handleAnswer(
   }
 }
 
+export function handleNextWord(
+  words: WordType[] | null | undefined,
+  currentIndex: number,
+  setBeingChecked: (checked: boolean) => void,
+  setIsSuccess: (success: boolean) => void,
+  setAnswer: (answer: string) => void,
+  setCurrentIndex: (index: number) => void,
+  setSetIsDone: (isDone: boolean) => void
+) {
+  setBeingChecked(false);
+  setIsSuccess(false);
+  setAnswer('');
+  if (hasWordsToLearn(words, currentIndex)) {
+    setCurrentIndex(currentIndex + 1);
+  } else {
+    setSetIsDone(true);
+  }
+}
+
+export function calculateNewState(
+  currentWord: WordType,
+  isCorrect: boolean
+): { shouldUpdate: boolean; newKnowledgeLevel: number } {
+  const newKnowledgeLevel = getKnowledgeLevel(currentWord.knowledgelevel, isCorrect);
+  const shouldUpdate = newKnowledgeLevel !== currentWord.knowledgelevel;
+
+  return { shouldUpdate, newKnowledgeLevel };
+}
+
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
 
@@ -101,41 +130,6 @@ export const StudyingView = observer(({ route }: Props) => {
   const [setIsDone, setSetIsDone] = useState(false);
   const { mutateAsync, isPending } = useUpdateWord();
 
-  // function handleAnswer(
-  //   words: WordType[],
-  //   autoCheck: boolean,
-  //   currentIndex: number,
-  //   answer: string,
-  //   mutateAsync: UseMutateAsyncFunction<WordType, Error, WordToUpdate, unknown>
-  // ) {
-  //   Keyboard.dismiss();
-  //
-  //   if (autoCheck) {
-  //     const isAnswerRight = wordCheck(words[currentIndex], answer);
-  //     const currentWord = words[currentIndex];
-  //
-  //     const newKnowledgeLevel = getKnowledgeLevel(currentWord.knowledgelevel, isAnswerRight);
-  //
-  //     mutateAsync({
-  //       id: currentWord.id,
-  //       knowledgelevel: newKnowledgeLevel,
-  //     }).then(() => {
-  //       setBeingChecked(true);
-  //       setIsSuccess(isAnswerRight);
-  //     });
-  //   } else {
-  //     setBeingChecked(true);
-  //   }
-  // }
-
-  function handleNextWord() {
-    setBeingChecked(false);
-    setIsSuccess(false);
-    setAnswer('');
-    if (hasWordsToLearn(words, currentIndex)) setCurrentIndex(currentIndex + 1);
-    if (!hasWordsToLearn(words, currentIndex)) setSetIsDone(true);
-  }
-
   function getBackgroundColor() {
     if (isSuccess) {
       return defaultColors.successColor;
@@ -146,31 +140,35 @@ export const StudyingView = observer(({ route }: Props) => {
     }
   }
 
-  function handleAnsweredRight() {
+  function handleAnswered(isCorrect: boolean) {
     const currentWord = words![currentIndex];
-    if (currentWord.knowledgelevel < 4) {
-      mutateAsync({
-        id: currentWord.id,
-        knowledgelevel: currentWord.knowledgelevel + 1,
-      }).then(() => {
-        handleNextWord();
-      });
-    } else {
-      handleNextWord();
-    }
-  }
+    const newKnowledgeLevel = getKnowledgeLevel(currentWord.knowledgelevel, isCorrect);
 
-  function handleAnsweredWrong() {
-    const currentWord = words![currentIndex];
-    if (currentWord.knowledgelevel > 1) {
+    if (newKnowledgeLevel !== currentWord.knowledgelevel) {
       mutateAsync({
         id: currentWord.id,
-        knowledgelevel: currentWord.knowledgelevel - 1,
+        knowledgelevel: newKnowledgeLevel,
       }).then(() => {
-        handleNextWord();
+        handleNextWord(
+          words,
+          currentIndex,
+          setBeingChecked,
+          setIsSuccess,
+          setAnswer,
+          setCurrentIndex,
+          setSetIsDone
+        );
       });
     } else {
-      handleNextWord();
+      handleNextWord(
+        words,
+        currentIndex,
+        setBeingChecked,
+        setIsSuccess,
+        setAnswer,
+        setCurrentIndex,
+        setSetIsDone
+      );
     }
   }
 
@@ -244,12 +242,16 @@ export const StudyingView = observer(({ route }: Props) => {
 
         <View style={styles.successButtons}>
           {!isSuccess && beingChecked && autoCheckStore.autoCheck && (
-            <Button style={{ flex: 1 }} onPress={handleAnsweredRight} isDisabled={isPending}>
+            <Button style={{ flex: 1 }} onPress={() => handleAnswered(true)} isDisabled={isPending}>
               <Text style={{ fontWeight: 500 }}>I answered right</Text>
             </Button>
           )}
           {beingChecked && !autoCheckStore.autoCheck && (
-            <Button style={{ flex: 1 }} onPress={handleAnsweredWrong} isDisabled={isPending}>
+            <Button
+              style={{ flex: 1 }}
+              onPress={() => handleAnswered(false)}
+              isDisabled={isPending}
+            >
               <Text
                 style={{
                   fontWeight: 500,
@@ -264,7 +266,19 @@ export const StudyingView = observer(({ route }: Props) => {
             <Button
               style={{ flex: 1 }}
               backgroundColor={defaultColors.activeColor}
-              onPress={autoCheckStore.autoCheck ? handleNextWord : handleAnsweredRight}
+              onPress={() =>
+                autoCheckStore.autoCheck
+                  ? handleNextWord(
+                      words,
+                      currentIndex,
+                      setBeingChecked,
+                      setIsSuccess,
+                      setAnswer,
+                      setCurrentIndex,
+                      setSetIsDone
+                    )
+                  : handleAnswered(true)
+              }
               disabled={isPending}
             >
               <ThemedText text={!autoCheckStore.autoCheck ? 'I answered right' : 'Next word'} />
