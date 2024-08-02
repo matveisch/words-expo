@@ -5,7 +5,7 @@ ios/
 android/
 credentials.json
 wordem-*
-#google-services.json
+google-services.json
 
 # dependencies
 node_modules/
