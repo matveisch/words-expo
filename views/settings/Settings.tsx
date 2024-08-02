@@ -19,10 +19,10 @@ import Loader from '../../components/Loader';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { pushStore } from '../../features/pushStore';
 import { secretCodeStore } from '../../features/secretCodeStore';
+import SpecialCodeInput from '../../components/SpecialCodeInput';
 
 type Inputs = {
   wordsPerSet: string;
-  code: string;
 };
 
 const Settings = observer(() => {
@@ -34,14 +34,12 @@ const Settings = observer(() => {
   } = useForm<Inputs>({
     defaultValues: {
       wordsPerSet: wordsLimitStore.limit.toString(),
-      code: secretCodeStore.secretCode,
     },
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     wordsLimitStore.setLimit(Number(data.wordsPerSet));
-    secretCodeStore.setSecretCode(data.code);
-    Toast.show('Settings updated', toastOptions);
+    Toast.show('Limit updated', toastOptions);
     Keyboard.dismiss();
   };
 
@@ -123,28 +121,7 @@ const Settings = observer(() => {
           </>
         )}
 
-        <View>
-          <Label text="Special code" />
-          <View style={{ gap: 10, flexDirection: 'row' }}>
-            <Controller
-              name="code"
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  style={{ flex: 1 }}
-                  onChangeText={(text) => onChange(text)}
-                  onBlur={onBlur}
-                  value={value}
-                  secureTextEntry={true}
-                  placeholder="Your special code"
-                />
-              )}
-            />
-            <Button onPress={handleSubmit(onSubmit)}>
-              <TabBarIcon name="check" size={20} />
-            </Button>
-          </View>
-        </View>
+        <SpecialCodeInput />
       </View>
 
       <User />
