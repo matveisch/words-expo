@@ -8,7 +8,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest",
-    "clear_jest": "jest --clearCache"
+    "clear_jest": "jest --clearCache",
+    "prebuild": "npx expo-env-info && cp google-services.json android/app/"
   },
   "jest": {
     "preset": "jest-expo",

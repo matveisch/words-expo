@@ -6,65 +6,88 @@ import { observer } from 'mobx-react-lite';
 import { supabase } from '../helpers/initSupabase';
 import useAddUser from '../hooks/useAddUser';
 import { sessionStore } from '../features/sessionStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Constants from 'expo-constants';
+
+const logError = (step: string, error: any) => {
+  console.error(
+    `MYAPP ERROR [${step}]: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`
+  );
+};
+
+const logInfo = (step: string, info: any) => {
+  console.log(`MYAPP INFO [${step}]: ${JSON.stringify(info)}`);
+};
 
 const GoogleButton = observer(() => {
   const { mutate } = useAddUser();
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    console.log('MYAPP ENV [extra]:', JSON.stringify(Constants.expoConfig?.extra));
+    console.log('MYAPP ENV [webClientId]:', Constants.expoConfig?.extra?.webClientId);
+    console.log('MYAPP ENV [iosClientId]:', Constants.expoConfig?.extra?.iosClientId);
+  }, []);
+
+  logInfo('ConfigureGoogleSignIn', 'Starting configuration');
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    webClientId: '103397523372-i20enh919kus9mgpot7udhg5rd1qs22h.apps.googleusercontent.com',
-    iosClientId: '103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com',
-    // androidClientId: '103397523372-5dm3q4i307cjnit97c93qmnrn4mbhnhj.apps.googleusercontent.com',
+    // @ts-ignore
+    webClientId: process.env.WEB_CLIENT_ID,
+    // @ts-ignore
+    iosClientId: process.env.IOS_CLIENT_ID,
   });
+  logInfo('ConfigureGoogleSignIn', 'Configuration complete');
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      console.log('Starting Google Sign-In process');
-      await GoogleSignin.hasPlayServices();
-      console.log('Play services checked');
+      logInfo('CheckPlayServices', 'Checking Play Services');
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      logInfo('CheckPlayServices', 'Play Services check passed');
+
+      logInfo('GoogleSignIn', 'Starting sign-in');
       const userInfo = await GoogleSignin.signIn();
-      console.log('Google Sign-In successful', userInfo);
+      logInfo('GoogleSignIn', 'Sign-in successful');
 
       if (userInfo.idToken) {
-        console.log('ID token present, signing in with Supabase');
+        logInfo('SupabaseSignIn', 'Starting Supabase sign-in');
         const { data, error } = await supabase.auth.signInWithIdToken({
           provider: 'google',
           token: userInfo.idToken,
         });
+        logInfo('SupabaseSignIn', 'Supabase sign-in complete');
 
-        console.log('Supabase sign-in result:', data, error);
-
-        if (!error) {
-          if (data.user) {
-            console.log('Adding user to database');
-            mutate({
-              name: '',
-              email: data.user.email || '',
-              pro: false,
-              user_uid: data.user.id,
-            });
-          }
-          console.log('Setting session');
-          sessionStore.setSession(data.session);
-        } else {
-          console.error('Supabase sign-in error:', error);
+        if (error) {
+          throw new Error(`Supabase sign-in error: ${error.message}`);
         }
+
+        if (data.user) {
+          logInfo('AddUser', 'Adding user to database');
+          mutate({
+            name: '',
+            email: data.user.email || '',
+            pro: false,
+            user_uid: data.user.id,
+          });
+        }
+
+        logInfo('SetSession', 'Setting session');
+        sessionStore.setSession(data.session);
       } else {
-        throw new Error('No ID token present!');
+        throw new Error('No ID token present in Google Sign-In response');
       }
+
+      logInfo('SignInProcess', 'Sign-in process completed successfully');
     } catch (error: any) {
-      console.error('Google Sign-In error:', error);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('Sign-in cancelled');
+        logError('GoogleSignIn', 'User cancelled the sign-in process');
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Sign-in already in progress');
+        logError('GoogleSignIn', 'Sign-in already in progress');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Play services not available or outdated');
+        logError('GoogleSignIn', 'Play Services not available or outdated');
       } else {
-        console.error('Other error:', error);
+        logError('GoogleSignIn', error);
       }
     } finally {
       setIsLoading(false);
