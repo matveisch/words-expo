@@ -100,6 +100,24 @@ export function handleNextWord(
   }
 }
 
+export function iDontKnow(
+  setBeingChecked: (checked: boolean) => void,
+  words: WordType[],
+  currentIndex: number,
+  setIsSuccess: (success: boolean) => void,
+  mutateAsync: UseMutateAsyncFunction<WordType, Error, WordToUpdate, unknown>
+) {
+  const currentWord = words[currentIndex];
+
+  mutateAsync({
+    id: currentWord.id,
+    knowledgelevel: 1,
+  }).then(() => {
+    setBeingChecked(true);
+    setIsSuccess(false);
+  });
+}
+
 export const StudyingView = observer(({ route }: Props) => {
   const { deckId, revise } = route.params;
 
@@ -183,6 +201,7 @@ export const StudyingView = observer(({ route }: Props) => {
             </View>
           )}
         </View>
+
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Input
             placeholder="Enter word"
@@ -217,6 +236,17 @@ export const StudyingView = observer(({ route }: Props) => {
             </Button>
           )}
         </View>
+
+        {!beingChecked && (
+          <Button
+            style={styles.dontKnowButton}
+            onPress={() =>
+              iDontKnow(setBeingChecked, words, currentIndex, setIsSuccess, mutateAsync)
+            }
+          >
+            <Text>I don't know</Text>
+          </Button>
+        )}
 
         <View style={styles.successButtons}>
           {!isSuccess && beingChecked && autoCheckStore.autoCheck && (
@@ -295,5 +325,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginTop: 20,
+  },
+  dontKnowButton: {
+    marginTop: 10,
   },
 });
