@@ -243,6 +243,7 @@ export const StudyingView = observer(({ route }: Props) => {
             onPress={() =>
               iDontKnow(setBeingChecked, words, currentIndex, setIsSuccess, mutateAsync)
             }
+            isDisabled={isPending}
           >
             <Text>I don't know</Text>
           </Button>
