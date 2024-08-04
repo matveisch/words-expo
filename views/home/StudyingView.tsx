@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { UseMutateAsyncFunction } from '@tanstack/react-query';
 
 import { RootStackParamList } from './HomeView';
 import Loader from '../../components/Loader';
@@ -19,7 +20,6 @@ import ThemedText from '../../ui/ThemedText';
 import { useDecks } from '../../hooks/useDecks';
 import { sessionStore } from '../../features/sessionStore';
 import { supabase } from '../../helpers/initSupabase';
-import { UseMutateAsyncFunction } from '@tanstack/react-query';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
