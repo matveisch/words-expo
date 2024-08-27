@@ -1,8 +1,6 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 .idea
 .env*
-ios/
-android/
 credentials.json
 wordem-*
 google-services.json
@@ -23,6 +21,8 @@ build*
 *.p12
 *.key
 *.mobileprovision
+/android/
+/ios/
 
 # Metro
 .metro-health-check*
