@@ -14,9 +14,10 @@ import ThemedText from '../ui/ThemedText';
 
 type Props = {
   deckId: number;
+  parentDeckId: number | null;
 };
 
-const StudyButtons = observer(({ deckId }: Props) => {
+const StudyButtons = observer(({ deckId, parentDeckId }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
   const subDecks = decks?.filter((d) => d.parent_deck === deckId);
@@ -37,6 +38,7 @@ const StudyButtons = observer(({ deckId }: Props) => {
           onPress={() =>
             navigation.navigate('Studying', {
               deckId: deckId,
+              parentDeckId: parentDeckId,
               revise: false,
             })
           }
@@ -53,6 +55,7 @@ const StudyButtons = observer(({ deckId }: Props) => {
           onPress={() =>
             navigation.navigate('Studying', {
               deckId: deckId,
+              parentDeckId: parentDeckId,
               revise: true,
             })
           }

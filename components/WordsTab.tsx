@@ -96,7 +96,7 @@ const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
             {foundWords.length < 1 && (
               <View>
                 <Stats deckId={deckId} />
-                <StudyButtons deckId={deckId} />
+                <StudyButtons deckId={deckId} parentDeckId={parentDeckId} />
               </View>
             )}
             {user?.pro && <Search setFoundWords={setFoundWords} onInput={scrollPastHeader} />}

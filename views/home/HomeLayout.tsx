@@ -38,7 +38,7 @@ export type RootStackParamList = {
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: { deck: DeckType };
   WordCreateModal: { deckId: number; parentDeckId: number | null };
-  Studying: { deckId: number; revise: boolean };
+  Studying: { deckId: number; revise: boolean; parentDeckId: number | null };
   SubscriptionOffer: undefined;
 };
 
