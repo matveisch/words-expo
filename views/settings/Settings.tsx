@@ -18,7 +18,6 @@ import LockedFeature from '../../components/LockedFeature';
 import Loader from '../../components/Loader';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { pushStore } from '../../features/pushStore';
-import { secretCodeStore } from '../../features/secretCodeStore';
 import SpecialCodeInput from '../../components/SpecialCodeInput';
 
 type Inputs = {

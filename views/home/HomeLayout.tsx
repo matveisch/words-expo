@@ -158,7 +158,7 @@ const HomeLayout = observer(() => {
 
   function handleDeleteDeck(
     deckId: number,
-    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView', undefined>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView'>
   ) {
     Alert.alert('Are you sure?', 'All of your sub decks are about to be deleted as well', [
       { text: 'Cancel', style: 'cancel' },
@@ -173,7 +173,7 @@ const HomeLayout = observer(() => {
 
   function handleDeleteWord(
     wordId: number,
-    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView', undefined>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView'>
   ) {
     Alert.alert('Are you sure?', 'You are about to delete the word', [
       { text: 'Cancel', style: 'cancel' },
