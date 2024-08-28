@@ -59,7 +59,7 @@ const WordCreateModal = observer(({ route }: Props) => {
       pronunciation: data.pronunciation,
       knowledgelevel: data.knowledgeLevel,
       deck: deckId,
-      parent_deck: parentDeckId,
+      parent_deck: parentDeckId !== null ? parentDeckId : deckId,
     };
 
     mutateAsync(newWord).then(() => {

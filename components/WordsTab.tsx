@@ -11,7 +11,6 @@ import Stats from './Stats';
 import StudyButtons from './StudyButtons';
 import LockedFeature from './LockedFeature';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
-import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
 import { useWords } from '../hooks/useWords';
 import useUser from '../hooks/useUser';
@@ -36,26 +35,13 @@ const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
     isLoading: userLoading,
     error: userError,
   } = useUser(sessionStore.session?.user.id || '');
-
-  const {
-    data: decks,
-    isFetched: decksFetched,
-    isLoading: decksLoading,
-    error: decksError,
-  } = useDecks(sessionStore.session?.user.id || '');
-
-  const subDecks = useMemo(() => decks?.filter((d) => d.parent_deck === deckId), [decks, deckId]);
-  const decksIds = useMemo(
-    () => [...(subDecks?.map((deck) => deck.id) || []), deckId],
-    [subDecks, deckId]
-  );
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isLoading: wordsLoading,
     error: wordsError,
-  } = useWords(deckId, decksIds, decksFetched);
+  } = useWords(deckId, parentDeckId);
   // Combine all pages into a single array
   const words = useMemo(() => data?.pages.flat() || [], [data]);
 
@@ -66,7 +52,7 @@ const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
     });
   };
 
-  if (userLoading || decksLoading || wordsLoading) {
+  if (userLoading || wordsLoading) {
     return (
       <FlashList
         estimatedItemSize={65}
@@ -76,7 +62,7 @@ const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     );
-  } else if (userError || decksError || wordsError) {
+  } else if (userError || wordsError) {
     return <Text style={styles.errorText}>Failed to load data</Text>;
   }
 
