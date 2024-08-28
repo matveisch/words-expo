@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
 import { useIsMutating } from '@tanstack/react-query';
 
-import { RootStackParamList } from '../views/home/HomeView';
+import { RootStackParamList } from '../views/home/HomeLayout';
 import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
 import { useWordsCount } from '../hooks/useWordsCount';

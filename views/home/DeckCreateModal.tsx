@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import useAddDeck from '../../hooks/useAddDeck';
 import { colors } from '../../helpers/colors';
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import Button from '../../ui/Button';
 import Label from '../../ui/Label';
 import Input from '../../ui/Input';

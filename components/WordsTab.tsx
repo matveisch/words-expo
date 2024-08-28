@@ -2,7 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Text, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../views/home/HomeView';
+import { RootStackParamList } from '../views/home/HomeLayout';
 import { observer } from 'mobx-react-lite';
 import { useMemo, useRef, useState } from 'react';
 
@@ -23,9 +23,10 @@ import { WordType } from '../types/WordType';
 
 type Props = {
   deckId: number;
+  parentDeckId: number | null;
 };
 
-const WordsTab = observer(({ deckId }: Props) => {
+const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [foundWords, setFoundWords] = useState<WordType[]>([]);
   const flashListRef = useRef<FlashList<WordType> | null>(null);
@@ -132,6 +133,7 @@ const WordsTab = observer(({ deckId }: Props) => {
         onPress={() =>
           navigation.navigate('WordCreateModal', {
             deckId: deckId,
+            parentDeckId: parentDeckId,
           })
         }
         style={styles.newItemButton}

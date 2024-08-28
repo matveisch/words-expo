@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite';
 import { knowledgeColors } from '../../helpers/colors';
 import useAddWord from '../../hooks/useAddWord';
 import { toastOptions } from '../../helpers/toastOptions';
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import Label from '../../ui/Label';
 import Input from '../../ui/Input';
 import InputError from '../../ui/InputError';
@@ -31,7 +31,7 @@ type Inputs = {
 interface Props extends NativeStackScreenProps<RootStackParamList, 'WordCreateModal'> {}
 
 const WordCreateModal = observer(({ route }: Props) => {
-  const { deckId } = route.params;
+  const { deckId, parentDeckId } = route.params;
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const { mutateAsync, isPending } = useAddWord();
   const { data: user } = useUser(sessionStore.session?.user.id || '');
@@ -59,6 +59,7 @@ const WordCreateModal = observer(({ route }: Props) => {
       pronunciation: data.pronunciation,
       knowledgelevel: data.knowledgeLevel,
       deck: deckId,
+      parent_deck: parentDeckId,
     };
 
     mutateAsync(newWord).then(() => {

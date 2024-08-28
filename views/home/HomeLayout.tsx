@@ -37,7 +37,7 @@ export type RootStackParamList = {
   Word: { word: WordType };
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: { deck: DeckType };
-  WordCreateModal: { deckId: number };
+  WordCreateModal: { deckId: number; parentDeckId: number | null };
   Studying: { deckId: number; revise: boolean };
   SubscriptionOffer: undefined;
 };
@@ -114,7 +114,7 @@ async function registerForPushNotificationsAsync() {
   }
 }
 
-const HomeView = observer(() => {
+const HomeLayout = observer(() => {
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
 
@@ -331,4 +331,4 @@ const HomeView = observer(() => {
   );
 });
 
-export default HomeView;
+export default HomeLayout;

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
 
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import Loader from '../../components/Loader';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';

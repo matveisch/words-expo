@@ -6,7 +6,7 @@ import Toast from 'react-native-root-toast';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { observer } from 'mobx-react-lite';
 
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import { knowledgeColors } from '../../helpers/colors';
 import { toastOptions } from '../../helpers/toastOptions';
 import useUpdateWord from '../../hooks/useUpdateWord';

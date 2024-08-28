@@ -74,6 +74,7 @@ export type Database = {
           id: number
           knowledgelevel: number
           meaning: string
+          parent_deck: number | null
           pronunciation: string
           word: string
         }
@@ -82,6 +83,7 @@ export type Database = {
           id?: number
           knowledgelevel: number
           meaning: string
+          parent_deck?: number | null
           pronunciation: string
           word: string
         }
@@ -90,6 +92,7 @@ export type Database = {
           id?: number
           knowledgelevel?: number
           meaning?: string
+          parent_deck?: number | null
           pronunciation?: string
           word?: string
         }
@@ -97,6 +100,13 @@ export type Database = {
           {
             foreignKeyName: "words_deck_fkey"
             columns: ["deck"]
+            isOneToOne: false
+            referencedRelation: "decks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "words_parent_deck_fkey"
+            columns: ["parent_deck"]
             isOneToOne: false
             referencedRelation: "decks"
             referencedColumns: ["id"]
@@ -119,6 +129,7 @@ export type Database = {
           id: number
           knowledgelevel: number
           meaning: string
+          parent_deck: number | null
           pronunciation: string
           word: string
         }[]
@@ -133,6 +144,7 @@ export type Database = {
           id: number
           knowledgelevel: number
           meaning: string
+          parent_deck: number | null
           pronunciation: string
           word: string
         }[]
@@ -150,6 +162,7 @@ export type Database = {
               id: number
               knowledgelevel: number
               meaning: string
+              parent_deck: number | null
               pronunciation: string
               word: string
             }[]
@@ -165,6 +178,7 @@ export type Database = {
               id: number
               knowledgelevel: number
               meaning: string
+              parent_deck: number | null
               pronunciation: string
               word: string
             }[]

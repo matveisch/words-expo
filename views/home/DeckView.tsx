@@ -6,7 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import PagerView from 'react-native-pager-view';
 import { useEffect, useRef, useState } from 'react';
 
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import Button from '../../ui/Button';
 import { defaultColors } from '../../helpers/colors';
 import WordsTab from '../../components/WordsTab';
@@ -105,7 +105,7 @@ const DeckView = observer(({ route }: Props) => {
         scrollEnabled={deck.parent_deck === null}
         onPageSelected={(e) => setActiveTab(e.nativeEvent.position)}
       >
-        <WordsTab deckId={deck.id} />
+        <WordsTab deckId={deck.id} parentDeckId={deck.parent_deck} />
         <DecksTab deckId={deck.id} />
       </PagerView>
     </View>
