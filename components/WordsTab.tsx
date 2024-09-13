@@ -95,7 +95,7 @@ const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
           <View>
             {foundWords.length < 1 && (
               <View>
-                <Stats deckId={deckId} />
+                <Stats deckId={deckId} parentDeckId={parentDeckId} />
                 <StudyButtons deckId={deckId} parentDeckId={parentDeckId} />
               </View>
             )}
