@@ -2,12 +2,12 @@ import { observer } from 'mobx-react-lite';
 import { ActivityIndicator, View } from 'react-native';
 
 import { sessionStore } from '../features/sessionStore';
-import { useWordsCount } from '../hooks/useWordsCount';
 import { knowledgeColors } from '../helpers/colors';
 import useUser from '../hooks/useUser';
-import PieChart from './PieChart';
+import { useWordsCount } from '../hooks/useWordsCount';
 import ChartItem from '../ui/ChartItem';
 import LockedFeature from './LockedFeature';
+import PieChart from './PieChart';
 
 type Props = {
   deckId: number;
@@ -36,7 +36,7 @@ const Stats = observer(({ deckId, parentDeckId }: Props) => {
 
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-      <PieChart graphData={graphData} total={counts[0] || 0} />
+      <PieChart graphData={graphData} total={counts[0]} />
 
       <View style={{ justifyContent: 'space-evenly' }}>
         {graphData.map((level, index) => (

@@ -1,5 +1,5 @@
+import { useQueries } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
-import { useQueries, useQuery } from '@tanstack/react-query';
 
 type WordCounts = {
   again: number;

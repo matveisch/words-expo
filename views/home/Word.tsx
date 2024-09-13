@@ -1,24 +1,24 @@
-import { Keyboard, StyleSheet, Text, View } from 'react-native';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
-import Toast from 'react-native-root-toast';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Toast from 'react-native-root-toast';
 
-import { RootStackParamList } from './HomeLayout';
+import Loader from '../../components/Loader';
+import LockedFeature from '../../components/LockedFeature';
+import { sessionStore } from '../../features/sessionStore';
 import { knowledgeColors } from '../../helpers/colors';
 import { toastOptions } from '../../helpers/toastOptions';
 import useUpdateWord from '../../hooks/useUpdateWord';
-import Loader from '../../components/Loader';
-import Description from '../../ui/Description';
-import Label from '../../ui/Label';
-import Input from '../../ui/Input';
-import Circle from '../../ui/Circle';
-import Button from '../../ui/Button';
 import useUser from '../../hooks/useUser';
-import { sessionStore } from '../../features/sessionStore';
-import LockedFeature from '../../components/LockedFeature';
+import Button from '../../ui/Button';
+import Circle from '../../ui/Circle';
+import Description from '../../ui/Description';
+import Input from '../../ui/Input';
+import Label from '../../ui/Label';
+import { RootStackParamList } from './HomeLayout';
 
 type Inputs = {
   word: string;
@@ -29,9 +29,49 @@ type Inputs = {
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
+function getMinLevel(level: number) {
+  switch (level) {
+    case 1:
+      return 1;
+    case 2:
+      return 3;
+    case 3:
+      return 5;
+    case 4:
+      return 7;
+    default:
+      return 1;
+  }
+}
+
+function transformLevel(level: number) {
+  switch (level) {
+    case 1:
+      return 1;
+    case 2:
+      return 1;
+    case 3:
+      return 2;
+    case 4:
+      return 2;
+    case 5:
+      return 3;
+    case 6:
+      return 3;
+    case 7:
+      return 4;
+    case 8:
+      return 4;
+    default:
+      return 1;
+  }
+}
+
+const knowledgeLevels = [1, 2, 3, 4];
+const namesOfKnowledgeLevels = ['again', 'hard', 'good', 'easy'];
+
 const Word = observer(({ route }: Props) => {
   const { word } = route.params;
-  const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const {
     control,
@@ -125,13 +165,13 @@ const Word = observer(({ route }: Props) => {
               {knowledgeLevels.map((level, index) => (
                 <Circle
                   onPress={() => {
-                    setCurrentLevel(level);
-                    setValue('knowledgeLevel', level);
+                    setCurrentLevel(getMinLevel(level));
+                    setValue('knowledgeLevel', getMinLevel(level));
                   }}
-                  text={`${level}`}
+                  text={`${namesOfKnowledgeLevels[index]}`}
                   key={`${level}-${index}`}
                   backgroundColor={knowledgeColors[index]}
-                  borderColor={currentLevel === level ? 'black' : undefined}
+                  borderColor={transformLevel(currentLevel) === level ? 'black' : undefined}
                 />
               ))}
             </View>

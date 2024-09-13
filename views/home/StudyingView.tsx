@@ -1,23 +1,23 @@
-import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { RootStackParamList } from './HomeLayout';
-import Loader from '../../components/Loader';
-import Input from '../../ui/Input';
-import Button from '../../ui/Button';
-import { defaultColors } from '../../helpers/colors';
-import { TabBarIcon } from '../../ui/TabBarIcon';
-import { WordType } from '../../types/WordType';
 import FinishedSetBoard from '../../components/FinishedSetBoard';
-import useUpdateWord, { WordToUpdate } from '../../hooks/useUpdateWord';
-import { wordsLimitStore } from '../../features/wordsLimitStore';
+import Loader from '../../components/Loader';
 import { autoCheckStore } from '../../features/autoCheckStore';
-import ThemedText from '../../ui/ThemedText';
+import { wordsLimitStore } from '../../features/wordsLimitStore';
+import { defaultColors } from '../../helpers/colors';
 import { supabase } from '../../helpers/initSupabase';
+import useUpdateWord, { WordToUpdate } from '../../hooks/useUpdateWord';
+import { WordType } from '../../types/WordType';
+import Button from '../../ui/Button';
+import Input from '../../ui/Input';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import ThemedText from '../../ui/ThemedText';
+import { RootStackParamList } from './HomeLayout';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
