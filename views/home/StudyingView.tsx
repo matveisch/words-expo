@@ -129,9 +129,7 @@ export const StudyingView = observer(({ route }: Props) => {
 
   useEffect(() => {
     getWords(deckId, isParentDeck, revise, wordsLimitStore.limit).then((words) => setWords(words));
-  }, []);
-
-  console.log(words?.length);
+  }, [deckId]);
 
   const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
