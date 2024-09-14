@@ -1,25 +1,27 @@
-import { Keyboard, StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import Toast from 'react-native-root-toast';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
+import { useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Toast from 'react-native-root-toast';
 
+import Loader from '../../components/Loader';
+import LockedFeature from '../../components/LockedFeature';
+import { sessionStore } from '../../features/sessionStore';
 import { knowledgeColors } from '../../helpers/colors';
-import useAddWord from '../../hooks/useAddWord';
+import { knowledgeLevels, namesOfKnowledgeLevels } from '../../helpers/consts';
+import { getMinLevel, transformLevel } from '../../helpers/lib';
 import { toastOptions } from '../../helpers/toastOptions';
-import { RootStackParamList } from './HomeLayout';
-import Label from '../../ui/Label';
+import useAddWord from '../../hooks/useAddWord';
+import useUser from '../../hooks/useUser';
+import Button from '../../ui/Button';
+import Circle from '../../ui/Circle';
+import Description from '../../ui/Description';
 import Input from '../../ui/Input';
 import InputError from '../../ui/InputError';
-import Description from '../../ui/Description';
-import Circle from '../../ui/Circle';
-import Button from '../../ui/Button';
-import useUser from '../../hooks/useUser';
-import { sessionStore } from '../../features/sessionStore';
-import LockedFeature from '../../components/LockedFeature';
-import Loader from '../../components/Loader';
+import Label from '../../ui/Label';
+import { RootStackParamList } from './HomeLayout';
 
 type Inputs = {
   word: string;
@@ -35,7 +37,6 @@ const WordCreateModal = observer(({ route }: Props) => {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const { mutateAsync, isPending } = useAddWord();
   const { data: user } = useUser(sessionStore.session?.user.id || '');
-  const knowledgeLevels = [1, 2, 3, 4];
 
   const {
     control,
@@ -125,13 +126,13 @@ const WordCreateModal = observer(({ route }: Props) => {
               {knowledgeLevels.map((level, index) => (
                 <Circle
                   onPress={() => {
-                    setCurrentLevel(level);
-                    setValue('knowledgeLevel', level);
+                    setCurrentLevel(getMinLevel(level));
+                    setValue('knowledgeLevel', getMinLevel(level));
                   }}
                   key={`${level}-${index}`}
                   backgroundColor={knowledgeColors[index]}
-                  borderColor={currentLevel === level ? 'black' : undefined}
-                  text={`${level}`}
+                  borderColor={transformLevel(currentLevel) === level ? 'black' : undefined}
+                  text={`${namesOfKnowledgeLevels[index]}`}
                 />
               ))}
             </View>

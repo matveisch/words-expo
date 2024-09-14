@@ -23,7 +23,7 @@ const StudyButtons = observer(({ deckId, parentDeckId }: Props) => {
 
   return (
     <View style={styles.studyButtonsContainer}>
-      {counts[0] !== counts[8] && (
+      {counts[0] !== counts[7] + counts[8] && (
         <Button
           style={styles.studyButton}
           backgroundColor={defaultColors.activeColor}
@@ -40,7 +40,7 @@ const StudyButtons = observer(({ deckId, parentDeckId }: Props) => {
         </Button>
       )}
 
-      {counts[8] !== 0 && (
+      {counts[7] + counts[8] !== 0 && (
         <Button
           style={styles.studyButton}
           backgroundColor={defaultColors.activeColor}
