@@ -19,6 +19,7 @@ import Button from '../../ui/Button';
 import Circle from '../../ui/Circle';
 import Description from '../../ui/Description';
 import Input from '../../ui/Input';
+import InputError from '../../ui/InputError';
 import Label from '../../ui/Label';
 import { RootStackParamList } from './HomeLayout';
 
@@ -86,21 +87,27 @@ const Word = observer(({ route }: Props) => {
         <Controller
           name="word"
           control={control}
+          rules={{
+            required: true,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.word && <Text style={styles.requiredText}>This field is required</Text>}
+        {errors.word && <InputError text="This field is required" />}
 
         <Label text="Meaning" />
         <Controller
           name="meaning"
           control={control}
+          rules={{
+            required: true,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.meaning && <Text style={styles.requiredText}>This field is required</Text>}
+        {errors.meaning && <InputError text="This field is required" />}
 
         <Label text="Pronunciation" />
         <Controller
