@@ -90,7 +90,7 @@ const Word = observer(({ route }: Props) => {
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.word && <Text style={{ color: 'red' }}>This field is required</Text>}
+        {errors.word && <Text style={styles.requiredText}>This field is required</Text>}
 
         <Label text="Meaning" />
         <Controller
@@ -100,7 +100,7 @@ const Word = observer(({ route }: Props) => {
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.meaning && <Text style={{ color: 'red' }}>This field is required</Text>}
+        {errors.meaning && <Text style={styles.requiredText}>This field is required</Text>}
 
         <Label text="Pronunciation" />
         <Controller
@@ -156,6 +156,9 @@ const styles = StyleSheet.create({
     marginTop: -10,
     marginBottom: 10,
     color: 'grey',
+  },
+  requiredText: {
+    color: 'red',
   },
 });
 

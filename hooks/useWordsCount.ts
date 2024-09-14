@@ -1,14 +1,6 @@
 import { useQueries } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
 
-type WordCounts = {
-  again: number;
-  hard: number;
-  good: number;
-  easy: number;
-  total: number;
-};
-
 async function newWordsCount(deckId: number, isParentDeck: boolean, knowledgeLevel?: number) {
   let query = supabase.from('words').select('*', { count: 'estimated', head: true });
 
