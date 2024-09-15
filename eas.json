@@ -7,17 +7,17 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "channel": "development",
-      "env": {
-        "SUPABASE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc3lucW9oeW9iZmtrYmtsamxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI3Mjg1NjUsImV4cCI6MjAyODMwNDU2NX0.__LeCCfGxTc6BNSXFD5owqsPVW-glIqFt5BhVtRaDhc",
-        "REVENUE_CAT_IOS_KEY":"appl_lgaulhUPshQrTHHapMEBaJvrnZV",
-        "REVENUE_CAT_ANDROID_KEY":"goog_oHqCSFFJzdEZspplpzRhllcPeUT",
-        "SUPABASE_URL":"https://cpsynqohyobfkkbkljle.supabase.co",
-        "SUPABASE_SERVICE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc3lucW9oeW9iZmtrYmtsamxlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMjcyODU2NSwiZXhwIjoyMDI4MzA0NTY1fQ.NJaNwKLnWBViFL0f6N5CLgoQ_hPwQsqKHgob1zM_L_I",
-        "SECRET_CODE": "aRYUy-9FLNc-",
-        "WEB_CLIENT_ID": "103397523372-uev5o0b7f28kdkvcd50vsj19ehe4rj6b.apps.googleusercontent.com",
-        "IOS_CLIENT_ID": "103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com"
-      }
+      "channel": "development"
+      // "env": {
+      //   "SUPABASE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc3lucW9oeW9iZmtrYmtsamxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI3Mjg1NjUsImV4cCI6MjAyODMwNDU2NX0.__LeCCfGxTc6BNSXFD5owqsPVW-glIqFt5BhVtRaDhc",
+      //   "REVENUE_CAT_IOS_KEY":"appl_lgaulhUPshQrTHHapMEBaJvrnZV",
+      //   "REVENUE_CAT_ANDROID_KEY":"goog_oHqCSFFJzdEZspplpzRhllcPeUT",
+      //   "SUPABASE_URL":"https://cpsynqohyobfkkbkljle.supabase.co",
+      //   "SUPABASE_SERVICE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwc3lucW9oeW9iZmtrYmtsamxlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMjcyODU2NSwiZXhwIjoyMDI4MzA0NTY1fQ.NJaNwKLnWBViFL0f6N5CLgoQ_hPwQsqKHgob1zM_L_I",
+      //   "SECRET_CODE": "aRYUy-9FLNc-",
+      //   "WEB_CLIENT_ID": "103397523372-uev5o0b7f28kdkvcd50vsj19ehe4rj6b.apps.googleusercontent.com",
+      //   "IOS_CLIENT_ID": "103397523372-funlghn7h0g24gab9mhou0avk878l25e.apps.googleusercontent.com"
+      // }
     },
     "preview": {
       "distribution": "internal",
