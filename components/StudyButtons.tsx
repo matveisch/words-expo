@@ -1,35 +1,29 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { observer } from 'mobx-react-lite';
 import { useIsMutating } from '@tanstack/react-query';
+import { observer } from 'mobx-react-lite';
 
-import { RootStackParamList } from '../views/home/HomeView';
-import { useDecks } from '../hooks/useDecks';
-import { sessionStore } from '../features/sessionStore';
-import { useWordsCount } from '../hooks/useWordsCount';
 import { StyleSheet, View } from 'react-native';
-import Button from '../ui/Button';
 import { defaultColors } from '../helpers/colors';
+import { useWordsCount } from '../hooks/useWordsCount';
+import Button from '../ui/Button';
 import ThemedText from '../ui/ThemedText';
+import { RootStackParamList } from '../views/home/HomeLayout';
 
 type Props = {
   deckId: number;
+  parentDeckId: number | null;
 };
 
-const StudyButtons = observer(({ deckId }: Props) => {
+const StudyButtons = observer(({ deckId, parentDeckId }: Props) => {
+  const isParentDeck = parentDeckId === null;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
-  const subDecks = decks?.filter((d) => d.parent_deck === deckId);
-  const decksIds = [...(subDecks?.map((deck) => deck.id) || []), deckId];
-
-  const { data: wordsCount } = useWordsCount(deckId, decksIds, isFetched);
-  const { data: easyWordsCount } = useWordsCount(deckId, decksIds, isFetched, 4);
-
+  const { data: counts, error } = useWordsCount(deckId, isParentDeck);
   const isDeckMutating = useIsMutating({ mutationKey: ['deleteDeck'] });
 
   return (
     <View style={styles.studyButtonsContainer}>
-      {wordsCount !== easyWordsCount && (
+      {counts[0] !== counts[7] + counts[8] && (
         <Button
           style={styles.studyButton}
           backgroundColor={defaultColors.activeColor}
@@ -37,6 +31,7 @@ const StudyButtons = observer(({ deckId }: Props) => {
           onPress={() =>
             navigation.navigate('Studying', {
               deckId: deckId,
+              parentDeckId: parentDeckId,
               revise: false,
             })
           }
@@ -45,7 +40,7 @@ const StudyButtons = observer(({ deckId }: Props) => {
         </Button>
       )}
 
-      {easyWordsCount !== 0 && (
+      {counts[7] + counts[8] !== 0 && (
         <Button
           style={styles.studyButton}
           backgroundColor={defaultColors.activeColor}
@@ -53,6 +48,7 @@ const StudyButtons = observer(({ deckId }: Props) => {
           onPress={() =>
             navigation.navigate('Studying', {
               deckId: deckId,
+              parentDeckId: parentDeckId,
               revise: true,
             })
           }

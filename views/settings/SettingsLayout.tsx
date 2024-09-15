@@ -8,7 +8,7 @@ type SettingsStackParamList = {
   SubscriptionOffer: undefined;
 };
 
-const SettingsView = () => {
+const SettingsLayout = () => {
   const Stack = createNativeStackNavigator<SettingsStackParamList>();
 
   return (
@@ -41,4 +41,4 @@ const SettingsView = () => {
   );
 };
 
-export default SettingsView;
+export default SettingsLayout;

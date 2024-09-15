@@ -1,36 +1,29 @@
 import { observer } from 'mobx-react-lite';
 import { ActivityIndicator, View } from 'react-native';
 
-import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
-import { useWordsCount } from '../hooks/useWordsCount';
 import { knowledgeColors } from '../helpers/colors';
 import useUser from '../hooks/useUser';
-import PieChart from './PieChart';
+import { useWordsCount } from '../hooks/useWordsCount';
 import ChartItem from '../ui/ChartItem';
 import LockedFeature from './LockedFeature';
+import PieChart from './PieChart';
 
 type Props = {
   deckId: number;
+  parentDeckId: number | null;
 };
 
-const Stats = observer(({ deckId }: Props) => {
-  const { data: decks, isFetched } = useDecks(sessionStore.session?.user.id || '');
-  const subDecks = decks?.filter((d) => d.parent_deck === deckId);
-  const decksIds = [...(subDecks?.map((deck) => deck.id) || []), deckId];
+const Stats = observer(({ deckId, parentDeckId }: Props) => {
+  const isParentDeck = parentDeckId === null;
   const { data: user } = useUser(sessionStore.session?.user.id || '');
-
-  const { data: wordsCount } = useWordsCount(deckId, decksIds, isFetched);
-  const { data: againWordsCount } = useWordsCount(deckId, decksIds, isFetched, 1);
-  const { data: hardWordsCount } = useWordsCount(deckId, decksIds, isFetched, 2);
-  const { data: goodWordsCount } = useWordsCount(deckId, decksIds, isFetched, 3);
-  const { data: easyWordsCount } = useWordsCount(deckId, decksIds, isFetched, 4);
+  const { data: counts, error } = useWordsCount(deckId, isParentDeck);
 
   const graphData = [
-    { value: againWordsCount || 0, color: knowledgeColors[0], text: 'again' },
-    { value: hardWordsCount || 0, color: knowledgeColors[1], text: 'hard' },
-    { value: goodWordsCount || 0, color: knowledgeColors[2], text: 'good' },
-    { value: easyWordsCount || 0, color: knowledgeColors[3], text: 'easy' },
+    { value: counts[1] + counts[2], color: knowledgeColors[0], text: 'again' },
+    { value: counts[3] + counts[4], color: knowledgeColors[1], text: 'hard' },
+    { value: counts[5] + counts[6], color: knowledgeColors[2], text: 'good' },
+    { value: counts[7] + counts[8], color: knowledgeColors[3], text: 'easy' },
   ];
 
   if (!user) {
@@ -43,7 +36,7 @@ const Stats = observer(({ deckId }: Props) => {
 
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-      <PieChart graphData={graphData} total={wordsCount || 0} />
+      <PieChart graphData={graphData} total={counts[0]} />
 
       <View style={{ justifyContent: 'space-evenly' }}>
         {graphData.map((level, index) => (

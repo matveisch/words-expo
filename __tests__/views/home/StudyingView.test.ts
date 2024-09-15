@@ -65,6 +65,7 @@ describe('handleAnswer', () => {
         pronunciation: 'test',
         knowledgelevel: 2,
         deck: 1,
+        parent_deck: 1,
       },
     ];
 
@@ -95,6 +96,7 @@ describe('handleAnswer', () => {
         pronunciation: 'test',
         knowledgelevel: 2,
         deck: 1,
+        parent_deck: 1,
       },
     ];
 
@@ -125,6 +127,7 @@ describe('handleAnswer', () => {
         pronunciation: 'test',
         knowledgelevel: 2,
         deck: 1,
+        parent_deck: 1,
       },
     ];
 
@@ -148,20 +151,20 @@ describe('handleAnswer', () => {
 });
 
 describe('getKnowledgeLevel', () => {
-  test('should increase the level by 1 when the answer is correct and current level is less than 4', () => {
+  test('should increase the level by 1 when the answer is correct and current level is less than 8', () => {
     expect(getKnowledgeLevel(1, true)).toBe(2);
-    expect(getKnowledgeLevel(2, true)).toBe(3);
-    expect(getKnowledgeLevel(3, true)).toBe(4);
+    expect(getKnowledgeLevel(4, true)).toBe(5);
+    expect(getKnowledgeLevel(7, true)).toBe(8);
   });
 
-  test('should not increase the level beyond 4 even if the answer is correct', () => {
-    expect(getKnowledgeLevel(4, true)).toBe(4);
+  test('should not increase the level beyond 8 even if the answer is correct', () => {
+    expect(getKnowledgeLevel(8, true)).toBe(8);
   });
 
   test('should decrease the level by 1 when the answer is incorrect and current level is greater than 1', () => {
-    expect(getKnowledgeLevel(2, false)).toBe(1);
     expect(getKnowledgeLevel(3, false)).toBe(2);
-    expect(getKnowledgeLevel(4, false)).toBe(3);
+    expect(getKnowledgeLevel(6, false)).toBe(5);
+    expect(getKnowledgeLevel(8, false)).toBe(7);
   });
 
   test('should not decrease the level below 1 even if the answer is incorrect', () => {
@@ -178,6 +181,7 @@ describe('wordCheck', () => {
       pronunciation: '',
       knowledgelevel: 1,
       deck: 1,
+      parent_deck: 1,
     };
     const answer = 'apple';
     expect(wordCheck(word, answer)).toBe(true);
@@ -191,6 +195,7 @@ describe('wordCheck', () => {
       pronunciation: '',
       knowledgelevel: 1,
       deck: 1,
+      parent_deck: 1,
     };
     const answer = 'aPpLe';
     expect(wordCheck(word, answer)).toBe(true);
@@ -204,6 +209,7 @@ describe('wordCheck', () => {
       pronunciation: '',
       knowledgelevel: 1,
       deck: 1,
+      parent_deck: 1,
     };
     const answer = '  banana  ';
     expect(wordCheck(word, answer)).toBe(true);
@@ -217,6 +223,7 @@ describe('wordCheck', () => {
       pronunciation: '',
       knowledgelevel: 1,
       deck: 1,
+      parent_deck: 1,
     };
     const answer = 'apple';
     expect(wordCheck(word, answer)).toBe(false);
@@ -230,6 +237,7 @@ describe('wordCheck', () => {
       pronunciation: '',
       knowledgelevel: 1,
       deck: 1,
+      parent_deck: 1,
     };
     const answer = 'grap';
     expect(wordCheck(word, answer)).toBe(false);
@@ -243,6 +251,7 @@ describe('wordCheck', () => {
       pronunciation: '',
       knowledgelevel: 1,
       deck: 1,
+      parent_deck: 1,
     };
     const answer = '';
     expect(wordCheck(word, answer)).toBe(false);
@@ -260,6 +269,7 @@ describe('hasWordsToLearn', () => {
         pronunciation: 'pron1',
         knowledgelevel: 1,
         deck: 1,
+        parent_deck: 1,
       },
       {
         id: 2,
@@ -268,6 +278,7 @@ describe('hasWordsToLearn', () => {
         pronunciation: 'pron2',
         knowledgelevel: 2,
         deck: 1,
+        parent_deck: 1,
       },
       {
         id: 3,
@@ -276,6 +287,7 @@ describe('hasWordsToLearn', () => {
         pronunciation: 'pron3',
         knowledgelevel: 3,
         deck: 1,
+        parent_deck: 1,
       },
     ];
     const currentIndex = 1;
@@ -297,6 +309,7 @@ describe('hasWordsToLearn', () => {
         pronunciation: 'pron1',
         knowledgelevel: 1,
         deck: 1,
+        parent_deck: 1,
       },
       {
         id: 2,
@@ -305,6 +318,7 @@ describe('hasWordsToLearn', () => {
         pronunciation: 'pron2',
         knowledgelevel: 2,
         deck: 1,
+        parent_deck: 1,
       },
       {
         id: 3,
@@ -313,6 +327,7 @@ describe('hasWordsToLearn', () => {
         pronunciation: 'pron3',
         knowledgelevel: 3,
         deck: 1,
+        parent_deck: 1,
       },
     ];
     const currentIndex = 2;

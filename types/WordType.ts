@@ -1,8 +1,3 @@
-export interface WordType {
-  id: number;
-  word: string;
-  meaning: string;
-  pronunciation: string;
-  knowledgelevel: number;
-  deck: number;
-}
+import { Tables } from './supabase';
+
+export interface WordType extends Tables<'words'> {}

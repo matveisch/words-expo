@@ -12,7 +12,7 @@ import LockedFeature from './LockedFeature';
 import ListItem from '../ui/ListItem';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
 import { useDecks } from '../hooks/useDecks';
-import { RootStackParamList } from '../views/home/HomeView';
+import { RootStackParamList } from '../views/home/HomeLayout';
 import { defaultColors } from '../helpers/colors';
 import ThemedText from '../ui/ThemedText';
 import Button from '../ui/Button';

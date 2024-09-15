@@ -9,7 +9,7 @@ import Animated, { SlideInRight } from 'react-native-reanimated';
 import Purchases from 'react-native-purchases';
 
 import { useDecks } from '../../hooks/useDecks';
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import ListItem from '../../ui/ListItem';
 import { sessionStore } from '../../features/sessionStore';
 import LockedFeature from '../../components/LockedFeature';

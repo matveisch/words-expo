@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 import useUpdateDeck from '../../hooks/useUpdateDeck';
 import { colors, defaultColors } from '../../helpers/colors';
 import { toastOptions } from '../../helpers/toastOptions';
-import { RootStackParamList } from './HomeView';
+import { RootStackParamList } from './HomeLayout';
 import Label from '../../ui/Label';
 import Input from '../../ui/Input';
 import Circle from '../../ui/Circle';

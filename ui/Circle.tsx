@@ -22,9 +22,9 @@ export default function Circle(props: Props & PressableProps) {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 50,
+    borderRadius: 8,
     height: 40,
-    width: 40,
+    flex: 1,
     borderWidth: 3,
     justifyContent: 'center',
     alignItems: 'center',

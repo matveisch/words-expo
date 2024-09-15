@@ -1,24 +1,27 @@
-import { Keyboard, StyleSheet, Text, View } from 'react-native';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
-import Toast from 'react-native-root-toast';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Toast from 'react-native-root-toast';
 
-import { RootStackParamList } from './HomeView';
+import Loader from '../../components/Loader';
+import LockedFeature from '../../components/LockedFeature';
+import { sessionStore } from '../../features/sessionStore';
 import { knowledgeColors } from '../../helpers/colors';
+import { knowledgeLevels, namesOfKnowledgeLevels } from '../../helpers/consts';
+import { getMinLevel, transformLevel } from '../../helpers/lib';
 import { toastOptions } from '../../helpers/toastOptions';
 import useUpdateWord from '../../hooks/useUpdateWord';
-import Loader from '../../components/Loader';
-import Description from '../../ui/Description';
-import Label from '../../ui/Label';
-import Input from '../../ui/Input';
-import Circle from '../../ui/Circle';
-import Button from '../../ui/Button';
 import useUser from '../../hooks/useUser';
-import { sessionStore } from '../../features/sessionStore';
-import LockedFeature from '../../components/LockedFeature';
+import Button from '../../ui/Button';
+import Circle from '../../ui/Circle';
+import Description from '../../ui/Description';
+import Input from '../../ui/Input';
+import InputError from '../../ui/InputError';
+import Label from '../../ui/Label';
+import { RootStackParamList } from './HomeLayout';
 
 type Inputs = {
   word: string;
@@ -31,7 +34,6 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'Word'> {}
 
 const Word = observer(({ route }: Props) => {
   const { word } = route.params;
-  const knowledgeLevels = [1, 2, 3, 4];
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const {
     control,
@@ -85,21 +87,27 @@ const Word = observer(({ route }: Props) => {
         <Controller
           name="word"
           control={control}
+          rules={{
+            required: true,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.word && <Text style={{ color: 'red' }}>This field is required</Text>}
+        {errors.word && <InputError text="This field is required" />}
 
         <Label text="Meaning" />
         <Controller
           name="meaning"
           control={control}
+          rules={{
+            required: true,
+          }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input onChangeText={(text) => onChange(text)} onBlur={onBlur} value={value} />
           )}
         />
-        {errors.meaning && <Text style={{ color: 'red' }}>This field is required</Text>}
+        {errors.meaning && <InputError text="This field is required" />}
 
         <Label text="Pronunciation" />
         <Controller
@@ -125,13 +133,13 @@ const Word = observer(({ route }: Props) => {
               {knowledgeLevels.map((level, index) => (
                 <Circle
                   onPress={() => {
-                    setCurrentLevel(level);
-                    setValue('knowledgeLevel', level);
+                    setCurrentLevel(getMinLevel(level));
+                    setValue('knowledgeLevel', getMinLevel(level));
                   }}
-                  text={`${level}`}
+                  text={`${namesOfKnowledgeLevels[index]}`}
                   key={`${level}-${index}`}
                   backgroundColor={knowledgeColors[index]}
-                  borderColor={currentLevel === level ? 'black' : undefined}
+                  borderColor={transformLevel(currentLevel) === level ? 'black' : undefined}
                 />
               ))}
             </View>
@@ -155,6 +163,9 @@ const styles = StyleSheet.create({
     marginTop: -10,
     marginBottom: 10,
     color: 'grey',
+  },
+  requiredText: {
+    color: 'red',
   },
 });
 

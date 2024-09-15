@@ -1,25 +1,23 @@
-import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { RootStackParamList } from './HomeView';
-import Loader from '../../components/Loader';
-import Input from '../../ui/Input';
-import Button from '../../ui/Button';
-import { defaultColors } from '../../helpers/colors';
-import { TabBarIcon } from '../../ui/TabBarIcon';
-import { WordType } from '../../types/WordType';
 import FinishedSetBoard from '../../components/FinishedSetBoard';
-import useUpdateWord, { WordToUpdate } from '../../hooks/useUpdateWord';
-import { wordsLimitStore } from '../../features/wordsLimitStore';
+import Loader from '../../components/Loader';
 import { autoCheckStore } from '../../features/autoCheckStore';
-import ThemedText from '../../ui/ThemedText';
-import { useDecks } from '../../hooks/useDecks';
-import { sessionStore } from '../../features/sessionStore';
+import { wordsLimitStore } from '../../features/wordsLimitStore';
+import { defaultColors } from '../../helpers/colors';
 import { supabase } from '../../helpers/initSupabase';
+import useUpdateWord, { WordToUpdate } from '../../hooks/useUpdateWord';
+import { WordType } from '../../types/WordType';
+import Button from '../../ui/Button';
+import Input from '../../ui/Input';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import ThemedText from '../../ui/ThemedText';
+import { RootStackParamList } from './HomeLayout';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Studying'> {}
 
@@ -27,11 +25,17 @@ export function wordCheck(word: WordType, answer: string) {
   return answer.toLowerCase().trim() === word.word.toLowerCase().trim();
 }
 
-async function getWords(deck_ids: number[], revise: boolean, words_limit: number) {
-  let { data, error } = await supabase.rpc('limited_words', {
-    deck_ids,
-    revise,
-    words_limit,
+async function getWords(
+  deckId: number,
+  isParentDeck: boolean,
+  revise: boolean,
+  words_limit: number
+) {
+  let { data, error } = await supabase.rpc('get_random_words_from_deck', {
+    deck_id: deckId,
+    is_parent_deck: isParentDeck,
+    words_limit: words_limit,
+    revise: revise,
   });
 
   if (error) throw error;
@@ -44,7 +48,7 @@ export const hasWordsToLearn = (
 ): boolean => (words ? currentIndex + 1 < words.length : false);
 
 export function getKnowledgeLevel(currentLevel: number, isAnswerRight: boolean) {
-  if (isAnswerRight && currentLevel < 4) {
+  if (isAnswerRight && currentLevel < 8) {
     return currentLevel + 1;
   } else if (!isAnswerRight && currentLevel > 1) {
     return currentLevel - 1;
@@ -119,17 +123,13 @@ export function iDontKnow(
 }
 
 export const StudyingView = observer(({ route }: Props) => {
-  const { deckId, revise } = route.params;
-
-  const { data: decks } = useDecks(sessionStore.session?.user.id || '');
-  const subDecks = decks?.filter((d) => d.parent_deck === deckId);
-  const decksIds = [...(subDecks?.map((deck) => deck.id) || []), deckId];
-
+  const { deckId, revise, parentDeckId } = route.params;
+  const isParentDeck = parentDeckId === null;
   const [words, setWords] = useState<WordType[] | null>();
 
   useEffect(() => {
-    getWords(decksIds, revise, wordsLimitStore.limit).then((words) => setWords(words));
-  }, []);
+    getWords(deckId, isParentDeck, revise, wordsLimitStore.limit).then((words) => setWords(words));
+  }, [deckId]);
 
   const [answer, setAnswer] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -243,6 +243,7 @@ export const StudyingView = observer(({ route }: Props) => {
             onPress={() =>
               iDontKnow(setBeingChecked, words, currentIndex, setIsSuccess, mutateAsync)
             }
+            isDisabled={isPending}
           >
             <Text>I don't know</Text>
           </Button>

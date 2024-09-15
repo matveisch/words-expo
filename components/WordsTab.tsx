@@ -2,7 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Text, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../views/home/HomeView';
+import { RootStackParamList } from '../views/home/HomeLayout';
 import { observer } from 'mobx-react-lite';
 import { useMemo, useRef, useState } from 'react';
 
@@ -11,7 +11,6 @@ import Stats from './Stats';
 import StudyButtons from './StudyButtons';
 import LockedFeature from './LockedFeature';
 import ListItemSkeleton from '../ui/ListItemSkeleton';
-import { useDecks } from '../hooks/useDecks';
 import { sessionStore } from '../features/sessionStore';
 import { useWords } from '../hooks/useWords';
 import useUser from '../hooks/useUser';
@@ -23,9 +22,10 @@ import { WordType } from '../types/WordType';
 
 type Props = {
   deckId: number;
+  parentDeckId: number | null;
 };
 
-const WordsTab = observer(({ deckId }: Props) => {
+const WordsTab = observer(({ deckId, parentDeckId }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [foundWords, setFoundWords] = useState<WordType[]>([]);
   const flashListRef = useRef<FlashList<WordType> | null>(null);
@@ -35,26 +35,13 @@ const WordsTab = observer(({ deckId }: Props) => {
     isLoading: userLoading,
     error: userError,
   } = useUser(sessionStore.session?.user.id || '');
-
-  const {
-    data: decks,
-    isFetched: decksFetched,
-    isLoading: decksLoading,
-    error: decksError,
-  } = useDecks(sessionStore.session?.user.id || '');
-
-  const subDecks = useMemo(() => decks?.filter((d) => d.parent_deck === deckId), [decks, deckId]);
-  const decksIds = useMemo(
-    () => [...(subDecks?.map((deck) => deck.id) || []), deckId],
-    [subDecks, deckId]
-  );
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isLoading: wordsLoading,
     error: wordsError,
-  } = useWords(deckId, decksIds, decksFetched);
+  } = useWords(deckId, parentDeckId);
   // Combine all pages into a single array
   const words = useMemo(() => data?.pages.flat() || [], [data]);
 
@@ -65,7 +52,7 @@ const WordsTab = observer(({ deckId }: Props) => {
     });
   };
 
-  if (userLoading || decksLoading || wordsLoading) {
+  if (userLoading || wordsLoading) {
     return (
       <FlashList
         estimatedItemSize={65}
@@ -75,7 +62,7 @@ const WordsTab = observer(({ deckId }: Props) => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     );
-  } else if (userError || decksError || wordsError) {
+  } else if (userError || wordsError) {
     return <Text style={styles.errorText}>Failed to load data</Text>;
   }
 
@@ -108,8 +95,8 @@ const WordsTab = observer(({ deckId }: Props) => {
           <View>
             {foundWords.length < 1 && (
               <View>
-                <Stats deckId={deckId} />
-                <StudyButtons deckId={deckId} />
+                <Stats deckId={deckId} parentDeckId={parentDeckId} />
+                <StudyButtons deckId={deckId} parentDeckId={parentDeckId} />
               </View>
             )}
             {user?.pro && <Search setFoundWords={setFoundWords} onInput={scrollPastHeader} />}
@@ -132,6 +119,7 @@ const WordsTab = observer(({ deckId }: Props) => {
         onPress={() =>
           navigation.navigate('WordCreateModal', {
             deckId: deckId,
+            parentDeckId: parentDeckId,
           })
         }
         style={styles.newItemButton}

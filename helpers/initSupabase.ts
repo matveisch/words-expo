@@ -53,7 +53,9 @@ class LargeSecureStore {
   }
 }
 
+// @ts-ignore
 const supabaseUrl = process.env.SUPABASE_URL;
+// @ts-ignore
 const supabaseKey = process.env.SUPABASE_KEY;
 
 // Better put your these secret keys in .env file

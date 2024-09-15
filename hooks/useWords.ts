@@ -1,25 +1,33 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '../helpers/initSupabase';
 
-async function getWords(deckIds: number[], page: number, limit: number) {
-  const { data, error } = await supabase
+async function getWords(deckId: number, parentDeckId: number | null, page: number, limit: number) {
+  let query = supabase
     .from('words')
     .select()
-    .in('deck', deckIds)
     .order('id', { ascending: false })
     .range((page - 1) * limit, page * limit - 1);
+
+  if (parentDeckId !== null) {
+    // children decks
+    query = query.eq('deck', deckId);
+  } else {
+    // parent decks
+    query = query.eq('parent_deck', deckId);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
   return data;
 }
 
-export const useWords = (currentDeckId: number, deckIds: number[], subDecksLoaded: boolean) =>
+export const useWords = (currentDeckId: number, parentDeckId: number | null) =>
   useInfiniteQuery({
-    queryKey: ['words', currentDeckId, deckIds, subDecksLoaded],
-    queryFn: ({ pageParam = 1 }) => getWords(deckIds, pageParam, 20),
+    queryKey: ['words', currentDeckId],
+    queryFn: ({ pageParam = 1 }) => getWords(currentDeckId, parentDeckId, pageParam, 20),
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === 20 ? allPages.length + 1 : undefined;
     },
-    enabled: !!subDecksLoaded,
     initialPageParam: 1,
   });

@@ -37,8 +37,8 @@ export type RootStackParamList = {
   Word: { word: WordType };
   DeckCreateModal: { parentDeckId: number };
   DeckUpdateModal: { deck: DeckType };
-  WordCreateModal: { deckId: number };
-  Studying: { deckId: number; revise: boolean };
+  WordCreateModal: { deckId: number; parentDeckId: number | null };
+  Studying: { deckId: number; revise: boolean; parentDeckId: number | null };
   SubscriptionOffer: undefined;
 };
 
@@ -114,7 +114,7 @@ async function registerForPushNotificationsAsync() {
   }
 }
 
-const HomeView = observer(() => {
+const HomeLayout = observer(() => {
   const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
 
@@ -158,7 +158,7 @@ const HomeView = observer(() => {
 
   function handleDeleteDeck(
     deckId: number,
-    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView', undefined>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView'>
   ) {
     Alert.alert('Are you sure?', 'All of your sub decks are about to be deleted as well', [
       { text: 'Cancel', style: 'cancel' },
@@ -173,7 +173,7 @@ const HomeView = observer(() => {
 
   function handleDeleteWord(
     wordId: number,
-    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView', undefined>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView'>
   ) {
     Alert.alert('Are you sure?', 'You are about to delete the word', [
       { text: 'Cancel', style: 'cancel' },
@@ -331,4 +331,4 @@ const HomeView = observer(() => {
   );
 });
 
-export default HomeView;
+export default HomeLayout;

@@ -74,6 +74,7 @@ export type Database = {
           id: number
           knowledgelevel: number
           meaning: string
+          parent_deck: number | null
           pronunciation: string
           word: string
         }
@@ -82,6 +83,7 @@ export type Database = {
           id?: number
           knowledgelevel: number
           meaning: string
+          parent_deck?: number | null
           pronunciation: string
           word: string
         }
@@ -90,6 +92,7 @@ export type Database = {
           id?: number
           knowledgelevel?: number
           meaning?: string
+          parent_deck?: number | null
           pronunciation?: string
           word?: string
         }
@@ -101,6 +104,13 @@ export type Database = {
             referencedRelation: "decks"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "words_parent_deck_fkey"
+            columns: ["parent_deck"]
+            isOneToOne: false
+            referencedRelation: "decks"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -108,6 +118,39 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_random_words_by_parent_deck: {
+        Args: {
+          parent_deck_id: number
+          words_limit: number
+          revise: boolean
+        }
+        Returns: {
+          deck: number
+          id: number
+          knowledgelevel: number
+          meaning: string
+          parent_deck: number | null
+          pronunciation: string
+          word: string
+        }[]
+      }
+      get_random_words_from_deck: {
+        Args: {
+          deck_id: number
+          is_parent_deck: boolean
+          words_limit: number
+          revise: boolean
+        }
+        Returns: {
+          deck: number
+          id: number
+          knowledgelevel: number
+          meaning: string
+          parent_deck: number | null
+          pronunciation: string
+          word: string
+        }[]
+      }
       limited_words: {
         Args: {
           deck_ids: number[]
@@ -119,6 +162,7 @@ export type Database = {
           id: number
           knowledgelevel: number
           meaning: string
+          parent_deck: number | null
           pronunciation: string
           word: string
         }[]
@@ -133,6 +177,7 @@ export type Database = {
           id: number
           knowledgelevel: number
           meaning: string
+          parent_deck: number | null
           pronunciation: string
           word: string
         }[]
@@ -150,6 +195,7 @@ export type Database = {
               id: number
               knowledgelevel: number
               meaning: string
+              parent_deck: number | null
               pronunciation: string
               word: string
             }[]
@@ -165,6 +211,7 @@ export type Database = {
               id: number
               knowledgelevel: number
               meaning: string
+              parent_deck: number | null
               pronunciation: string
               word: string
             }[]
