@@ -11,6 +11,7 @@ import { autoCheckStore } from '../../features/autoCheckStore';
 import { wordsLimitStore } from '../../features/wordsLimitStore';
 import { defaultColors } from '../../helpers/colors';
 import { supabase } from '../../helpers/initSupabase';
+import { checkAndRequestReview } from '../../helpers/reviewPrompt';
 import useUpdateWord, { WordToUpdate } from '../../hooks/useUpdateWord';
 import { WordType } from '../../types/WordType';
 import Button from '../../ui/Button';
@@ -101,6 +102,7 @@ export function handleNextWord(
     setCurrentIndex(currentIndex + 1);
   } else {
     setSetIsDone(true);
+    checkAndRequestReview();
   }
 }
 

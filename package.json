@@ -41,7 +41,7 @@
     "expo-dev-client": "~4.0.26",
     "expo-device": "~6.0.2",
     "expo-linear-gradient": "~13.0.2",
-    "expo-notifications": "~0.28.16",
+    "expo-notifications": "~0.28.17",
     "expo-secure-store": "~13.0.2",
     "expo-status-bar": "~1.12.1",
     "expo-updates": "~0.25.24",
@@ -64,7 +64,8 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-url-polyfill": "^2.0.0",
-    "react-test-renderer": "^18.2.0"
+    "react-test-renderer": "^18.2.0",
+    "expo-store-review": "~7.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
