@@ -6,6 +6,10 @@ jest.mock('expo-secure-store', () => ({
   getItemAsync: jest.fn(),
   deleteItemAsync: jest.fn(),
 }));
+jest.mock('expo-store-review', () => ({
+  isAvailableAsync: jest.fn(),
+  requestReview: jest.fn(),
+}));
 jest.mock('../../../views/home/StudyingView', () => {
   const originalModule = jest.requireActual('../../../views/home/StudyingView');
   return {
@@ -14,14 +18,14 @@ jest.mock('../../../views/home/StudyingView', () => {
 });
 
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { WordToUpdate } from '../../../hooks/useUpdateWord';
+import { WordType } from '../../../types/WordType';
 import {
   getKnowledgeLevel,
   handleAnswer,
   hasWordsToLearn,
   wordCheck,
 } from '../../../views/home/StudyingView';
-import { WordType } from '../../../types/WordType';
-import { WordToUpdate } from '../../../hooks/useUpdateWord';
 
 jest.mock('react-native', () => ({
   View: 'View',
