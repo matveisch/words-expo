@@ -1,24 +1,24 @@
-import { FlashList } from '@shopify/flash-list';
-import { Text, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../views/home/HomeLayout';
+import { FlashList } from '@shopify/flash-list';
 import { observer } from 'mobx-react-lite';
 import { useMemo, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { RootStackParamList } from '../views/home/HomeLayout';
 
+import { sessionStore } from '../features/sessionStore';
+import { defaultColors } from '../helpers/colors';
+import useUser from '../hooks/useUser';
+import { useWords } from '../hooks/useWords';
+import { WordType } from '../types/WordType';
+import Button from '../ui/Button';
 import ListItem from '../ui/ListItem';
+import ListItemSkeleton from '../ui/ListItemSkeleton';
+import ThemedText from '../ui/ThemedText';
+import LockedFeature from './LockedFeature';
+import Search from './Search';
 import Stats from './Stats';
 import StudyButtons from './StudyButtons';
-import LockedFeature from './LockedFeature';
-import ListItemSkeleton from '../ui/ListItemSkeleton';
-import { sessionStore } from '../features/sessionStore';
-import { useWords } from '../hooks/useWords';
-import useUser from '../hooks/useUser';
-import { defaultColors } from '../helpers/colors';
-import ThemedText from '../ui/ThemedText';
-import Button from '../ui/Button';
-import Search from './Search';
-import { WordType } from '../types/WordType';
 
 type Props = {
   deckId: number;
