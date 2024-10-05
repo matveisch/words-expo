@@ -1,3 +1,4 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   DefaultTheme,
   getFocusedRouteNameFromRoute,
@@ -5,22 +6,23 @@ import {
   RouteProp,
   Theme,
 } from '@react-navigation/native';
+import { Session } from '@supabase/supabase-js';
+import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
+import Purchases from 'react-native-purchases';
+import { RootSiblingParent } from 'react-native-root-siblings';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import QueryClientProvider from './components/QueryClientProvider';
-import { Session } from '@supabase/supabase-js';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { RootSiblingParent } from 'react-native-root-siblings';
-import { observer } from 'mobx-react-lite';
-import Purchases from 'react-native-purchases';
-import { Platform } from 'react-native';
 
-import { supabase } from './helpers/initSupabase';
-import HomeLayout from './views/home/HomeLayout';
-import SettingsLayout from './views/settings/SettingsLayout';
-import { TabBarIcon } from './ui/TabBarIcon';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { sessionStore } from './features/sessionStore';
+import { supabase } from './helpers/initSupabase';
+import { TabBarIcon } from './ui/TabBarIcon';
+import HomeLayout from './views/home/HomeLayout';
 import OnboardingView from './views/OnboardingView';
+import SettingsLayout from './views/settings/SettingsLayout';
 
 export type RootTabsParamList = {
   HomeTab: { session: Session };
@@ -69,41 +71,45 @@ const App = observer(() => {
   }, []);
 
   return (
-    <RootSiblingParent>
-      <QueryClientProvider>
-        <SafeAreaProvider>
-          <NavigationContainer theme={MyTheme}>
-            {sessionStore.session ? (
-              <Tab.Navigator>
-                <Tab.Screen
-                  name="HomeTab"
-                  component={HomeLayout}
-                  options={({ route }) => ({
-                    tabBarStyle: { display: getTabBarStyle(route) },
-                    headerShown: false,
-                    tabBarLabel: 'Home',
-                    headerShadowVisible: false,
-                    tabBarIcon: () => <TabBarIcon name="home" />,
-                  })}
-                />
-                <Tab.Screen
-                  name="SettingsTab"
-                  component={SettingsLayout}
-                  options={{
-                    headerShown: false,
-                    headerShadowVisible: false,
-                    tabBarLabel: 'Settings',
-                    tabBarIcon: () => <TabBarIcon name="gear" />,
-                  }}
-                />
-              </Tab.Navigator>
-            ) : (
-              <OnboardingView />
-            )}
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </QueryClientProvider>
-    </RootSiblingParent>
+    <GestureHandlerRootView>
+      <BottomSheetModalProvider>
+        <RootSiblingParent>
+          <QueryClientProvider>
+            <SafeAreaProvider>
+              <NavigationContainer theme={MyTheme}>
+                {sessionStore.session ? (
+                  <Tab.Navigator>
+                    <Tab.Screen
+                      name="HomeTab"
+                      component={HomeLayout}
+                      options={({ route }) => ({
+                        tabBarStyle: { display: getTabBarStyle(route) },
+                        headerShown: false,
+                        tabBarLabel: 'Home',
+                        headerShadowVisible: false,
+                        tabBarIcon: () => <TabBarIcon name="home" />,
+                      })}
+                    />
+                    <Tab.Screen
+                      name="SettingsTab"
+                      component={SettingsLayout}
+                      options={{
+                        headerShown: false,
+                        headerShadowVisible: false,
+                        tabBarLabel: 'Settings',
+                        tabBarIcon: () => <TabBarIcon name="gear" />,
+                      }}
+                    />
+                  </Tab.Navigator>
+                ) : (
+                  <OnboardingView />
+                )}
+              </NavigationContainer>
+            </SafeAreaProvider>
+          </QueryClientProvider>
+        </RootSiblingParent>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 });
 

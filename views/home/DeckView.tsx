@@ -1,19 +1,21 @@
-import { Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import { useEffect, useRef, useState } from 'react';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { RootStackParamList } from './HomeLayout';
-import Button from '../../ui/Button';
-import { defaultColors } from '../../helpers/colors';
-import WordsTab from '../../components/WordsTab';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import DecksTab from '../../components/DecksTab';
-import useUser from '../../hooks/useUser';
-import { sessionStore } from '../../features/sessionStore';
 import Loader from '../../components/Loader';
+import WordsTab from '../../components/WordsTab';
+import { sessionStore } from '../../features/sessionStore';
+import { defaultColors } from '../../helpers/colors';
+import useUser from '../../hooks/useUser';
+import Button from '../../ui/Button';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import { RootStackParamList } from './HomeLayout';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {}
 
@@ -48,6 +50,19 @@ const DeckView = observer(({ route }: Props) => {
     }
   }, [activeTab]);
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
   if (!user) return <Loader />;
 
   return (
@@ -60,6 +75,17 @@ const DeckView = observer(({ route }: Props) => {
         paddingRight: insets.right + 10,
       }}
     >
+      <View style={styles.header}>
+        <Button chromeless size="small">
+          <TabBarIcon name="arrow-left" />
+        </Button>
+
+        <Text>Deck Name</Text>
+
+        <Button chromeless size="small" onPress={handlePresentModalPress}>
+          <TabBarIcon name="ellipsis-v" />
+        </Button>
+      </View>
       <View style={{ marginBottom: 10 }}>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Button
@@ -108,8 +134,36 @@ const DeckView = observer(({ route }: Props) => {
         <WordsTab deckId={deck.id} parentDeckId={deck.parent_deck} />
         <DecksTab deckId={deck.id} />
       </PagerView>
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+      >
+        <BottomSheetView style={styles.contentContainer}>
+          <Text>Awesome 🎉</Text>
+        </BottomSheetView>
+      </BottomSheetModal>
     </View>
   );
+});
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: 'grey',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
 });
 
 export default DeckView;
