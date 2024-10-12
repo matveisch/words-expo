@@ -1,17 +1,19 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
 import DecksTab from '../../components/DecksTab';
 import Loader from '../../components/Loader';
 import WordsTab from '../../components/WordsTab';
 import { sessionStore } from '../../features/sessionStore';
 import { defaultColors } from '../../helpers/colors';
+import useDeleteDeck from '../../hooks/useDeleteDeck';
 import useUser from '../../hooks/useUser';
 import Button from '../../ui/Button';
 import { TabBarIcon } from '../../ui/TabBarIcon';
@@ -22,10 +24,16 @@ interface Props extends NativeStackScreenProps<RootStackParamList, 'DeckView'> {
 const DeckView = observer(({ route }: Props) => {
   const { deck } = route.params;
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  // bottom sheet
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['25%'], []);
+  const [sheetIndex, setSheetIndex] = useState(-1);
 
   const [activeTab, setActiveTab] = useState(0);
   const { data: user } = useUser(sessionStore.session?.user.id || '');
-
+  const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const pagerViewRef = useRef<PagerView | null>(null);
   const offset = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
@@ -42,6 +50,18 @@ const DeckView = observer(({ route }: Props) => {
     });
   }
 
+  function handleDeleteDeck(deckId: number) {
+    Alert.alert('Are you sure?', 'All of your sub decks are about to be deleted as well', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        onPress: () => {
+          deleteDeck(deckId).then(() => navigation.goBack());
+        },
+      },
+    ]);
+  }
+
   useEffect(() => {
     if (activeTab === 0) {
       handleOffset(0);
@@ -50,17 +70,16 @@ const DeckView = observer(({ route }: Props) => {
     }
   }, [activeTab]);
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  function handlePresentModalPress() {
+    if (sheetIndex === -1) {
+      bottomSheetModalRef.current?.present();
+    } else {
+      bottomSheetModalRef.current?.dismiss();
+    }
+  }
 
-  // variables
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
-
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
   const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
+    setSheetIndex(index);
   }, []);
 
   if (!user) return <Loader />;
@@ -70,19 +89,17 @@ const DeckView = observer(({ route }: Props) => {
       style={{
         height: '100%',
         flexDirection: 'column',
-        marginTop: 5,
+        paddingTop: insets.top,
         paddingLeft: insets.left + 10,
         paddingRight: insets.right + 10,
       }}
     >
+      {/* navigation bar */}
       <View style={styles.header}>
-        <Button chromeless size="small">
+        <Button chromeless onPress={() => navigation.goBack()}>
           <TabBarIcon name="arrow-left" />
         </Button>
-
-        <Text>Deck Name</Text>
-
-        <Button chromeless size="small" onPress={handlePresentModalPress}>
+        <Button chromeless onPress={handlePresentModalPress}>
           <TabBarIcon name="ellipsis-v" />
         </Button>
       </View>
@@ -123,7 +140,6 @@ const DeckView = observer(({ route }: Props) => {
           ]}
         />
       </View>
-
       <PagerView
         initialPage={0}
         style={{ flex: 1 }}
@@ -137,12 +153,33 @@ const DeckView = observer(({ route }: Props) => {
 
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
+          <Button
+            style={styles.sheetButton}
+            disabled={deckIsBeingDeleted}
+            onPress={() => {
+              bottomSheetModalRef.current?.dismiss();
+              navigation.navigate('DeckUpdateModal', {
+                deck: route.params.deck,
+              });
+            }}
+          >
+            <Text>Edit</Text>
+          </Button>
+          <Button style={styles.sheetButton} disabled={deckIsBeingDeleted}>
+            <Text>Export</Text>
+          </Button>
+          <Button
+            style={[styles.sheetButton, { backgroundColor: defaultColors.errorColor }]}
+            disabled={deckIsBeingDeleted}
+            onPress={() => handleDeleteDeck(route.params.deck.id)}
+          >
+            <Text>Delete</Text>
+          </Button>
         </BottomSheetView>
       </BottomSheetModal>
     </View>
@@ -162,8 +199,10 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
+    gap: 10,
+    padding: 10,
   },
+  sheetButton: {},
 });
 
 export default DeckView;

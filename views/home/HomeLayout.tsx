@@ -2,33 +2,32 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import { Alert, Platform, View } from 'react-native';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
-import Constants from 'expo-constants';
+import { Alert, Platform } from 'react-native';
 
-import ListOfDecks from './ListOfDecks';
-import DeckView from './DeckView';
-import useDeleteDeck from '../../hooks/useDeleteDeck';
-import Word from './Word';
+import Loader from '../../components/Loader';
+import { pushStore } from '../../features/pushStore';
+import { sessionStore } from '../../features/sessionStore';
+import { defaultColors } from '../../helpers/colors';
+import { useDecks } from '../../hooks/useDecks';
+import useDeleteWord from '../../hooks/useDeleteWord';
+import useUser from '../../hooks/useUser';
+import { DeckType } from '../../types/Deck';
+import { WordType } from '../../types/WordType';
+import Button from '../../ui/Button';
+import { TabBarIcon } from '../../ui/TabBarIcon';
+import SubscriptionOffer from '../SubscriptionOffer';
 import DeckCreateModal from './DeckCreateModal';
 import DeckUpdateModal from './DeckUpdateModal';
-import WordCreateModal from './WordCreateModal';
-import { TabBarIcon } from '../../ui/TabBarIcon';
-import Button from '../../ui/Button';
+import DeckView from './DeckView';
+import ListOfDecks from './ListOfDecks';
 import { StudyingView } from './StudyingView';
-import { WordType } from '../../types/WordType';
-import useDeleteWord from '../../hooks/useDeleteWord';
-import { DeckType } from '../../types/Deck';
-import { useDecks } from '../../hooks/useDecks';
-import { sessionStore } from '../../features/sessionStore';
-import useUser from '../../hooks/useUser';
-import Loader from '../../components/Loader';
-import SubscriptionOffer from '../SubscriptionOffer';
-import { defaultColors } from '../../helpers/colors';
-import { pushStore } from '../../features/pushStore';
+import Word from './Word';
+import WordCreateModal from './WordCreateModal';
 
 export type RootStackParamList = {
   Decks: undefined;
@@ -115,7 +114,6 @@ async function registerForPushNotificationsAsync() {
 }
 
 const HomeLayout = observer(() => {
-  const { mutateAsync: deleteDeck, isPending: deckIsBeingDeleted } = useDeleteDeck();
   const { mutateAsync: deleteWord, isPending: wordIsBeingDeleted } = useDeleteWord();
 
   const { data: decks } = useDecks(sessionStore.session?.user.id || '');
@@ -155,21 +153,6 @@ const HomeLayout = observer(() => {
   useEffect(() => {
     checkAndScheduleNotification();
   }, [pushStore.time, pushStore.push]);
-
-  function handleDeleteDeck(
-    deckId: number,
-    navigation: NativeStackNavigationProp<RootStackParamList, 'DeckView'>
-  ) {
-    Alert.alert('Are you sure?', 'All of your sub decks are about to be deleted as well', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        onPress: () => {
-          deleteDeck(deckId).then(() => navigation.goBack());
-        },
-      },
-    ]);
-  }
 
   function handleDeleteWord(
     wordId: number,
@@ -219,35 +202,7 @@ const HomeLayout = observer(() => {
         <Stack.Screen
           name="DeckView"
           component={DeckView}
-          options={({ route, navigation }) => ({
-            headerTitle: '',
-            headerShadowVisible: false,
-            headerBackTitleVisible: false,
-            headerRight: () => (
-              <View style={{ flexDirection: 'row', gap: 5 }}>
-                <Button
-                  chromeless
-                  size="small"
-                  disabled={deckIsBeingDeleted}
-                  onPress={() =>
-                    navigation.navigate('DeckUpdateModal', {
-                      deck: route.params.deck,
-                    })
-                  }
-                >
-                  <TabBarIcon name="edit" />
-                </Button>
-                <Button
-                  chromeless
-                  size="small"
-                  disabled={deckIsBeingDeleted}
-                  onPress={() => handleDeleteDeck(route.params.deck.id, navigation)}
-                >
-                  <TabBarIcon name="trash-o" />
-                </Button>
-              </View>
-            ),
-          })}
+          options={() => ({ headerShown: false })}
         />
 
         <Stack.Screen
@@ -269,6 +224,7 @@ const HomeLayout = observer(() => {
             ),
           })}
         />
+
         <Stack.Screen
           name="Studying"
           component={StudyingView}
